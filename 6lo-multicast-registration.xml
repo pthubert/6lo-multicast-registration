@@ -1,0 +1,441 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE rfc SYSTEM "rfc2629-xhtml.ent">
+
+
+<?rfc toc="yes"?>
+<?rfc tocompact="yes"?>
+<?rfc tocdepth="3"?>
+<?rfc tocindent="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc comments="yes"?>
+<?rfc inline="yes"?>
+<?rfc compact="no"?>
+<?rfc subcompact="no"?>
+<?rfc authorship="yes"?>
+<?rfc tocappendix="yes"?>
+<rfc  xmlns:xi="http://www.w3.org/2001/XInclude" category="std" ipr='trust200902'
+tocInclude="true" indexInclude="true" obsoletes=""  consensus="true"
+submissionType="IETF" xml:lang="en" version="3"
+docName="draft-thubert-6lo-multicast-registration-00" >
+
+<front>
+
+   <title abbrev='Multicast Address Registration'>IPv6 Neighbor Discovery Multicast Address Registration</title>
+   <author initials='P' surname='Thubert' fullname='Pascal Thubert' role='editor'>
+      <organization abbrev='Cisco Systems'>Cisco Systems, Inc</organization>
+      <address>
+         <postal>
+            <street>Building D</street>
+            <street>45 Allee des Ormes - BP1200 </street>
+            <city>Mougins - Sophia Antipolis</city>
+            <code>06254</code>
+          <country>France</country>
+         </postal>
+         <phone>+33 497 23 26 34</phone>
+         <email>pthubert@cisco.com</email>
+      </address>
+   </author>
+   <area>Internet</area>
+
+   <workgroup>6lo</workgroup>
+
+   <abstract>
+   <t>
+    This document updates RFC 8505 in order to enable the registration by a 6LN
+    of an IPv6 multicast address to a 6LR.
+    This document also extends RFC 9010 to enable the 6LR to inject the address
+    in the RPL multicast support.
+   </t>
+   </abstract>
+</front>
+
+<middle>
+
+<!-- **************************************************************** -->
+<!-- **************************************************************** -->
+<!-- **************************************************************** -->
+<!-- **************************************************************** -->
+<section anchor="introduction"> <name>Introduction</name>
+
+<t>The design of Low Power and Lossy Networks (LLNs) is generally focused on
+   saving energy, which is the most constrained resource of all. Other design
+   constraints, such as a limited memory capacity, duty cycling of the LLN
+   devices and low-power lossy transmissions, derive from that primary concern.
+   The radio is a major energy drain and the protocol signaling must be adapted
+   to optimize their transmissions and avoid any waste.
+</t><t>
+   The <xref target='RFC6550'>"Routing Protocol for Low Power
+   and Lossy Networks"</xref> (RPL) to provide IPv6 <xref target='RFC8200'/>
+   routing services within such constraints.
+   To save signaling and routing state in constrained networks, the RPL routing
+   is only performed along a Destination-Oriented Directed Acyclic Graph (DODAG)
+   that is optimized to reach a Root node, as opposed to along the shortest path
+   between 2 peers, whatever that would mean in a given LLN.
+   This trades the quality of peer-to-peer (P2P) paths for a vastly reduced
+   amount of control traffic and routing state that would be required to
+   operate an any-to-any shortest path protocol. Additionally,
+   broken routes may be fixed lazily and on-demand, based on dataplane
+   inconsistency discovery, which avoids wasting energy in the proactive repair
+   of unused paths.
+</t><t>
+   The classical "IPv6 Neighbor Discovery (IPv6 ND) Protocol"
+   <xref target='RFC4861'/> <xref target='RFC4862'/> was defined in the late
+   1990's for serial links and shared transit media such as Ethernet where - at
+   the time - broadcast was cheap and memory for neighbor cache, expensive.
+   It was thus designed as a reactive protocol that relies heavily on multicast
+   operations for Address Discovery (aka Lookup) and Duplicate Address Detection
+   (DAD) for IPv6 unicast addresses. Those multicast operations typically impact
+   every node on the link when at most one is really targeted and are especially
+   wasteful for constrained nodes.
+</t><t>
+   The original 6LoWPAN ND, <xref target='RFC6775'> "Neighbor Discovery
+   Optimizations for 6LoWPAN networks"</xref>, was introduced to avoid the
+   excessive use of multicast messages and enable IPv6 ND for operations over
+   energy-constrained nodes.
+   <xref target='RFC6775'/> changes the classical IPv6 ND model to proactively
+   establish the Neighbor Cache Entry (NCE) associated to the unicast address of
+   a 6LoWPAN Node (6LN) in the a 6LoWPAN Router(s) (6LR) that serves it.
+   To that effect, <xref target='RFC6775'/> defines a new Address Registration
+   Option (ARO) that is  placed in unicast Neighbor Solicitation (NS) and
+   Neighbor Advertisement (NA) messages between the 6LN and the 6LR.
+</t><t>
+   <xref target='RFC8505'> "Registration Extensions for 6LoWPAN Neighbor
+   Discovery"</xref> updates <xref target='RFC6775'/> into a generic Address
+   Registration mechanism that can be used to access services such as routing
+   and ND proxy and introduces the Extended Address Registration Option (EARO)
+   for that purpose. This provides a routing-agnostic interface for a host to
+   request that the router injects a unicast IPv6 address in the local routing
+   protocol and provide return reachability for that address.
+</t><t>
+   <xref target='RFC9010'>"Routing for RPL Leaves"</xref> provides the router
+   counterpart of the mechanism for a host that implements
+   <xref target='RFC8505'/> to inject its unicast Unique Local Addresses (ULAs)
+   and Glocal Unicast Addresses (GUAs). But though RPL also provides multicast
+   routing, <xref target='RFC8505'/> only signals unicast addresses and there
+   is no equivalent of <xref target='RFC9010'/> to specify the 6LR operation
+   in that case.
+</t>
+
+
+</section>	<!-- end section = "Introduction"  -->
+
+
+
+<section> <name>Terminology</name>
+  <section anchor='bcp'><name>BCP 14</name>
+  <t>
+
+    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+    "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+    "OPTIONAL" in this document are to be interpreted as described in BCP 14
+    <xref target="RFC2119"/> <xref target="RFC8174"/> when, and only when,
+    they appear in all capitals, as shown here.
+
+  </t>
+  </section>	<!-- end section "BCP 14" -->
+
+  <section anchor='lo'><name>References</name>
+    <t>
+	This document uses terms and concepts that are discussed in:
+    </t>
+	<ul>
+	<li> <xref target="RFC4861">"Neighbor Discovery for IP version 6"
+		</xref> and
+	    <xref target="RFC4862">"IPv6 Stateless address Autoconfiguration"
+		</xref>,
+    </li>
+	<li> <xref target="RFC6775">Neighbor Discovery Optimization for Low-Power
+		and Lossy Networks</xref>, as well as
+    </li>
+    <li>
+	    <xref target="RFC8505">
+		"Registration Extensions for 6LoWPAN Neighbor Discovery"</xref>.
+	</li>
+	</ul>
+  </section> <!--	 end section "References" -->
+
+  <section anchor='new'><name>New Terms</name>
+
+  </section>	<!-- end section "New Terms" -->
+
+  <section anchor='acronyms'><name>Acronym Definitions</name>
+    <t> This document uses the following acronyms:</t>
+       <dl>
+       <dt>6BBR</dt><dd> 6LoWPAN Backbone Router </dd>
+       <dt>6BBR</dt><dd> 6LoWPAN Border Router </dd>
+       <dt>6LR</dt><dd> 6LoWPAN Router </dd>
+       <dt>6CIO</dt><dd> Capability Indication Option </dd>
+       <dt>AMC</dt><dd> Address Mapping Confirmation </dd>
+       <dt>AMR</dt><dd> Address Mapping Request</dd>
+       <dt>ARO</dt><dd> Address Registration Option</dd>
+       <dt>DAC</dt><dd> Duplicate Address Confirmation </dd>
+       <dt>DAD</dt><dd> Duplicate Address Detection </dd>
+       <dt>DAR</dt><dd> Duplicate Address Request</dd>
+       <dt>EDAC</dt><dd> Extended Duplicate Address Confirmation  </dd>
+       <dt>EDAR</dt><dd> Extended Duplicate Address Request</dd>
+       <dt>DODAG</dt><dd> Destination-Oriented Directed Acyclic Graph </dd>
+       <dt>LLN</dt><dd> Low-Power and Lossy Network </dd>
+       <dt>NA</dt><dd>  Neighbor Advertisement </dd>
+       <dt>NCE</dt><dd>  Neighbor Cache Entry  </dd>
+       <dt>ND</dt><dd>  Neighbor Discovery  </dd>
+       <dt>NS</dt><dd>  Neighbor Solicitation  </dd>
+       <dt>ROVR</dt><dd> Registration Ownership Verifier </dd>
+       <dt>RA</dt><dd>  Router Advertisement  </dd>
+       <dt>RS</dt><dd>  Router Solicitation  </dd>
+       <dt>TID</dt><dd> Transaction ID </dd>
+       </dl>
+
+
+  </section>	<!-- end section "Acronym Definitions" -->
+
+
+</section>	<!-- end section "Terminology" -->
+
+
+
+<!-- **************************************************************** -->
+<!-- **************************************************************** -->
+<!-- **************************************************************** -->
+<!-- **************************************************************** -->
+<!-- **************************************************************** -->
+<!-- **************************************************************** -->
+<!-- **************************************************************** -->
+<!-- **************************************************************** -->
+
+<section anchor='overview'><name>Overview</name>
+
+    <t>
+    <xref target="figBackbone"/> illustrates a Backbone Link that federates a
+    collection of LLNs as a single IPv6 Subnet, with a number of 6BBRs
+    providing proxy-ND services to their attached LLNs.
+    </t>
+    <t>
+    A collection of IPv6 Nodes are present on the Backbone and use IPv6 ND
+    <xref target="RFC4861"/><xref target="RFC4862"/> procedures for
+    DAD and Lookup.
+    </t>
+    <t>
+	The LLN may be a hub-and-spoke access link such	as (Low-Power)
+    IEEE STD. 802.11 (Wi-Fi) <xref target="IEEEstd80211"/>
+	and IEEE STD. 802.15.1 (Bluetooth) <xref target="IEEEstd802151"/>,
+    or a Mesh-Under or a Route-Over network <xref target="RFC8505"/>.
+    </t>
+
+    <figure anchor='figBackbone'><name>Backbone Link and 6LBR</name>
+    <artwork><![CDATA[
+                 |
+              +-----+               +-----+       +-----+
+    (default) |     |          6LBR |     |       |     | IPv6
+       Router |     |               |     |       |     | Node
+              +-----+               +-----+       +-----+
+                 |  Backbone side      |             |
+     ----+-------+-----------------+---+-------------+----+-----
+         |                         |                      |
+      +------+                 +------+                +------+
+      | 6BBR |                 | 6BBR |                | 6BBR |
+      |      |                 |      |                |      |
+      +------+                 +------+                +------+
+         o     Wireless side   o   o  o                  o o
+     o o   o  o            o o   o  o  o             o  o  o  o o
+    o  o o  o o            o   o  o  o  o            o  o  o o o
+    o   o  o  o               o    o  o               o  o   o
+      o   o o                    o  o                     o o
+
+      LLN                        LLN                      LLN
+    ]]></artwork></figure>
+
+
+    <t>
+    A 6LBR provides registration services for the purpose of proactive IPv6 ND
+    and maintains a registry of the active registrations as an abstract data
+    structure called an Address Registrar.
+    An entry in the Address Registrar is called an "Address Registration".
+    </t>
+
+
+
+</section> <!-- Overview -->
+
+
+    <section anchor='CIO'><name>Extending RFC 7400</name>
+    <t>
+	This specification defines a new capability bit for use in the 6CIO, as
+	defined by <xref target="RFC7400"/> and extended in<xref target="RFC8505"/>
+    for use in IPv6 ND messages.
+    </t>
+    <t>
+	The new "M" bit indicates that the 6LR accepts multicast address
+    registrations as specified in this document.
+    </t>
+    <figure anchor='fig6CIO'><name>New Capability Bits in the 6CIO</name>
+    <artwork>
+    <![CDATA[
+    0                   1                   2                   3
+    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |     Type      |   Length = 1  |    Reserved   |M|A|D|L|B|P|E|G|
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+   |                           Reserved                            |
+   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+    ]]></artwork>
+    </figure>
+
+    <t> Option Fields:    </t>
+	<dl>
+	<dt>Type</dt><dd> 36 </dd>
+	<dt>M</dt><dd> The 6LR accepts multicast address registrations </dd>
+	</dl>
+
+    </section>	<!-- end section "Extending RFC 7400" -->
+
+
+
+<section anchor='updating'><name>Updating RFC 8505</name>
+
+
+   <t>This specification does not introduce new options; it modifies
+   existing options and updates the associated behaviors.</t>
+
+
+
+
+
+</section> <!-- end section "Updating RFC 8505"-->
+
+<section anchor="back"><name>Backward Compatibility</name>
+</section>	<!-- end section "Backward Compatibility" -->
+
+<section  anchor="sec"><name>Security Considerations</name>
+<t>
+    This specification extends <xref target="RFC8505"/>, and
+    the security section of that document also applies to this document.
+    In particular, the link layer SHOULD be sufficiently
+    protected to prevent rogue access.
+</t>
+</section>	<!-- end section "Security Considerations" -->
+
+
+<section ><name>IANA Considerations</name>
+<t>
+	Note to RFC Editor, to be removed: please replace "This RFC"
+	throughout this document by the RFC number for this specification
+	once it is allocated.
+</t>
+<t>
+    IANA is requested to make a number of changes under the
+    "Internet Control Message Protocol version 6 (ICMPv6) Parameters"
+    registry, as follows.
+</t>
+
+    <section><name>New ARO Flag</name>
+	<t> IANA is requested to make additions to the Address Registration
+	    Option Status Values Registry as follows:
+	</t>
+
+	<table anchor="AROstat" ><name>New ARO Flag</name>
+   <thead>
+      <tr><td>ARO Status</td><td>Meaning</td><td>Reference</td></tr>
+   </thead><tbody>
+      <tr><td>11 (suggested)</td><td>Not Found</td><td>This RFC</td></tr>
+   </tbody>
+	</table>	<!-- end table "New New ARO Flag" +-->
+    </section>	<!-- end section "New New ARO Flagues" -->
+
+    <section title="New 6LoWPAN Capability Bits">
+	<t>
+    IANA is requested to make additions to the Subregistry for
+    "6LoWPAN Capability Bits" as follows:
+	</t>
+
+	<table anchor="CIOdat" ><name>New 6LoWPAN Capability Bits</name>
+   <thead>
+      <tr><td>Capability Bit</td><td>Meaning</td><td>Reference</td></tr>
+   </thead><tbody>
+      <tr><td>X (suggested)</td><td>Multicast Address (M bit)</td><td>This RFC</td></tr>
+
+   </tbody>
+	</table>	<!-- end table "New 6LoWPAN Capability Bits" -->
+    </section>	<!-- end section "New 6LoWPAN Capability Bits" -->
+</section>	<!-- end section "IANA Considerations" -->
+
+<section title="Acknowledgments">
+<t>
+
+</t>
+</section> <!-- title="Acknowledgments" -->
+
+
+
+
+
+
+
+</middle>
+
+<back>
+    <references title='Normative References'>
+	<!-- RFC  -->
+
+	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml'/>
+	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4861.xml'/>
+	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4862.xml'/>
+	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6550.xml'/>
+	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6775.xml'/>
+	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7400.xml'/>
+	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8126.xml'/>
+	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml'/>
+	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8200.xml'/>
+	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8505.xml'/>
+	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9010.xml'/>
+
+    </references>
+
+
+    <references title='Informative References'>
+	<!-- RFC  -->
+
+    <!-- I-D -->
+	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9008.xml'/>
+	<xi:include href= 'https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-mboned-ieee802-mcast-problems.xml'/>
+    <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.bi-savi-wlan.xml'/>
+    <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.thubert-6man-ipv6-over-wireless.xml'/>
+
+      <reference anchor="IEEEstd80211">
+         <front>
+            <title>IEEE Standard for Information technology --
+		Telecommunications and information exchange between systems
+		Local and metropolitan area networks-- Specific requirements
+		Part 11: Wireless LAN Medium Access Control (MAC) and Physical
+		Layer (PHY) Specifications
+            </title>
+            <author>
+               <organization>
+		IEEE standard for Information Technology</organization>
+            </author>
+            <date/>
+         </front>
+      </reference>
+
+      <reference anchor="IEEEstd802151">
+         <front>
+            <title> IEEE Standard for Information Technology -
+		Telecommunications and Information Exchange Between Systems -
+		Local and Metropolitan Area Networks - Specific Requirements. -
+		Part 15.1: Wireless Medium Access Control (MAC) and Physical
+		Layer (PHY) Specifications for Wireless Personal Area Networks
+		(WPANs)
+            </title>
+            <author>
+            	<organization> IEEE standard for Information Technology
+		</organization>
+            </author>
+            <date/>
+         </front>
+      </reference>
+
+    </references>
+
+</back>
+
+</rfc>
