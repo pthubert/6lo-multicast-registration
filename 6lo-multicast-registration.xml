@@ -10,13 +10,13 @@
 <?rfc sortrefs="yes"?>
 <?rfc comments="yes"?>
 <?rfc inline="yes"?>
-<?rfc compact="no"?>
+<?rfc compact="yes"?>
 <?rfc subcompact="no"?>
 <?rfc authorship="yes"?>
 <?rfc tocappendix="yes"?>
 <rfc  xmlns:xi="http://www.w3.org/2001/XInclude" category="std" ipr='trust200902'
 tocInclude="true" indexInclude="true" obsoletes=""  consensus="true"
-submissionType="IETF" xml:lang="en" version="3"
+submissionType="IETF" xml:lang="en" version="3"  updates='8505, 9010'
 docName="draft-thubert-6lo-multicast-registration-00" >
 
 <front>
@@ -72,6 +72,7 @@ docName="draft-thubert-6lo-multicast-registration-00" >
    is only performed along a Destination-Oriented Directed Acyclic Graph (DODAG)
    that is optimized to reach a Root node, as opposed to along the shortest path
    between 2 peers, whatever that would mean in a given LLN.
+</t><t>
    This trades the quality of peer-to-peer (P2P) paths for a vastly reduced
    amount of control traffic and routing state that would be required to
    operate an any-to-any shortest path protocol. Additionally,
@@ -79,15 +80,19 @@ docName="draft-thubert-6lo-multicast-registration-00" >
    inconsistency discovery, which avoids wasting energy in the proactive repair
    of unused paths.
 </t><t>
+   Section 12 of <xref target='RFC6550'/> details the "Storing Mode of
+   Operation with multicast support" with source-independent multicast routing in RPL.
+</t><t>
    The classical "IPv6 Neighbor Discovery (IPv6 ND) Protocol"
-   <xref target='RFC4861'/> <xref target='RFC4862'/> was defined in the late
-   1990's for serial links and shared transit media such as Ethernet where - at
-   the time - broadcast was cheap and memory for neighbor cache, expensive.
-   It was thus designed as a reactive protocol that relies heavily on multicast
-   operations for Address Discovery (aka Lookup) and Duplicate Address Detection
-   (DAD) for IPv6 unicast addresses. Those multicast operations typically impact
-   every node on the link when at most one is really targeted and are especially
-   wasteful for constrained nodes.
+   <xref target='RFC4861'/> <xref target='RFC4862'/> was defined for serial
+   links and shared transit media such as Ethernet at a time when broadcast
+   was cheap on those media while memory for neighbor cache was expensive.
+   It was thus designed as a reactive protocol that relies on caching and
+   multicast operations for Address Discovery (aka Lookup) and Duplicate Address Detection (DAD) of IPv6 unicast addresses.
+   Those multicast operations typically impact every node on link when at most
+   one is really targeted, which is a waste of energy, and imply that all
+   nodes are awake to hear the request, which is inconsistent with power
+   saving (sleeping) modes.
 </t><t>
    The original 6LoWPAN ND, <xref target='RFC6775'> "Neighbor Discovery
    Optimizations for 6LoWPAN networks"</xref>, was introduced to avoid the
@@ -112,9 +117,23 @@ docName="draft-thubert-6lo-multicast-registration-00" >
    counterpart of the mechanism for a host that implements
    <xref target='RFC8505'/> to inject its unicast Unique Local Addresses (ULAs)
    and Glocal Unicast Addresses (GUAs). But though RPL also provides multicast
-   routing, <xref target='RFC8505'/> only signals unicast addresses and there
-   is no equivalent of <xref target='RFC9010'/> to specify the 6LR operation
-   in that case.
+   routing, 6LoWPAN ND supports only the registering of unicast addresses and
+   there is no equivalent to <xref target='RFC9010'/> to specify the 6LR
+   operation upon the registration of a multicast address.
+</t><t>
+   The <xref target='RFC3810'>"Multicast Listener Discovery Version 2 (MLDv2)
+   for IPv6" </xref> enables the router to learn which node listens to which
+   multicast address, but as the classical IPv6 ND protocol, MLD relies on
+   multicasting Queries to all nodes, which is unfit for low power operations.
+   As for IPv6 ND, it makes sense to let the 6LNs control when and how they
+   maintain the state associated to their multicast address in the 6LR, e.g.,
+   during their own wake time. In the case of a constrained node that already
+   implements <xref target='RFC8505'/> for unicast reachability, it makes sense
+   to specify a simple extension to that code to register the multicast
+   addresses they listen to.
+</t><t>
+   This specification extends <xref target='RFC8505'/> and <xref target='RFC9010'/> to add the capability for the 6LN to register multicast
+   addresses and for the 6LR to inject them in the RPL multicast support.
 </t>
 
 
@@ -123,7 +142,7 @@ docName="draft-thubert-6lo-multicast-registration-00" >
 
 
 <section> <name>Terminology</name>
-  <section anchor='bcp'><name>BCP 14</name>
+  <section anchor='bcp'><name>Requirements Language</name>
   <t>
 
     The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -133,7 +152,7 @@ docName="draft-thubert-6lo-multicast-registration-00" >
     they appear in all capitals, as shown here.
 
   </t>
-  </section>	<!-- end section "BCP 14" -->
+  </section>	<!-- end section "Requirements Language" -->
 
   <section anchor='lo'><name>References</name>
     <t>
@@ -150,20 +169,23 @@ docName="draft-thubert-6lo-multicast-registration-00" >
     </li>
     <li>
 	    <xref target="RFC8505">
-		"Registration Extensions for 6LoWPAN Neighbor Discovery"</xref>.
+		"Registration Extensions for 6LoWPAN Neighbor Discovery"</xref> and
+	</li>
+    <li>
+	    <xref target="RFC9008">
+		"Using RPI Option Type, Routing Header for Source Routes,
+        and IPv6-in-IPv6 Encapsulation in the RPL Data Plane"</xref>.
 	</li>
 	</ul>
   </section> <!--	 end section "References" -->
 
-  <section anchor='new'><name>New Terms</name>
 
-  </section>	<!-- end section "New Terms" -->
-
-  <section anchor='acronyms'><name>Acronym Definitions</name>
+  <section anchor='acronyms'><name>Glossary</name>
     <t> This document uses the following acronyms:</t>
-       <dl>
+       <dl newline="false" indent="7" spacing="compact" >
        <dt>6BBR</dt><dd> 6LoWPAN Backbone Router </dd>
        <dt>6BBR</dt><dd> 6LoWPAN Border Router </dd>
+       <dt>6LN</dt><dd> 6LoWPAN Node </dd>
        <dt>6LR</dt><dd> 6LoWPAN Router </dd>
        <dt>6CIO</dt><dd> Capability Indication Option </dd>
        <dt>AMC</dt><dd> Address Mapping Confirmation </dd>
@@ -172,6 +194,7 @@ docName="draft-thubert-6lo-multicast-registration-00" >
        <dt>DAC</dt><dd> Duplicate Address Confirmation </dd>
        <dt>DAD</dt><dd> Duplicate Address Detection </dd>
        <dt>DAR</dt><dd> Duplicate Address Request</dd>
+       <dt>EARO</dt><dd> Extended Address Registration Option</dd>
        <dt>EDAC</dt><dd> Extended Duplicate Address Confirmation  </dd>
        <dt>EDAR</dt><dd> Extended Duplicate Address Request</dd>
        <dt>DODAG</dt><dd> Destination-Oriented Directed Acyclic Graph </dd>
@@ -187,7 +210,7 @@ docName="draft-thubert-6lo-multicast-registration-00" >
        </dl>
 
 
-  </section>	<!-- end section "Acronym Definitions" -->
+  </section>	<!-- end section "Glossary" -->
 
 
 </section>	<!-- end section "Terminology" -->
@@ -206,7 +229,7 @@ docName="draft-thubert-6lo-multicast-registration-00" >
 <section anchor='overview'><name>Overview</name>
 
     <t>
-    <xref target="figBackbone"/> illustrates a Backbone Link that federates a
+    <xref target="figref"/> illustrates a Backbone Link that federates a
     collection of LLNs as a single IPv6 Subnet, with a number of 6BBRs
     providing proxy-ND services to their attached LLNs.
     </t>
@@ -216,42 +239,71 @@ docName="draft-thubert-6lo-multicast-registration-00" >
     DAD and Lookup.
     </t>
     <t>
-	The LLN may be a hub-and-spoke access link such	as (Low-Power)
-    IEEE STD. 802.11 (Wi-Fi) <xref target="IEEEstd80211"/>
-	and IEEE STD. 802.15.1 (Bluetooth) <xref target="IEEEstd802151"/>,
-    or a Mesh-Under or a Route-Over network <xref target="RFC8505"/>.
+	The LLN may be a hub-and-spoke access link such	as (Low-Power) Wi-Fi
+    <xref target="IEEE80211"/> and Bluetooth (Low Energy)
+    <xref target="IEEE802151"/>, or a Route-Over LLN such as the Wi-SUN mesh
+    <xref target="I-D.heile-lpwan-wisun-overview"/> that leverages 6LoWPAN
+    <xref target="RFC4919"/><xref target="RFC6282"/>
+    and RPL <xref target="RFC6550"/> over <xref target="IEEE802154"/>.
     </t>
 
-    <figure anchor='figBackbone'><name>Backbone Link and 6LBR</name>
+    <figure anchor='figref'><name>Backbone Link and 6LBR</name>
     <artwork><![CDATA[
                  |
-              +-----+               +-----+       +-----+
-    (default) |     |          6LBR |     |       |     | IPv6
-       Router |     |               |     |       |     | Node
-              +-----+               +-----+       +-----+
-                 |  Backbone side      |             |
+                 |
      ----+-------+-----------------+---+-------------+----+-----
          |                         |                      |
       +------+                 +------+                +------+
-      | 6BBR |                 | 6BBR |                | 6BBR |
-      |      |                 |      |                |      |
+      | 6LBR |                 | 6LBR |                | 6LBR |
+      |(Root)|                 |(Root)|                |(Root)|
       +------+                 +------+                +------+
          o     Wireless side   o   o  o                  o o
      o o   o  o            o o   o  o  o             o  o  o  o o
     o  o o  o o            o   o  o  o  o            o  o  o o o
-    o   o  o  o               o    o  o               o  o   o
-      o   o o                    o  o                     o o
-
+    o   o  o  6LR               o    o  o               o  o   o
+      o   o o    z                 o  o                     o o
+                  6LN
       LLN                        LLN                      LLN
     ]]></artwork></figure>
 
 
-    <t>
-    A 6LBR provides registration services for the purpose of proactive IPv6 ND
-    and maintains a registry of the active registrations as an abstract data
-    structure called an Address Registrar.
-    An entry in the Address Registrar is called an "Address Registration".
-    </t>
+   <t>
+   A 6LBR acts as Root for RPL operations and maintains a registry of the
+   active registrations as an abstract data structure called an Address
+   Registrar. A leaf called a 6LN that supports <xref target="RFC8505"/>
+   registers its unicast addresses to a RPL router called a 6LR, using a unicast
+   NS message with an Extended Adress Registration Option (EARO).
+   The registration state is periodically renewed by the Registering Node,
+   before the lifetime indicated in the EARO expires.
+   </t><t>
+   Upon accepting the registration with a NA message and a positive status in
+   the EARO, the 6LR maintains a registration state per Registered Address,
+   including a Neighbor Cache Entry (NCE) with the Link Layer Address (LLA) of
+   the Registered Node (the 6LN here).
+   If the "R" flag is set in the EARO, the 6LR also injects the address in RPL
+   as prescribed in <xref target="RFC9010"/>.
+   </t><t>
+   With this specification, the 6LN also registers the IPv6 multicast addresses
+   that it listens to. The 6LR maintains a registration state per tuple
+   (IPv6 address, LLA) since multiple 6LN can listen to the same multicast flow.
+   </t><t>
+   For multicast flows, the RPL network operates in the "Storing Mode of
+   Operation with multicast support" (MOP 3) which provides
+   source-independent multicast routing in RPL, as prescribed in section 12 of
+   <xref target='RFC6550'/>.
+   </t><t>
+   In the case where the unicast operation leverages the "Non-Storing Mode of
+   Operation" (MOP 1), MOP 1 is the MOP signaled in the RPL DODAG Information
+   Object (DIO) messages and the support of MOP 3 on top is signaled using 6CIO,
+   see <xref target="CIO"/>.
+   </t><t>
+   If the "R" flag is set in at least one of the registrations, the 6LR injects
+   the multicast address based on the longest registration lifetime across LLNs
+   that registered to that address with the "RF" flag set.
+   Upon receiving a packet directed to a multicast address, the 6LR delivers
+   a unicast copy of the multicast packet to each of the nodes that registered
+   to that address regardless of the "R" flag setting.
+   </t>
 
 
 
@@ -374,6 +426,11 @@ docName="draft-thubert-6lo-multicast-registration-00" >
 </middle>
 
 <back>
+
+<displayreference   target="IEEE802154"            to="IEEE Std 802.15.4"/>
+<displayreference   target="IEEE802151"            to="IEEE Std 802.15.1"/>
+<displayreference   target="IEEE80211"             to="IEEE Std 802.11"/>
+
     <references title='Normative References'>
 	<!-- RFC  -->
 
@@ -383,7 +440,6 @@ docName="draft-thubert-6lo-multicast-registration-00" >
 	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6550.xml'/>
 	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6775.xml'/>
 	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7400.xml'/>
-	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8126.xml'/>
 	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml'/>
 	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8200.xml'/>
 	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8505.xml'/>
@@ -396,28 +452,44 @@ docName="draft-thubert-6lo-multicast-registration-00" >
 	<!-- RFC  -->
 
     <!-- I-D -->
+    <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.3810.xml'/>
+    <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4919.xml'/>
+    <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6282.xml'/>
 	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9008.xml'/>
-	<xi:include href= 'https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-mboned-ieee802-mcast-problems.xml'/>
-    <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.bi-savi-wlan.xml'/>
-    <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.thubert-6man-ipv6-over-wireless.xml'/>
-
-      <reference anchor="IEEEstd80211">
+    <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.heile-lpwan-wisun-overview.xml'/>
+      <reference anchor='IEEE802154'>
          <front>
-            <title>IEEE Standard for Information technology --
-		Telecommunications and information exchange between systems
-		Local and metropolitan area networks-- Specific requirements
-		Part 11: Wireless LAN Medium Access Control (MAC) and Physical
-		Layer (PHY) Specifications
+            <title>IEEE Std 802.15.4, Part. 15.4: Wireless Medium Access
+            Control (MAC) and Physical Layer (PHY) Specifications for Low-Rate
+            Wireless Personal Area Networks
             </title>
             <author>
-               <organization>
-		IEEE standard for Information Technology</organization>
+               <organization>IEEE standard for Information Technology</organization>
             </author>
             <date/>
          </front>
       </reference>
 
-      <reference anchor="IEEEstd802151">
+      <reference anchor='IEEE80211'
+                 target="https://ieeexplore.ieee.org/document/9363693" >
+        <front>
+          <title>
+            IEEE Standard 802.11 - IEEE Standard for Information
+            Technology - Telecommunications and information exchange
+            between systems Local and metropolitan area networks -
+            Specific requirements - Part 11: Wireless LAN Medium
+            Access Control (MAC) and Physical Layer (PHY)
+            Specifications.
+          </title>
+          <author>
+               <organization>IEEE standard for Information Technology</organization>
+           </author>
+          <date/>
+        </front>
+      </reference>
+
+
+      <reference anchor="IEEE802151">
          <front>
             <title> IEEE Standard for Information Technology -
 		Telecommunications and Information Exchange Between Systems -
