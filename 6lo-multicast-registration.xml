@@ -268,34 +268,28 @@ docName="draft-thubert-6lo-multicast-registration-00" >
    <t>
    A leaf acting as a 6LN registers its unicast addresses to a RPL router
    acting as a 6LR, using a unicast NS message with an EARO as specified in
-   <xref target="RFC8505"/> .
+   <xref target="RFC8505"/>.
    The registration state is periodically renewed by the Registering Node,
    before the lifetime indicated in the EARO expires.
    </t><t>
-   For multicast flows, the RPL network operates in the "Storing Mode of
-   Operation with multicast support" (MOP 3) which provides
-   source-independent multicast routing in RPL, as prescribed in section 12 of
-   <xref target='RFC6550'/>.
+   With this specification, the 6LNs can now register for the multicast
+   addresses they listen to, using a new M flag in the EARO to signal a
+   registration for a multicast address. Multiple 6LN can register for the same multicast address to the samme 6LR. Note the use of the term "for",
+   the nodes registers the unicast addresses it owns, but registers for
+   multicast addresses that it listens to.
    </t><t>
-   In the case where the unicast operation leverages the "Non-Storing Mode of
-   Operation" (MOP 1), MOP 1 is the MOP signaled in the RPL DODAG Information
-   Object (DIO) messages and the support of MOP 3 on top is signaled using 6CIO,
-   see <xref target="CIO"/>. Note that the support of MOP 3 can also be known
-   by other means such as configuration or external information such as support
-   of an industry standard that mandates it.
-   </t><t>
-   If the R flag is set in at least one of the registrations for a multicast
-   address, the 6LR injects the multicast address based on the longest
-   registration lifetime across LLNs that registered to that address with the
-   "RF" flag set. The multicast address percolating in RPL storing mode
-   forms a tree along the preferred parent path form the leaves that registered
-   for the address.
+   If the R flag is set in the registration of one or more 6LNs for the same
+   multicast address, the 6LR injects the multicast address in the RPL
+   multicast support, based on the longest registration lifetime across those
+   6LNs. The DAO messages for the multicast address percolate along the RPL
+   preferred parent tree in storing mode of operation and form a subtree for
+   that multicast address with 6LNs that registered for it as the leaves.
    </t><t>
    As prescribed in section 12 of <xref target='RFC6550'/>, the RPL routers
-   forward the multicast packets to each child that advertised the multicast
-   address in its DAO message as individual unicast MAC frames. The same way,
-   the 6LR delivers the multicast packet as individual unicast MAC frames to
-   each of the 6LNs that registered for the multicast address.
+   forward the multicast packets as individual unicast MAC frames to each
+   child that advertised the multicast address in its DAO message . The same
+   way, the 6LR delivers the multicast packet as individual unicast MAC frames
+   to each of the 6LNs that registered for the multicast address.
    </t>
 
 
@@ -344,13 +338,37 @@ docName="draft-thubert-6lo-multicast-registration-00" >
 
 
 
+
+<section anchor='coex'><name>Updating RFC 6550</name>
+<t>
+
+   RPL supports multicast operation the "Storing Mode of Operation with
+   multicast support" (MOP 3) which provides source-independent multicast
+   routing in RPL, as prescribed in section 12 of <xref target='RFC6550'/>.
+   MOP 3 is a storing Mode of Operation. This is needed to build a multicast tree within the RPL DODAG for each multicast Address.
+   </t>
+
+   <t>
+   The expectation is that the unicast traffic also follows the Storing Mode of
+   Operation. But this is rarely the case in current LLN deployments of RPL
+   where Non-Storing Mode (MOP 1) is the norm. Though it is PREFERRED to build
+   2 separate RPL Instances, one in MOP 1 and one in MOP 3, this specification allows to hybrid the Storing Mode for multicast and Non-Storing Mode for
+   unicast in the same RPL Instance.
+   </t><t>
+   In the case where the unicast operation leverages the "Non-Storing Mode of
+   Operation" (MOP 1), MOP 1 is the MOP signaled in the RPL DODAG Information
+   Object (DIO) messages and the support of MOP 3 on top is signaled using 6CIO,
+   see <xref target="CIO"/>. Note that the support of MOP 3 can also be known
+   by other means such as configuration or external information such as support
+   of an industry standard that mandates it.
+   </t>
+</section>	<!-- end section "Updating RFC 6550" -->
 <section anchor='updating'><name>Updating RFC 8505</name>
 
    <t><xref target='RFC8505'/> is a pre-requisite to this specification.
    A node that implement this MUST also implement <xref target='RFC8505'/>.
    This specification does not introduce a new option; it modifies
    existing options and updates the associated behaviors.</t>
-
 
 <section anchor='R8505E'><name>New EARO flag</name>
 
