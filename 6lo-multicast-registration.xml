@@ -11,13 +11,13 @@
 <?rfc comments="yes"?>
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
-<?rfc subcompact="no"?>
+<!-- <?rfc subcompact="no"?> -->
 <?rfc authorship="yes"?>
 <?rfc tocappendix="yes"?>
 <rfc  xmlns:xi="http://www.w3.org/2001/XInclude" category="std" ipr='trust200902'
 tocInclude="true" indexInclude="true" obsoletes=""  consensus="true"
 submissionType="IETF" xml:lang="en" version="3"  updates='6550, 8505, 9010'
-docName="draft-thubert-6lo-multicast-registration-00" >
+docName="draft-thubert-6lo-multicast-registration-01" >
 
 <front>
 
@@ -88,7 +88,7 @@ docName="draft-thubert-6lo-multicast-registration-00" >
    links and shared transit media such as Ethernet at a time when broadcast
    was cheap on those media while memory for neighbor cache was expensive.
    It was thus designed as a reactive protocol that relies on caching and
-   multicast operations for Address Discovery (aka Lookup) and Duplicate Address Detection (DAD) of IPv6 unicast addresses.
+   multicast operations for Address Discovery (aka Lookup) andsime Duplicate Address Detection (DAD) of IPv6 unicast addresses.
    Those multicast operations typically impact every node on link when at most
    one is really targeted, which is a waste of energy, and imply that all
    nodes are awake to hear the request, which is inconsistent with power
@@ -130,8 +130,7 @@ docName="draft-thubert-6lo-multicast-registration-00" >
    maintain the state associated to their multicast address in the 6LR, e.g.,
    during their own wake time. In the case of a constrained node that already
    implements <xref target='RFC8505'/> for unicast reachability, it makes sense
-   to specify a simple extension to that code to register the multicast
-   addresses they listen to.
+   to extend to that support to register the multicast addresses they listen to.
 </t><t>
    This specification extends <xref target='RFC8505'/> and <xref target='RFC9010'/> to add the capability for the 6LN to register multicast
    addresses and for the 6LR to inject them in the RPL multicast support.
@@ -358,20 +357,14 @@ docName="draft-thubert-6lo-multicast-registration-00" >
    routing in RPL, as prescribed in section 12 of <xref target='RFC6550'/>.
    MOP 3 is a storing Mode of Operation. This is needed to build a multicast
    tree within the RPL DODAG for each multicast Address.
-   </t>
-   <t>
+</t> <t>
    The expectation is that the unicast traffic also follows the Storing Mode of
    Operation. But this is rarely the case in current LLN deployments of RPL
-   where Non-Storing Mode (MOP 1) is the norm. Though it is preferred to build
-   separate RPL Instances, one in MOP 1 and one in MOP 3, this specification allows to hybrid the Storing Mode for multicast and Non-Storing Mode for
-   unicast in the same RPL Instance.
-   </t><t>
-   In the case where the unicast operation leverages the "Non-Storing Mode of
-   Operation" (MOP 1), MOP 1 is the MOP signaled in the RPL DODAG Information
-   Object (DIO) messages and the support of MOP 3 on top is signaled using 6CIO,
-   see <xref target="CIO"/>. Note that the support of MOP 3 can also be known
-   by other means such as configuration or external information such as support
-   of an industry standard that mandates it.
+   where the "Non-Storing Mode of Operation" (MOP 1) is the norm.
+   Though it is preferred to build separate RPL Instances, one in MOP 1 and one
+   in MOP 3, this specification allows to hybrid the Storing Mode for multicast
+   and Non-Storing Mode for unicast in the same RPL Instance, more in
+   <xref target='deploy'/>   .
    </t>
 </section>	<!-- end section "Updating RFC 6550" -->
 
@@ -487,7 +480,7 @@ docName="draft-thubert-6lo-multicast-registration-00" >
    </t>
    <ul>
    <li>
-   upon a registration with the R and the M flags set to 1 in the EARO, the
+   Upon a registration with the R and the M flags set to 1 in the EARO, the
    6LR injects the address in the RPL multicast support.
    </li><li>
    Upon receiving a packet directed to a multicast address for which it has at
@@ -502,9 +495,50 @@ docName="draft-thubert-6lo-multicast-registration-00" >
 
 
 <section anchor="back"><name>Backward Compatibility</name>
+<t>
+   A legacy 6LN will not register multicast address and the service will be
+   the same when the network is upgraded. A legacy 6LR will not set the M flag
+   in the 6CIO and an upgraded 6LN will not register multicast addresses.
+</t>
+
 </section>	<!-- end section "Backward Compatibility" -->
 
-<section anchor="dep"><name>Deployment considerations</name>
+<section anchor="deploy"><name>Deployment considerations</name>
+
+<t>
+   To deploy this specification in a RPL domain, it is REQUIRED that there is
+   enough density of RPL routers that support MOP 3 to build the spanning
+   multicast trees that are needed to distribute the multicast flows.
+</t><t>
+   It is generally  RECOMMENDED to deploy one RPL Instance in any Mode of
+   Operation (typically MOP 1) for unicast that legacy nodes can join, and a
+   separate RPL Instance dedicated to multicast operations and operating in MOP 3. This allows to use a different objective function for both direction,
+   favouring the link quality up for unicast collection and down for multicast
+   distribution.
+</t><t>
+   But this might be impractical in some use cases where the signaling and the
+   state to be installed in the devices are very constrained. When using a
+   single RPL Instance, MOP 3 expects the Storing Mode of Operation for both
+   unicast and multicast, which is an issue in constrained networks that typically use MOP 1 for unicast. This specification allows a mixed mode (MOP
+   1 fo runicast and MOP 3 for multicast) under the following conditions:
+</t>
+
+<ul>
+ <li>
+   All the RPL routers support the mixed mode and are configured to operate in
+   that mode.
+ </li> <li>
+   The MOP signaled in the RPL DODAG Information Object (DIO) messages is MOP 1
+   to enable the legacy nodes to operate as leaves.
+ </li> <li>T
+   The support of multicast in the RPL Instance SHOULD be signaled by the 6LR
+   to the 6LN using a 6CIO, see <xref target="CIO"/>.
+ </li> <li>
+   Altrenatively, the support of multicast in the RPL domain can be known
+   by other means such as configuration or external information such as support
+   of a version of an industry standard that mandates it.
+ </li>
+</ul>
 </section>	<!-- end section "Deployment considerations" -->
 
 <section  anchor="sec"><name>Security Considerations</name>
