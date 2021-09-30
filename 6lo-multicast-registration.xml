@@ -16,7 +16,7 @@
 <?rfc tocappendix="yes"?>
 <rfc  xmlns:xi="http://www.w3.org/2001/XInclude" category="std" ipr='trust200902'
 tocInclude="true" indexInclude="true" obsoletes=""  consensus="true"
-submissionType="IETF" xml:lang="en" version="3"  updates='8505, 9010'
+submissionType="IETF" xml:lang="en" version="3"  updates='6550, 8505, 9010'
 docName="draft-thubert-6lo-multicast-registration-00" >
 
 <front>
@@ -228,7 +228,18 @@ docName="draft-thubert-6lo-multicast-registration-00" >
 <!-- **************************************************************** -->
 
 <section anchor='overview'><name>Overview</name>
-
+   <t><xref target='RFC8505'/> is a pre-requisite to this specification.
+   A node that implement this MUST also implement <xref target='RFC8505'/>.
+   This specification does not introduce a new option; it modifies
+   existing options and updates the associated behaviors to enable the
+   registration of multicast addresses with <xref target='RFC8505'/>.
+   </t>
+   <t>
+   This specification also extends <xref target='RFC6550'/> and
+   <xref target='RFC9010'/> in the case of a route-over multilink subnet based
+   on the RPL routing protocol. A 6LR that implements the RPL extensions
+   specified therein MUST also implement <xref target='RFC9010'/>.
+   </t>
     <t>
     <xref target="figref"/> illustrates the classical situation of an LLN as a
     single IPv6 Subnet, with a 6LoWPAN Border Router (6LBR) that acts as Root
@@ -294,7 +305,7 @@ docName="draft-thubert-6lo-multicast-registration-00" >
 
 
 
-</section> <!-- Overview -->
+</section> <!-- end section "Overview" -->
 
 
     <section anchor='CIO'><name>Extending RFC 7400</name>
@@ -345,14 +356,14 @@ docName="draft-thubert-6lo-multicast-registration-00" >
    RPL supports multicast operation the "Storing Mode of Operation with
    multicast support" (MOP 3) which provides source-independent multicast
    routing in RPL, as prescribed in section 12 of <xref target='RFC6550'/>.
-   MOP 3 is a storing Mode of Operation. This is needed to build a multicast tree within the RPL DODAG for each multicast Address.
+   MOP 3 is a storing Mode of Operation. This is needed to build a multicast
+   tree within the RPL DODAG for each multicast Address.
    </t>
-
    <t>
    The expectation is that the unicast traffic also follows the Storing Mode of
    Operation. But this is rarely the case in current LLN deployments of RPL
-   where Non-Storing Mode (MOP 1) is the norm. Though it is PREFERRED to build
-   2 separate RPL Instances, one in MOP 1 and one in MOP 3, this specification allows to hybrid the Storing Mode for multicast and Non-Storing Mode for
+   where Non-Storing Mode (MOP 1) is the norm. Though it is preferred to build
+   separate RPL Instances, one in MOP 1 and one in MOP 3, this specification allows to hybrid the Storing Mode for multicast and Non-Storing Mode for
    unicast in the same RPL Instance.
    </t><t>
    In the case where the unicast operation leverages the "Non-Storing Mode of
@@ -363,12 +374,9 @@ docName="draft-thubert-6lo-multicast-registration-00" >
    of an industry standard that mandates it.
    </t>
 </section>	<!-- end section "Updating RFC 6550" -->
+
 <section anchor='updating'><name>Updating RFC 8505</name>
 
-   <t><xref target='RFC8505'/> is a pre-requisite to this specification.
-   A node that implement this MUST also implement <xref target='RFC8505'/>.
-   This specification does not introduce a new option; it modifies
-   existing options and updates the associated behaviors.</t>
 
 <section anchor='R8505E'><name>New EARO flag</name>
 
@@ -376,15 +384,17 @@ docName="draft-thubert-6lo-multicast-registration-00" >
    Section 4.1 of <xref target='RFC8505'/> defines the EARO as an extension to
    the ARO option defined in <xref target='RFC6775'/>. This specification adds
    a new M flag to the EARO flags field to signal that the Registered Address is
-   a multicast address. When this new and the R flags are set, the 6LR that
-   conforms this specification injects the address in the RPL multicast support.
+   a multicast address. When both the M and the R flags are set, the 6LR that
+   conforms this specification joins the multicast stream,
+   e.g., by injecting
+   the address in the RPL multicast support.
 </t>
 <t>
    <xref target='EARO'/> illustrates the M flag in its suggested position
    (4, counting 0 to 8 in network order in the 8-bit array), to be confirmed by IANA.
 </t>
  <figure anchor='EARO'><name>EARO Option Format</name>
- <artwork align="center"> <![CDATA[
+ <artwork align="center">
    0                   1                   2                   3
    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -396,42 +406,74 @@ docName="draft-thubert-6lo-multicast-registration-00" >
  ...             Registration Ownership Verifier                 ...
   |                                                               |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    ]]></artwork>
- </figure>
+</artwork>
+ </figure><!-- end figure "EARO Option Format" -->
 
     <t> New Option Field:    </t>
 	<dl>
 	<dt>M</dt><dd> 1-bit flag: "Registration of Multicast Address Supported" </dd>
 	</dl>
 
-</section> <!-- New EARO flag -->
+</section> <!-- end section "New EARO flag" -->
+
 
 <section anchor='multireg'><name>Multicast Registration</name>
 <t>
-   With <xref target='RFC8505'/>, the 6LR maintains a registration state per
-   Registered Address, including an NCE with the Link Layer Address (LLA) of
-   the Registered Node (the 6LN here).
-   If the R flag is set in the EARO, the 6LR also injects the address in the RPL
-   unicast support as prescribed in <xref target="RFC9010"/>.
-   </t><t>
-   With this specification, the 6LN also registers the IPv6 multicast addresses
-   that it listens to. The 6LR maintains a registration state per tuple
-   (IPv6 address, LLA) since multiple 6LN can listen to the same multicast flow.
-   Upon receiving a packet directed to a multicast address for which it has at
-   least one registration, the 6LR delivers a copy of the packet as a unicast
-   layer-2 frame to the LLA of each of the nodes that registered to that
-   multicast address,
+   With <xref target='RFC8505'/>:
    </t>
+<ul>
+   <li>
+   Only unicast addresses can be registered.
+   </li>
+   <li>
+   The 6LN must register all its ULA and GUA with a NS(EARO).
+   </li>
+   <li>
+   The 6LN may set the R flag in the EARO to obtain return reachability services by the 6LR, e.g., through ND proxy operations, or by injecting the route in a route-over subnet.
+   </li>
+   <li>
+   the 6LR maintains a registration state per Registered Address, including an
+   NCE with the Link Layer Address (LLA) of the Registered Node (the 6LN here).
+   </li>
+   </ul>
 
-</section> <!-- end section Multicast Registration-->
+  <t>
+   This specification adds the following behaviour:
+  </t>
+   <ul>
+   <li>
+   Registration of multicast addresses is now supported.
+   </li>
+   <li>
+   The 6LN MUST also register all the IPv6 multicast addresses that it listens
+   to and it MUST set the M flag in the EARO for those addresses.
+   </li>
+   <li>
+   The 6LN MAY set the R flag in the EARO to obtain the delivery of the
+   multicast packets by the 6LR, e.g., by MLD proxy operations, or by injecting
+   the address in a route-over subnet or in the Protocol Independent Multicast
+   <xref target='RFC7761'/> protocol.
+   </li>
+   <li>
+    The 6LR maintains a registration state per tuple (IPv6 address, LLA) since
+    multiple 6LNs may listen to the same multicast address.
+   </li>
+
+   </ul>
+
+</section> <!-- end section "Multicast Registration"-->
 
 </section> <!-- end section "Updating RFC 8505"-->
+
 
 <section anchor='updating2'><name>Updating RFC 9010</name>
 <t>
    With <xref target='RFC9010'/>:
    </t>
    <ul>
+   <li>
+   The 6LR injects only unicast routes in RPL
+   </li>
    <li>
    upon a registration with the R flag set to 1 in the EARO, the 6LR injects the address in the RPL unicast support.
    </li><li>
@@ -458,8 +500,12 @@ docName="draft-thubert-6lo-multicast-registration-00" >
 
 </section> <!-- end section "Updating RFC 9010"-->
 
+
 <section anchor="back"><name>Backward Compatibility</name>
 </section>	<!-- end section "Backward Compatibility" -->
+
+<section anchor="dep"><name>Deployment considerations</name>
+</section>	<!-- end section "Deployment considerations" -->
 
 <section  anchor="sec"><name>Security Considerations</name>
 <t>
@@ -562,7 +608,8 @@ docName="draft-thubert-6lo-multicast-registration-00" >
     <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.3810.xml'/>
     <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4919.xml'/>
     <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6282.xml'/>
-	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9008.xml'/>
+    <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7761.xml'/>
+    <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9008.xml'/>
     <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.heile-lpwan-wisun-overview.xml'/>
       <reference anchor='IEEE802154'>
          <front>
