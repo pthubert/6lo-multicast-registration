@@ -62,8 +62,8 @@ docName="draft-thubert-6lo-multicast-registration-01" >
    saving energy, which is the most constrained resource of all. Other design
    constraints, such as a limited memory capacity, duty cycling of the LLN
    devices and low-power lossy transmissions, derive from that primary concern.
-   The radio is a major energy drain and the protocol signaling must be adapted
-   to optimize their transmissions and avoid any waste.
+   The radio (both transmitting or simply listening) is a major energy drain and the LLN protocols must be adapted to allow the nodes to remain sleeping with
+   the radio turned off at most times.
 </t><t>
    The <xref target='RFC6550'>"Routing Protocol for Low Power
    and Lossy Networks"</xref> (RPL) to provide IPv6 <xref target='RFC8200'/>
@@ -89,7 +89,7 @@ docName="draft-thubert-6lo-multicast-registration-01" >
    was cheap on those media while memory for neighbor cache was expensive.
    It was thus designed as a reactive protocol that relies on caching and
    multicast operations for Address Discovery (aka Lookup) andsime Duplicate Address Detection (DAD) of IPv6 unicast addresses.
-   Those multicast operations typically impact every node on link when at most
+   Those multicast operations typically impact every node on-link when at most
    one is really targeted, which is a waste of energy, and imply that all
    nodes are awake to hear the request, which is inconsistent with power
    saving (sleeping) modes.
@@ -120,14 +120,14 @@ docName="draft-thubert-6lo-multicast-registration-01" >
    But though RPL also provides multicast routing, 6LoWPAN ND supports only
    the registration of unicast addresses and there is no equivalent of
    <xref target='RFC9010'/> to specify the 6LR behavior upon the registration
-   of a multicast address.
+   of one or more multicast address.
 </t><t>
    The <xref target='RFC3810'>"Multicast Listener Discovery Version 2 (MLDv2)
    for IPv6" </xref> enables the router to learn which node listens to which
    multicast address, but as the classical IPv6 ND protocol, MLD relies on
    multicasting Queries to all nodes, which is unfit for low power operations.
    As for IPv6 ND, it makes sense to let the 6LNs control when and how they
-   maintain the state associated to their multicast address in the 6LR, e.g.,
+   maintain the state associated to their multicast addresses in the 6LR, e.g.,
    during their own wake time. In the case of a constrained node that already
    implements <xref target='RFC8505'/> for unicast reachability, it makes sense
    to extend to that support to register the multicast addresses they listen to.
@@ -228,10 +228,10 @@ docName="draft-thubert-6lo-multicast-registration-01" >
 
 <section anchor='overview'><name>Overview</name>
    <t><xref target='RFC8505'/> is a pre-requisite to this specification.
-   A node that implement this MUST also implement <xref target='RFC8505'/>.
+   A node that implements this MUST also implement <xref target='RFC8505'/>.
    This specification does not introduce a new option; it modifies
    existing options and updates the associated behaviors to enable the
-   registration of multicast addresses with <xref target='RFC8505'/>.
+   Registration for Multicast Addresses with <xref target='RFC8505'/>.
    </t>
    <t>
    This specification also extends <xref target='RFC6550'/> and
@@ -267,11 +267,13 @@ docName="draft-thubert-6lo-multicast-registration-01" >
        o  o  o  Wireless side
    o   o o   o  o o
   o  o  o o   o  o  o
- o  o  o   LLN  o  o o
-   o  o   o  o   6LR
-   o o  o o   o  o  z
-    o   o   o o       z
-          o            6LN
+ o  o  o   LLN  o   +---+
+   o  o   o  o   o  |6LR|
+   o o  o o   o     +---+
+    o   o   o o o  o    z
+   o  o oo o  o        +---+
+          o            |6LN|
+                       +---+
     ]]></artwork></figure>
 
 
@@ -284,22 +286,41 @@ docName="draft-thubert-6lo-multicast-registration-01" >
    </t><t>
    With this specification, the 6LNs can now register for the multicast
    addresses they listen to, using a new M flag in the EARO to signal a
-   registration for a multicast address. Multiple 6LN can register for the same multicast address to the samme 6LR. Note the use of the term "for",
-   the nodes registers the unicast addresses it owns, but registers for
+   registration for a multicast address. Multiple 6LN can register for the same multicast address to the same 6LR. Note the use of the term "for",
+   a node registers the unicast addresses that it owns, but registers for
    multicast addresses that it listens to.
    </t><t>
    If the R flag is set in the registration of one or more 6LNs for the same
    multicast address, the 6LR injects the multicast address in the RPL
    multicast support, based on the longest registration lifetime across those
-   6LNs. The DAO messages for the multicast address percolate along the RPL
-   preferred parent tree in storing mode of operation and form a subtree for
-   that multicast address with 6LNs that registered for it as the leaves.
+   6LNs.
    </t><t>
-   As prescribed in section 12 of <xref target='RFC6550'/>, the RPL routers
+   In the RPL "Storing Mode of Operation with multicast support", the DAO
+   messages for the multicast address percolate along the RPL preferred parent
+   tree and mark a subtree that becomes the multicast tree for that multicast
+   address, with 6LNs that registered for it as the leaves.
+   </t><t>
+   As prescribed in section 12 of <xref target='RFC6550'/>, the 6LR
    forward the multicast packets as individual unicast MAC frames to each
-   child that advertised the multicast address in its DAO message . The same
-   way, the 6LR delivers the multicast packet as individual unicast MAC frames
-   to each of the 6LNs that registered for the multicast address.
+   child that advertised the multicast address in its DAO message . In most LLNs
+   a broadcast is unreliable (no ack) and forces a listener to remain awake, so
+   it is expected that the 6LR also delivers the multicast packet as individual
+   unicast MAC frames to each of the 6LNs that registered for the multicast
+   address.
+   </t><t>
+   In the new RPL "Non-Storing Mode of Operation with multicast support" that is
+   introduced here, the DAO messages register multicast addresses as Targets,
+   though never as Transit. The multicast distribution is hub-and-spoke from
+   the Root to all the 6LRs that are transit for the multicast address, using
+   the same source-routing header as for unicast targets attahced to the 6LR,
+   but for the ultimate entry that is the multicast address.
+   </t><t>
+   With this specification, the 6LNs can also register for the anycast
+   addresses they listen to, using a new A flag in the EARO to signal a
+   registration for an anycast address. Multiple 6LN can register for the same
+   anycast address to the same 6LR, but the RPL routing ensures that only one
+   of the 6LN gets the particular packet.
+
    </t>
 
 
@@ -317,7 +338,7 @@ docName="draft-thubert-6lo-multicast-registration-01" >
    for use in IPv6 ND messages.
     </t>
     <t>
-   The new "Registration of Multicast Address Supported" (M) flag indicates
+   The new "Registration for Multicast Address Supported" (M) flag indicates
    to the 6LN that the 6LR accepts multicast address registrations as
    specified in this document and will ensure that packets for the multicast Registered Address will be routed to the 6LNs that registered with the
    R flag set.
@@ -341,7 +362,8 @@ docName="draft-thubert-6lo-multicast-registration-01" >
 
     <t> New Option Field:    </t>
 	<dl>
-	<dt>M</dt><dd> 1-bit flag: "Registration of Multicast Address Supported" </dd>
+	<dt>M</dt><dd> 1-bit flag: "Registration for Multicast and Anycast
+    Addresses Supported" </dd>
 	</dl>
 
     </section>	<!-- end section "Extending RFC 7400" -->
@@ -352,7 +374,7 @@ docName="draft-thubert-6lo-multicast-registration-01" >
 <section anchor='coex'><name>Updating RFC 6550</name>
 <t>
 
-   RPL supports multicast operation the "Storing Mode of Operation with
+   RPL supports multicast operations in the "Storing Mode of Operation with
    multicast support" (MOP 3) which provides source-independent multicast
    routing in RPL, as prescribed in section 12 of <xref target='RFC6550'/>.
    MOP 3 is a storing Mode of Operation. This is needed to build a multicast
@@ -364,8 +386,19 @@ docName="draft-thubert-6lo-multicast-registration-01" >
    Though it is preferred to build separate RPL Instances, one in MOP 1 and one
    in MOP 3, this specification allows to hybrid the Storing Mode for multicast
    and Non-Storing Mode for unicast in the same RPL Instance, more in
-   <xref target='deploy'/>   .
-   </t>
+   <xref target='deploy'/>.
+</t> <t>
+   This specification adds a "Non-Storing Mode of Operation with multicast
+   support" (MOP to be assigned by IANA) whereby the non-storing Mode DAO to
+   the Root may contain multicast addresses in the RPL Target Option (RTO),
+   whereas the Transit Information Option (TIO) can not. In that case, the RPL
+   Root copies the multicast packet to each 6LR that is a transit for the
+   multicast target, using the same source routing header as for unicast
+   targets attached to that 6LR.
+</t> <t>
+   For this new mode as well, this specification allows to enable the operation
+   in a MOP 1 brown field, more in  <xref target='deploy'/>.
+</t>
 </section>	<!-- end section "Updating RFC 6550" -->
 
 <section anchor='updating'><name>Updating RFC 8505</name>
@@ -375,16 +408,29 @@ docName="draft-thubert-6lo-multicast-registration-01" >
 
 <t>
    Section 4.1 of <xref target='RFC8505'/> defines the EARO as an extension to
-   the ARO option defined in <xref target='RFC6775'/>. This specification adds
-   a new M flag to the EARO flags field to signal that the Registered Address is
-   a multicast address. When both the M and the R flags are set, the 6LR that
-   conforms this specification joins the multicast stream,
-   e.g., by injecting
-   the address in the RPL multicast support.
+   the ARO option defined in <xref target='RFC6775'/>.
+
 </t>
 <t>
-   <xref target='EARO'/> illustrates the M flag in its suggested position
-   (4, counting 0 to 8 in network order in the 8-bit array), to be confirmed by IANA.
+   This specification adds
+   a new M flag to the EARO flags field to signal that the Registered Address is
+   a multicast address. When both the M and the R flags are set, the 6LR that
+   conforms to this specification joins the multicast stream,  e.g., by
+   injecting the address in the RPL multicast support which is extended in this
+   specification for Non-Storiong Mode.
+</t>
+<t>
+   This specification adds
+   a new A flag to the EARO flags field to signal that the Registered Address is
+   an anycast address. When both the A and the R flags are set, the 6LR that
+   conforms to this specification injects the anycast address in the RPL
+   anycast support that is introduced in this specification for both Storing
+   and Non-Storing Modes.
+</t>
+<t>
+   <xref target='EARO'/> illustrates the A and M flags in their suggested
+   positions (2 and 3, respectively, counting 0 to 7 in network order in the
+   8-bit array), to be confirmed by IANA.
 </t>
  <figure anchor='EARO'><name>EARO Option Format</name>
  <artwork align="center">
@@ -393,7 +439,7 @@ docName="draft-thubert-6lo-multicast-registration-01" >
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |     Type      |     Length    |    Status     |    Opaque     |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |Rsvd |M| I |R|T|     TID       |     Registration Lifetime     |
+  |Rsv|A|M| I |R|T|     TID       |     Registration Lifetime     |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |                                                               |
  ...             Registration Ownership Verifier                 ...
@@ -404,13 +450,15 @@ docName="draft-thubert-6lo-multicast-registration-01" >
 
     <t> New Option Field:    </t>
 	<dl>
-	<dt>M</dt><dd> 1-bit flag: "Registration of Multicast Address Supported" </dd>
+	<dt>Rsv</dt><dd> 2-bit field: reserved, MUST be set to 0 and ignored by the receiver</dd>
+	<dt>A</dt><dd> 1-bit flag: "Registration for Anycast Address" </dd>
+	<dt>M</dt><dd> 1-bit flag: "Registration for Multicast Address" </dd>
 	</dl>
 
 </section> <!-- end section "New EARO flag" -->
 
 
-<section anchor='multireg'><name>Multicast Registration</name>
+<section anchor='multireg'><name>Registering Extensions</name>
 <t>
    With <xref target='RFC8505'/>:
    </t>
@@ -435,7 +483,7 @@ docName="draft-thubert-6lo-multicast-registration-01" >
   </t>
    <ul>
    <li>
-   Registration of multicast addresses is now supported.
+   Registration for multicast and anycast addresses is now supported.
    </li>
    <li>
    The 6LN MUST also register all the IPv6 multicast addresses that it listens
@@ -448,8 +496,14 @@ docName="draft-thubert-6lo-multicast-registration-01" >
    <xref target='RFC7761'/> protocol.
    </li>
    <li>
-    The 6LR maintains a registration state per tuple (IPv6 address, LLA) since
-    multiple 6LNs may listen to the same multicast address.
+   The 6LN MUST also register all the IPv6 anycast addresses that it supports
+   and it MUST set the A flag in the EARO for those addresses.
+   </li>
+   <li>
+    The Registration Ownership Verifier (ROVR) in the EARO identifies uniquely
+    a registration within the namespace of the Registered Address. The 6LR MUST
+    maintain a registration state per tuple (IPv6 address, ROVR) for both
+    anycast and multicast types of address, since multiple 6LNs may register for the same address of these types.
    </li>
 
    </ul>
@@ -496,7 +550,7 @@ docName="draft-thubert-6lo-multicast-registration-01" >
 
 <section anchor="back"><name>Backward Compatibility</name>
 <t>
-   A legacy 6LN will not register multicast address and the service will be
+   A legacy 6LN will not register multicast addresses and the service will be
    the same when the network is upgraded. A legacy 6LR will not set the M flag
    in the 6CIO and an upgraded 6LN will not register multicast addresses.
 </t>
@@ -512,15 +566,18 @@ docName="draft-thubert-6lo-multicast-registration-01" >
 </t><t>
    It is generally  RECOMMENDED to deploy one RPL Instance in any Mode of
    Operation (typically MOP 1) for unicast that legacy nodes can join, and a
-   separate RPL Instance dedicated to multicast operations and operating in MOP 3. This allows to use a different objective function for both direction,
+   separate RPL Instance dedicated to multicast operations and operating in MOP
+   3. This allows to use a different objective function for both directions,
    favouring the link quality up for unicast collection and down for multicast
    distribution.
 </t><t>
    But this might be impractical in some use cases where the signaling and the
    state to be installed in the devices are very constrained. When using a
    single RPL Instance, MOP 3 expects the Storing Mode of Operation for both
-   unicast and multicast, which is an issue in constrained networks that typically use MOP 1 for unicast. This specification allows a mixed mode (MOP
-   1 fo runicast and MOP 3 for multicast) under the following conditions:
+   unicast and multicast, which is an issue in constrained networks that
+   typically use MOP 1 for unicast. This specification allows a mixed mode (MOP
+   1 for unicast with support for multicast and/or anycast) under the following
+   conditions:
 </t>
 
 <ul>
@@ -530,11 +587,11 @@ docName="draft-thubert-6lo-multicast-registration-01" >
  </li> <li>
    The MOP signaled in the RPL DODAG Information Object (DIO) messages is MOP 1
    to enable the legacy nodes to operate as leaves.
- </li> <li>T
-   The support of multicast in the RPL Instance SHOULD be signaled by the 6LR
-   to the 6LN using a 6CIO, see <xref target="CIO"/>.
  </li> <li>
-   Altrenatively, the support of multicast in the RPL domain can be known
+   The support of multicast and/ or anycast in the RPL Instance SHOULD be
+   signaled by the 6LR to the 6LN using a 6CIO, see <xref target="CIO"/>.
+ </li> <li>
+   Alternatively, the support of multicast in the RPL domain can be known
    by other means such as configuration or external information such as support
    of a version of an industry standard that mandates it.
  </li>
@@ -565,7 +622,7 @@ docName="draft-thubert-6lo-multicast-registration-01" >
     registry, as follows.
 </t>
 
-    <section><name>New ARO flag</name>
+    <section><name>New EARO flag</name>
 	<t> IANA is requested to make additions to the Address Registration Option
     flags subregistry as follows:
 	</t>
@@ -575,7 +632,8 @@ docName="draft-thubert-6lo-multicast-registration-01" >
       <tr><td>ARO flag</td><td>Meaning</td><td>Reference</td></tr>
    </thead><tbody>
       <tr><td>4 and 5</td><td>"I" Field</td><td>RFC 8505</td></tr>
-      <tr><td>3 (suggested)</td><td>M flag: Registration of Multicast Address</td><td>This RFC</td></tr>
+      <tr><td>3 (suggested)</td><td>M flag: Registration for Multicast Address</td><td>This RFC</td></tr>
+      <tr><td>2 (suggested)</td><td>A flag: Registration for Anycast Address</td><td>This RFC</td></tr>
    </tbody>
 	</table>	<!-- end table "New  ARO flag" +-->
     </section>	<!-- end section "New ARO flag -->
@@ -590,7 +648,7 @@ docName="draft-thubert-6lo-multicast-registration-01" >
    <thead>
       <tr><td>Capability Bit</td><td>Meaning</td><td>Reference</td></tr>
    </thead><tbody>
-      <tr><td>8 (suggested)</td><td>M flag: Registration of Multicast Address Supported</td><td>This RFC</td></tr>
+      <tr><td>8 (suggested)</td><td>M flag: Registration for Multicast and Anycast Addresses Supported</td><td>This RFC</td></tr>
 
    </tbody>
 	</table>	<!-- end table "New 6LoWPAN Capability Bits" -->
