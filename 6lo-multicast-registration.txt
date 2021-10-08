@@ -14,10 +14,11 @@ Expires: 11 April 2022
 
 Abstract
 
-   This document updates RFC 8505 in order to enable the registration by
-   a 6LN of an IPv6 multicast address to a 6LR.  This document also
-   extends RFC 9010 to enable the 6LR to inject the address in the RPL
-   multicast support.
+   This document updates RFC 8505 to enable the address registration of
+   IPv6 anycast and multicast addresses to a 6LR and updates RFC 6550
+   (RPL) add a new Non-Storing multicast mode and support for anycast
+   addresses.  This document also extends RFC 9010 to enable the 6LR to
+   inject the anycast and multicast addresses in RPL.
 
 Status of This Memo
 
@@ -49,7 +50,6 @@ Copyright Notice
    extracted from this document must include Simplified BSD License text
    as described in Section 4.e of the Trust Legal Provisions and are
    provided without warranty as described in the Simplified BSD License.
-
 
 
 
@@ -479,10 +479,10 @@ Internet-Draft       Multicast Address Registration         October 2021
 
    With multicast, the address has a recognizable format, and a
    multicast packet is to be delivered to all the registered listeners.
-   In contrast with anycast, the format of the address or prefix may not
-   be distinguishable from unicast.  In fact, an external destination
-   that may be injected from multiple border routers MUST be injected as
-   anycast in RPL.
+   In contrast with anycast, the format of the address may not be
+   distinguishable from unicast.  In fact, an external destination
+   (address or prefix) that may be injected from multiple border routers
+   MUST be injected as anycast in RPL.
 
    For both multicast and anycast, there is no concept of duplication,
    and there might be multiple registrations from multiple parties, each
@@ -496,7 +496,7 @@ Internet-Draft       Multicast Address Registration         October 2021
    The 6LRs that inject multicast and anycast routes into RPL may not be
    synchronized to advertise same value of the Path Sequence in the RPL
    TIO.  It results that the value the Path Sequence is irrelevant when
-   the target is anycast ot multicast, and that it MUST be ignored.
+   the target is anycast or multicast, and that it MUST be ignored.
    Like the 6LR, a RPL router in Storing Mode propagates the route to
 
 
@@ -574,7 +574,7 @@ Internet-Draft       Multicast Address Registration         October 2021
    the M and the R flags are set, the 6LR that conforms to this
    specification joins the multicast stream, e.g., by injecting the
    address in the RPL multicast support which is extended in this
-   specification for Non-Storiong Mode.
+   specification for Non-Storing Mode.
 
    This specification adds a new A flag to the EARO flags field to
    signal that the Registered Address is an anycast address.  When both
@@ -634,7 +634,7 @@ Internet-Draft       Multicast Address Registration         October 2021
       including an NCE with the Link Layer Address (LLA) of the
       Registered Node (the 6LN here).
 
-   This specification adds the following behaviour:
+   This specification adds the following behavior:
 
    *  Registration for multicast and anycast addresses is now supported.
 
@@ -679,7 +679,7 @@ Internet-Draft       Multicast Address Registration         October 2021
       unicast layer-2 frame to the LLA the nodes that registered the
       unicast address.
 
-   This specification adds the following behaviour:
+   This specification adds the following behavior:
 
    *  Upon a registration with the R and the M flags set to 1 in the
       EARO, the 6LR injects the address in the RPL multicast support.
@@ -694,18 +694,18 @@ Internet-Draft       Multicast Address Registration         October 2021
    With this specification, a RPL DODAG forms a realm, and multiple RPL
    DODAGs may federated in a single RPL Instance administratively.  This
    means that a multicast address that needs to span a RPL DODAG MUST
-   use use a scope of Realm-Local whereas a multicast address that needs
-   to span a RPL Instance MUST use use a scope of Admin-Local as
-   discussed in section 3 of "IPv6 Multicast Address Scopes" [RFC7346].
+   use a scope of Realm-Local whereas a multicast address that needs to
+   span a RPL Instance MUST use a scope of Admin-Local as discussed in
+   section 3 of "IPv6 Multicast Address Scopes" [RFC7346].
 
    "IPv6 Addressing of IPv4/IPv6 Translators" [RFC6052] enables to embed
-   IPv4 addresses in IPv6 addresses.  The Root of a DODAG may leveerage
+   IPv4 addresses in IPv6 addresses.  The Root of a DODAG may leverage
    that technique to translate IPv4 traffic in IPv6 and route along the
    RPL domain.  When encapsulating an packet with an IPv4 multicast
    Destination Address, it MUST use form a multicast address and use the
    appropriate scope, Realm-Local or Admin-Local.
 
-   "Unicast-Prefix-based IPv6 Multicast Addresse" [RFC3306] enables to
+   "Unicast-Prefix-based IPv6 Multicast Addresses" [RFC3306] enables to
    form 2^32 multicast addresses from a single /64 prefix.  If an IPv6
    prefix is associated to an Instance or a RPL DODAG, this provides a
    namespace that can be used in any desired fashion.  It is for
@@ -717,7 +717,7 @@ Internet-Draft       Multicast Address Registration         October 2021
    either a Realm-Local or an Admin-Local multicast address as needed in
    the configuration.
 
-   IN a "green field" deployement where all nodes support this
+   IN a "green field" deployment where all nodes support this
    specification, it is possible to deploy a single RPL Instance using a
    multicast MOP for unicast, multicast and anycast addresses.
 
@@ -746,13 +746,13 @@ Internet-Draft       Multicast Address Registration         October 2021
    In the case of the new Non-Storing multicast MOP, arguably the new
    support is only needed at the 6LRs that will accept multicast
    listeners.  It is still required that each listener can reach at
-   least one such 6LR, so the upgraded 6LRs must be deployed so as to
-   cover all the 6LN that need multicast services.
+   least one such 6LR, so the upgraded 6LRs must be deployed to cover
+   all the 6LN that need multicast services.
 
    Using separate RPL Instances for in the one hand unicast traffic and
    in the other hand anycast and multicast traffic allows to use
-   different objective function, one favouring the link quality up for
-   unicast collection and one farouring downwards link quality for
+   different objective function, one favoring the link quality up for
+   unicast collection and one favoring downwards link quality for
    multicast distribution.
 
    But this might be impractical in some use cases where the signaling
@@ -763,14 +763,14 @@ Internet-Draft       Multicast Address Registration         October 2021
    When using a single RPL Instance, MOP 3 expects the Storing Mode of
    Operation for both unicast and multicast, which is an issue in
    constrained networks that typically use MOP 1 for unicast.  This
-   specification allows a mixed mode that is signaled as MOP 1 in teh
+   specification allows a mixed mode that is signaled as MOP 1 in the
    DIO messages for backward compatibility, where limited multicast and/
    or anycast is available, under the following conditions:
 
    *  There MUST be enough density of 6LRs that support the mixed mode
       to cover the all the 6LNs that require multicast or anycast
-      services.In Storing Mode, there MUST be enough density or 6LR that
-      support the mixed mode to also form a DODAG to the Root.
+      services.  In Storing Mode, there MUST be enough density or 6LR
+      that support the mixed mode to also form a DODAG to the Root.
 
    *  The RPL routers that support the mixed mode and are configured to
       operate in in accordance with the desired operation in the
@@ -866,7 +866,7 @@ Internet-Draft       Multicast Address Registration         October 2021
 
 11.2.  New RPL Mode of Operation
 
-   IANA is requested to make an additions to the "Mode of Operation"
+   IANA is requested to make an addition to the "Mode of Operation"
    [IANA.RPL.MOP] subregistry of the "Routing Protocol for Low Power and
    Lossy Networks (RPL)" registry as indicated in Table 2:
 

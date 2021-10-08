@@ -42,10 +42,10 @@ docName="draft-thubert-6lo-multicast-registration-02" >
 
    <abstract>
    <t>
-    This document updates RFC 8505 in order to enable the registration by a 6LN
-    of an IPv6 multicast address to a 6LR.
-    This document also extends RFC 9010 to enable the 6LR to inject the address
-    in the RPL multicast support.
+    This document updates RFC 8505 to enable the address registration
+    of IPv6 anycast and multicast addresses to a 6LR and updates RFC 6550 (RPL)
+    add a new Non-Storing multicast mode and support for anycast addresses.
+    This document also extends RFC 9010 to enable the 6LR to inject the anycast and multicast addresses in RPL.
    </t>
    </abstract>
 </front>
@@ -442,9 +442,9 @@ docName="draft-thubert-6lo-multicast-registration-02" >
 <t>
    With multicast, the address has a recognizable format, and a multicast
    packet is to be delivered to all the registered listeners. In contrast with
-   anycast, the format of the address or prefix may not be distinguishable
-   from unicast. In fact, an external destination that may be injected from
-   multiple border routers MUST be injected as anycast in RPL.
+   anycast, the format of the address may not be distinguishable from unicast.
+   In fact, an external destination (address or prefix) that may be injected
+   from multiple border routers MUST be injected as anycast in RPL.
 </t> <t>
    For both multicast and anycast, there is no concept of duplication, and
    there might be multiple registrations from multiple parties, each using a
@@ -456,7 +456,7 @@ docName="draft-thubert-6lo-multicast-registration-02" >
    same ROVR.
 </t> <t>
    The 6LRs that inject multicast and anycast routes into RPL may not be synchronized to advertise same value of the Path Sequence in the RPL TIO. It results that the value the Path Sequence is irrelevant when the target
-   is anycast ot multicast, and that it MUST be ignored.
+   is anycast or multicast, and that it MUST be ignored.
    Like the 6LR, a RPL router in Storing Mode propagates the route to its
    parent(s) in DAO messages once and only once for each address, but it MUST retain a routing table entry for each of the children that advertised the
    address. Note that typically the router advertises the multicast and
@@ -528,7 +528,7 @@ docName="draft-thubert-6lo-multicast-registration-02" >
    a multicast address. When both the M and the R flags are set, the 6LR that
    conforms to this specification joins the multicast stream,  e.g., by
    injecting the address in the RPL multicast support which is extended in this
-   specification for Non-Storiong Mode.
+   specification for Non-Storing Mode.
 </t>
 <t>
    This specification adds
@@ -590,7 +590,7 @@ docName="draft-thubert-6lo-multicast-registration-02" >
    </ul>
 
   <t>
-   This specification adds the following behaviour:
+   This specification adds the following behavior:
   </t>
    <ul>
    <li>
@@ -641,7 +641,7 @@ docName="draft-thubert-6lo-multicast-registration-02" >
    </li>
    </ul>
    <t>
-   This specification adds the following behaviour:
+   This specification adds the following behavior:
    </t>
    <ul>
    <li>
@@ -664,20 +664,20 @@ docName="draft-thubert-6lo-multicast-registration-02" >
 <t>
    With this specification, a RPL DODAG forms a realm, and multiple RPL DODAGs
    may federated in a single RPL Instance administratively. This means that
-   a multicast address that needs to span a RPL DODAG MUST use use a scope
+   a multicast address that needs to span a RPL DODAG MUST use a scope
    of Realm-Local whereas a multicast address that needs to span a RPL Instance
-   MUST use use a scope of Admin-Local as discussed in section 3 of <xref
+   MUST use a scope of Admin-Local as discussed in section 3 of <xref
    target='RFC7346'>"IPv6 Multicast Address Scopes"</xref>.
 </t>
 <t>
    <xref target='RFC6052'>"IPv6 Addressing of IPv4/IPv6 Translators"</xref>
    enables to embed IPv4 addresses in IPv6 addresses. The Root of a DODAG
-   may leveerage that technique to translate IPv4 traffic in IPv6 and route
+   may leverage that technique to translate IPv4 traffic in IPv6 and route
    along the RPL domain. When encapsulating an packet with an IPv4 multicast
    Destination Address, it MUST use form a multicast address and use the
    appropriate scope, Realm-Local or Admin-Local.
 </t>
-<t><xref target='RFC3306'>"Unicast-Prefix-based IPv6 Multicast Addresse"</xref>
+<t><xref target='RFC3306'>"Unicast-Prefix-based IPv6 Multicast Addresses"</xref>
    enables to form 2^32 multicast addresses from a single /64 prefix.
    If an IPv6 prefix is associated to an Instance or a RPL DODAG, this provides
    a namespace that can be used in any desired fashion. It is for instance
@@ -689,7 +689,7 @@ docName="draft-thubert-6lo-multicast-registration-02" >
    address as needed in the configuration.
 </t>
 <t>
-   IN a "green field"  deployement where all nodes support this
+   IN a "green field"  deployment where all nodes support this
    specification, it is possible to deploy a single RPL Instance using a
    multicast MOP for unicast, multicast and anycast addresses.
 </t><t>
@@ -709,25 +709,24 @@ docName="draft-thubert-6lo-multicast-registration-02" >
    In the case of the new Non-Storing multicast MOP, arguably the new support is
    only needed at the 6LRs that will accept multicast listeners. It is still
    required that each listener can reach at least one such 6LR, so the upgraded
-   6LRs must be deployed so as to cover all the 6LN that need multicast
-   services.
+   6LRs must be deployed to cover all the 6LN that need multicast services.
 </t><t>
    Using separate RPL Instances for in the one hand unicast traffic and in the
    other hand anycast and multicast traffic allows to use different objective
-   function, one favouring the link quality up for unicast collection and one
-   farouring downwards link quality for multicast distribution.
+   function, one favoring the link quality up for unicast collection and one
+   favoring downwards link quality for multicast distribution.
 </t><t>
    But this might be impractical in some use cases where the signaling and the
    state to be installed in the devices are very constrained, the upgraded
    devices are too sparse, or the devices do not support more multiple instances.
 </t><t>
-   When using a single RPL Instance, MOP 3 expects the Storing Mode of Operation for both unicast and multicast, which is an issue in constrained networks that typically use MOP 1 for unicast. This specification allows a mixed mode that is signaled as MOP 1 in teh DIO messages for backward compatibility, where limited multicast and/or anycast is available, under the following conditions:
+   When using a single RPL Instance, MOP 3 expects the Storing Mode of Operation for both unicast and multicast, which is an issue in constrained networks that typically use MOP 1 for unicast. This specification allows a mixed mode that is signaled as MOP 1 in the DIO messages for backward compatibility, where limited multicast and/or anycast is available, under the following conditions:
 </t>
 
 <ul>
  <li>
    There MUST be enough density of 6LRs that support the mixed mode to
-   cover the all the 6LNs that require multicast or anycast services.In Storing Mode, there MUST be enough density or 6LR that support the mixed mode
+   cover the all the 6LNs that require multicast or anycast services. In Storing Mode, there MUST be enough density or 6LR that support the mixed mode
    to also form a DODAG to the Root.
  </li>  <li>
    The RPL routers that support the mixed mode and are configured to operate in
@@ -813,7 +812,7 @@ docName="draft-thubert-6lo-multicast-registration-02" >
     </section>	<!-- end section "New RTO flags -->
 
     <section><name>New RPL Mode of Operation</name>
-	<t> IANA is requested to make an additions to the "Mode of Operation" <xref target='IANA.RPL.MOP'/> subregistry of the "Routing Protocol for Low Power and Lossy Networks (RPL)" registry as indicated in <xref target="RMOP"/>:
+	<t> IANA is requested to make an addition to the "Mode of Operation" <xref target='IANA.RPL.MOP'/> subregistry of the "Routing Protocol for Low Power and Lossy Networks (RPL)" registry as indicated in <xref target="RMOP"/>:
 	</t>
 
 	<table anchor="RMOP" ><name>New RPL Mode of Operation</name>
