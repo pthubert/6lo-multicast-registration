@@ -62,8 +62,9 @@ docName="draft-thubert-6lo-multicast-registration-02" >
    saving energy, which is the most constrained resource of all. Other design
    constraints, such as a limited memory capacity, duty cycling of the LLN
    devices and low-power lossy transmissions, derive from that primary concern.
-   The radio (both transmitting or simply listening) is a major energy drain and the LLN protocols must be adapted to allow the nodes to remain sleeping with
-   the radio turned off at most times.
+   The radio (both transmitting or simply listening) is a major energy drain
+   and the LLN protocols must be adapted to allow the nodes to remain sleeping
+   with the radio turned off at most times.
 </t><t>
    The <xref target='RFC6550'>"Routing Protocol for Low Power
    and Lossy Networks"</xref> (RPL) to provide IPv6 <xref target='RFC8200'/>
@@ -204,9 +205,11 @@ docName="draft-thubert-6lo-multicast-registration-02" >
        <dt>ND</dt><dd>  Neighbor Discovery  </dd>
        <dt>NS</dt><dd>  Neighbor Solicitation  </dd>
        <dt>ROVR</dt><dd> Registration Ownership Verifier </dd>
+       <dt>RTO</dt><dd> RPL Target Option </dd>
        <dt>RA</dt><dd>  Router Advertisement  </dd>
        <dt>RS</dt><dd>  Router Solicitation  </dd>
        <dt>TID</dt><dd> Transaction ID </dd>
+       <dt>TIO</dt><dd> Transit Information Option </dd>
        </dl>
 
 
@@ -231,7 +234,8 @@ docName="draft-thubert-6lo-multicast-registration-02" >
    A node that implements this MUST also implement <xref target='RFC8505'/>.
    This specification does not introduce a new option; it modifies
    existing options and updates the associated behaviors to enable the
-   Registration for Multicast Addresses with <xref target='RFC8505'/>.
+   Registration for Multicast Addresses as an extension to
+   <xref target='RFC8505'/>.
    </t>
    <t>
    This specification also extends <xref target='RFC6550'/> and
@@ -321,6 +325,10 @@ docName="draft-thubert-6lo-multicast-registration-02" >
    anycast address to the same 6LR, but the RPL routing ensures that only one
    of the 6LN gets the particular packet.
    </t>
+ <t>For backward compatibility, this specification allows to build a single
+    DODAG signaled as MOP 1, that conveys both unicast and multicast traffic in
+    Non-Storing Mode, more in <xref target='deploy'/>.
+   </t>
  <t>
    It is also possible to leverage this specification between the 6LN and the
    6LR for the registration of an anycast or a multicast addresses in networks
@@ -329,23 +337,30 @@ docName="draft-thubert-6lo-multicast-registration-02" >
    </t>
  <t>
    For instance, it is possible to operate a RPL Instance in the new
-   "Non-Storing Mode of Operation with multicast support" and use <xref target=
-   'RFC7731'>"Multicast Protocol for Low-Power and Lossy Networks (MPL)"</xref>
-   for the multicast operation. MPL floods the DODAG with the multicast messages
-   independently of the RPL DODAG topologies. Two variations are possible:
+   "Non-Storing Mode of Operation with multicast support" (while possibly
+   signaling a MOP of 1) and use <xref target='RFC7731'>"Multicast Protocol
+   for Low-Power and Lossy Networks (MPL)"</xref> for the multicast operation.
+   MPL floods the DODAG with the multicast messages independently of the RPL
+   DODAG topologies. Two variations are possible:
 </t>
 <ul>
 <li>
    In one possible variation, all the 6LNs set the R flag in the EARO for a
-   multicast target, upon which the 6LR sends a unicast DAO message to the
-   Root; in that case, the Root can filter the multicast messages for which
-   there is no listener and only flood the relevant multicasts.
+   multicast target, upon which the 6LRs send a unicast DAO message to the
+   Root; the Root filters out the multicast messages for which there is no
+   listener and only floods when there is.
 </li>
 <li>
    In a simpler variation, the 6LNs do not set the R flag and the Root floods
-   all the multicast packets over the whole DODAG.
+   all the multicast packets over the whole DODAG. Using configuration, is it
+   also possible to control the behavior of the 6LR to ignore the R flag and either always or never send the DAO message, and/or to control the Root and
+   specify which groups it should flood or not flood.
+
 </li>
- </ul><t>
+ </ul>
+ <t>
+   Note that if the configuration instructs the 6LR not to send the DAO, then
+   MPL can really by used in conjunction with RPL Storing Mode as well.
  </t>
 
 </section> <!-- end section "Overview" -->
@@ -421,8 +436,8 @@ docName="draft-thubert-6lo-multicast-registration-02" >
 <t>
    This specification adds a "Non-Storing Mode of Operation with multicast
    support" (MOP to be assigned by IANA) whereby the non-storing Mode DAO to
-   the Root may contain multicast addresses in the RTO, whereas the Transit
-   Information Option (TIO) can not.
+   the Root may contain multicast addresses in the RPL Target Option (RTO),
+   whereas the Transit Information Option (TIO) can not.
    In that case, the RPL Root copies the multicast packet to each 6LR that is
    a transit for the multicast target, using the same source routing header as
    for unicast address of a RPL Unaware Leaf (RUL) attached to that 6LR.
