@@ -409,7 +409,7 @@ Internet-Draft       Multicast Address Registration         October 2021
 
    *  In a simpler variation, the 6LNs do not set the R flag and the
       Root floods all the multicast packets over the whole DODAG.  Using
-      configuration, is it also possible to control the behavior of the
+      configuration, it is also possible to control the behavior of the
       6LR to ignore the R flag and either always or never send the DAO
       message, and/or to control the Root and specify which groups it
       should flood or not flood.
