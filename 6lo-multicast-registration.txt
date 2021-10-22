@@ -5,12 +5,12 @@
 6lo                                                      P. Thubert, Ed.
 Internet-Draft                                             Cisco Systems
 Updates: 6550, 8505, 9010 (if approved)                  22 October 2021
-Intended status: Standards Track                                        
+Intended status: Standards Track
 Expires: 25 April 2022
 
 
     IPv6 Neighbor Discovery Multicast Address Listener Registration
-                draft-ietf-6lo-multicast-registration-01
+                draft-ietf-6lo-multicast-registration-02
 
 Abstract
 
@@ -1147,7 +1147,7 @@ Internet-Draft       Multicast Address Registration         October 2021
               IANA, https://www.iana.org/assignments/rpl/rpl.xhtml.
 
    [IANA.RPL.RTO.FLG]
-              IANA, "IANA Sub-Registry for the RTO Flags", IANA, 
+              IANA, "IANA Sub-Registry for the RTO Flags", IANA,
               https://www.iana.org/assignments/rpl/rpl.xhtml#rpl-target-
               option-flags.
 
