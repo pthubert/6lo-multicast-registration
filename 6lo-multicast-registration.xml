@@ -231,6 +231,17 @@ docName="draft-ietf-6lo-multicast-registration-01" >
 <!-- **************************************************************** -->
 
 <section anchor="overview"><name>Overview</name>
+   <t>
+   This specification inherits from <xref target="RFC6550"/>,
+   <xref target="RFC8505"/>, and <xref target="RFC8505"/> to provide additional
+   capabilities for anycast and multicast. Unless specified otherwise therein,
+   the behaviour of the 6LBR that acts as RPL Root, of the intermediate routers
+   down the RPL graph, of the 6LR that act as access routers and of the 6LNs
+   that are the RFC-unaware destinations, is the same as for unicast. In
+   particular, forwarding a packet happens as specified in section 11 of
+   <xref target="RFC6550"/>, including loop avoidance and detection, though in
+   the case of multicast multiple copies might be generated.
+   </t>
    <t><xref target="RFC8505"/> is a pre-requisite to this specification.
    A node that implements this MUST also implement <xref target="RFC8505"/>.
    This specification does not introduce a new option; it modifies
@@ -691,11 +702,21 @@ docName="draft-ietf-6lo-multicast-registration-01" >
    <ul>
    <li>
    Upon a registration with the R and the M flags set to 1 in the EARO, the
-   6LR injects the address in the RPL multicast support.
+   6LR injects the address in the RPL multicast support and sets the M flag
+   in the RTO.
+   </li><li>
+   Upon a registration with the R and the A flags set to 1 in the EARO, the
+   6LR injects the address in the new RPL anycast support and sets the A flag
+   in the RTO.
    </li><li>
    Upon receiving a packet directed to a multicast address for which it has at
    least one registration, the 6LR delivers a copy of the packet as a unicast
    layer-2 frame to the LLA of each of the nodes that registered to that
+   multicast address.
+   </li><li>
+   Upon receiving a packet directed to a multicast address for which it has at
+   least one registration, the 6LR delivers a copy of the packet as a unicast
+   layer-2 frame to the LLA of exactly one of the nodes that registered to that
    multicast address.
    </li>
    </ul>
