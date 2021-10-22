@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE rfc SYSTEM "rfc2629-xhtml.ent">
 
 
@@ -14,16 +14,16 @@
 <!-- <?rfc subcompact="no"?> -->
 <?rfc authorship="yes"?>
 <?rfc tocappendix="yes"?>
-<rfc  xmlns:xi="http://www.w3.org/2001/XInclude" category="std" ipr='trust200902'
+<rfc  xmlns:xi="http://www.w3.org/2001/XInclude" category="std" ipr="trust200902"
 tocInclude="true" indexInclude="true" obsoletes=""  consensus="true"
-submissionType="IETF" xml:lang="en" version="3"  updates='6550, 8505, 9010'
-docName="draft-thubert-6lo-multicast-registration-02" >
+submissionType="IETF" xml:lang="en" version="3"  updates="6550, 8505, 9010"
+docName="draft-ietf-6lo-multicast-registration-01" >
 
 <front>
 
-   <title abbrev='Multicast Address Registration'>IPv6 Neighbor Discovery Multicast Address Registration</title>
-   <author initials='P' surname='Thubert' fullname='Pascal Thubert' role='editor'>
-      <organization abbrev='Cisco Systems'>Cisco Systems, Inc</organization>
+   <title abbrev="Multicast Address Registration">IPv6 Neighbor Discovery Multicast Address Listener Registration</title>
+   <author initials="P" surname="Thubert" fullname="Pascal Thubert" role="editor">
+      <organization abbrev="Cisco Systems">Cisco Systems, Inc</organization>
       <address>
          <postal>
             <street>Building D</street>
@@ -42,8 +42,8 @@ docName="draft-thubert-6lo-multicast-registration-02" >
 
    <abstract>
    <t>
-    This document updates RFC 8505 to enable the address registration
-    of IPv6 anycast and multicast addresses to a 6LR and updates RFC 6550 (RPL)
+    This document updates RFC 8505 to enable a listener to subscribe to
+    an IPv6 anycast or multicast address; the draft updates RFC 6550 (RPL) to
     add a new Non-Storing multicast mode and support for anycast addresses.
     This document also extends RFC 9010 to enable the 6LR to inject the anycast and multicast addresses in RPL.
    </t>
@@ -66,8 +66,8 @@ docName="draft-thubert-6lo-multicast-registration-02" >
    and the LLN protocols must be adapted to allow the nodes to remain sleeping
    with the radio turned off at most times.
 </t><t>
-   The <xref target='RFC6550'>"Routing Protocol for Low Power
-   and Lossy Networks"</xref> (RPL) to provide IPv6 <xref target='RFC8200'/>
+   The <xref target="RFC6550">"Routing Protocol for Low Power
+   and Lossy Networks"</xref> (RPL) to provide IPv6 <xref target="RFC8200"/>
    routing services within such constraints.
    To save signaling and routing state in constrained networks, the RPL routing
    is only performed along a Destination-Oriented Directed Acyclic Graph (DODAG)
@@ -81,11 +81,11 @@ docName="draft-thubert-6lo-multicast-registration-02" >
    inconsistency discovery, which avoids wasting energy in the proactive repair
    of unused paths.
 </t><t>
-   Section 12 of <xref target='RFC6550'/> details the "Storing Mode of
+   Section 12 of <xref target="RFC6550"/> details the "Storing Mode of
    Operation with multicast support" with source-independent multicast routing in RPL.
 </t><t>
    The classical "IPv6 Neighbor Discovery (IPv6 ND) Protocol"
-   <xref target='RFC4861'/> <xref target='RFC4862'/> was defined for serial
+   <xref target="RFC4861"/> <xref target="RFC4862"/> was defined for serial
    links and shared transit media such as Ethernet at a time when broadcast
    was cheap on those media while memory for neighbor cache was expensive.
    It was thus designed as a reactive protocol that relies on caching and
@@ -95,45 +95,45 @@ docName="draft-thubert-6lo-multicast-registration-02" >
    nodes are awake to hear the request, which is inconsistent with power
    saving (sleeping) modes.
 </t><t>
-   The original 6LoWPAN ND, <xref target='RFC6775'> "Neighbor Discovery
+   The original 6LoWPAN ND, <xref target="RFC6775"> "Neighbor Discovery
    Optimizations for 6LoWPAN networks"</xref>, was introduced to avoid the
    excessive use of multicast messages and enable IPv6 ND for operations over
    energy-constrained nodes.
-   <xref target='RFC6775'/> changes the classical IPv6 ND model to proactively
+   <xref target="RFC6775"/> changes the classical IPv6 ND model to proactively
    establish the Neighbor Cache Entry (NCE) associated to the unicast address of
    a 6LoWPAN Node (6LN) in the a 6LoWPAN Router(s) (6LR) that serves it.
-   To that effect, <xref target='RFC6775'/> defines a new Address Registration
+   To that effect, <xref target="RFC6775"/> defines a new Address Registration
    Option (ARO) that is  placed in unicast Neighbor Solicitation (NS) and
    Neighbor Advertisement (NA) messages between the 6LN and the 6LR.
 </t><t>
-   <xref target='RFC8505'> "Registration Extensions for 6LoWPAN Neighbor
-   Discovery"</xref> updates <xref target='RFC6775'/> into a generic Address
+   <xref target="RFC8505"> "Registration Extensions for 6LoWPAN Neighbor
+   Discovery"</xref> updates <xref target="RFC6775"/> into a generic Address
    Registration mechanism that can be used to access services such as routing
    and ND proxy and introduces the Extended Address Registration Option (EARO)
    for that purpose. This provides a routing-agnostic interface for a host to
    request that the router injects a unicast IPv6 address in the local routing
    protocol and provide return reachability for that address.
 </t><t>
-   <xref target='RFC9010'>"Routing for RPL Leaves"</xref> provides the router
+   <xref target="RFC9010">"Routing for RPL Leaves"</xref> provides the router
    counterpart of the mechanism for a host that implements
-   <xref target='RFC8505'/> to inject its unicast Unique Local Addresses (ULAs)
+   <xref target="RFC8505"/> to inject its unicast Unique Local Addresses (ULAs)
    and Global Unicast Addresses (GUAs) in RPL.
    But though RPL also provides multicast routing, 6LoWPAN ND supports only
    the registration of unicast addresses and there is no equivalent of
-   <xref target='RFC9010'/> to specify the 6LR behavior upon the registration
+   <xref target="RFC9010"/> to specify the 6LR behavior upon the registration
    of one or more multicast address.
 </t><t>
-   The <xref target='RFC3810'>"Multicast Listener Discovery Version 2 (MLDv2)
+   The <xref target="RFC3810">"Multicast Listener Discovery Version 2 (MLDv2)
    for IPv6" </xref> enables the router to learn which node listens to which
    multicast address, but as the classical IPv6 ND protocol, MLD relies on
    multicasting Queries to all nodes, which is unfit for low power operations.
    As for IPv6 ND, it makes sense to let the 6LNs control when and how they
    maintain the state associated to their multicast addresses in the 6LR, e.g.,
    during their own wake time. In the case of a constrained node that already
-   implements <xref target='RFC8505'/> for unicast reachability, it makes sense
+   implements <xref target="RFC8505"/> for unicast reachability, it makes sense
    to extend to that support to register the multicast addresses they listen to.
 </t><t>
-   This specification extends <xref target='RFC8505'/> and <xref target='RFC9010'/> to add the capability for the 6LN to register multicast
+   This specification extends <xref target="RFC8505"/> and <xref target="RFC9010"/> to add the capability for the 6LN to register multicast
    addresses and for the 6LR to inject them in the RPL multicast support.
 </t>
 
@@ -143,7 +143,7 @@ docName="draft-thubert-6lo-multicast-registration-02" >
 
 
 <section> <name>Terminology</name>
-  <section anchor='bcp'><name>Requirements Language</name>
+  <section anchor="bcp"><name>Requirements Language</name>
   <t>
 
     The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -155,7 +155,7 @@ docName="draft-thubert-6lo-multicast-registration-02" >
   </t>
   </section>	<!-- end section "Requirements Language" -->
 
-  <section anchor='lo'><name>References</name>
+  <section anchor="lo"><name>References</name>
     <t>
 	This document uses terms and concepts that are discussed in:
     </t>
@@ -181,7 +181,7 @@ docName="draft-thubert-6lo-multicast-registration-02" >
   </section> <!--	 end section "References" -->
 
 
-  <section anchor='acronyms'><name>Glossary</name>
+  <section anchor="acronyms"><name>Glossary</name>
     <t> This document uses the following acronyms:</t>
        <dl newline="false" indent="7" spacing="compact" >
        <dt>6BBR</dt><dd> 6LoWPAN Backbone Router </dd>
@@ -230,19 +230,21 @@ docName="draft-thubert-6lo-multicast-registration-02" >
 <!-- **************************************************************** -->
 <!-- **************************************************************** -->
 
-<section anchor='overview'><name>Overview</name>
-   <t><xref target='RFC8505'/> is a pre-requisite to this specification.
-   A node that implements this MUST also implement <xref target='RFC8505'/>.
+<section anchor="overview"><name>Overview</name>
+   <t><xref target="RFC8505"/> is a pre-requisite to this specification.
+   A node that implements this MUST also implement <xref target="RFC8505"/>.
    This specification does not introduce a new option; it modifies
    existing options and updates the associated behaviors to enable the
    Registration for Multicast Addresses as an extension to
-   <xref target='RFC8505'/>.
+   <xref target="RFC8505"/>.
    </t>
    <t>
-   This specification also extends <xref target='RFC6550'/> and
-   <xref target='RFC9010'/> in the case of a route-over multilink subnet based
-   on the RPL routing protocol. A 6LR that implements the RPL extensions
-   specified therein MUST also implement <xref target='RFC9010'/>.
+   This specification also extends <xref target="RFC6550"/> and
+   <xref target="RFC9010"/> in the case of a route-over multilink subnet based
+   on the RPL routing protocol, to add multicast ingress replication in
+   Non-Storing Mode and anycast support in both Storing and Non-Storing modes.
+   A 6LR that implements the RPL extensions specified therein MUST also
+   implement <xref target="RFC9010"/>.
    </t>
     <t>
     <xref target="figref"/> illustrates the classical situation of an LLN as a
@@ -260,7 +262,7 @@ docName="draft-thubert-6lo-multicast-registration-02" >
     and RPL <xref target="RFC6550"/> over <xref target="IEEE802154"/>.
     </t>
 
-    <figure anchor='figref' align='center'><name>Wireless Mesh</name>
+    <figure anchor="figref" align="center"><name>Wireless Mesh</name>
     <artwork><![CDATA[
                   |
       ----+-------+------------
@@ -289,57 +291,68 @@ docName="draft-thubert-6lo-multicast-registration-02" >
    The registration state is periodically renewed by the Registering Node,
    before the lifetime indicated in the EARO expires.
    </t><t>
-   With this specification, the 6LNs can now register for the multicast
-   addresses they listen to, using a new M flag in the EARO to signal a
-   registration for a multicast address. Multiple 6LN can register for the same multicast address to the same 6LR. Note the use of the term "for",
-   a node registers the unicast addresses that it owns, but registers for
-   multicast addresses that it listens to.
+   With this specification, the 6LNs can now subscribe to the multicast
+   addresses they listen to, using a new M flag in the EARO to signal that the
+   registration is for a multicast address. Multiple 6LN may subscribe to
+   the same multicast address to the same 6LR. Note the use of the term
+   "subscribe": using the EARO registration mechanism, a node registers the
+   unicast addresses that it owns, but subscribes to the multicast addresses
+   that it listens to.
+   </t><t>
+   With this specification, the 6LNs can also resgister the anycast
+   addresses they accept, using a new A flag in the EARO to signal that the
+   registration is for an anycast address. As for multicast, multiple 6LN may
+   register the same anycast address to the same 6LR.
    </t><t>
    If the R flag is set in the registration of one or more 6LNs for the same
-   multicast address, the 6LR injects the multicast address in the RPL
-   multicast support, based on the longest registration lifetime across those
-   6LNs.
+   address, the 6LR injects the anycast and multicast addresses in RPL, based on
+   the longest registration lifetime across the active registrations for the
+   address.
    </t><t>
    In the RPL "Storing Mode of Operation with multicast support", the DAO
    messages for the multicast address percolate along the RPL preferred parent
    tree and mark a subtree that becomes the multicast tree for that multicast
-   address, with 6LNs that registered for it as the leaves.
-   </t><t>
-   As prescribed in section 12 of <xref target='RFC6550'/>, the 6LR
-   forward the multicast packets as individual unicast MAC frames to each
-   child that advertised the multicast address in its DAO message. In most LLNs
-   a broadcast is unreliable (no ack) and forces a listener to remain awake, so
-   it is expected that the 6LR also delivers the multicast packet as individual
-   unicast MAC frames to each of the 6LNs that registered for the multicast
-   address.
+   address, with 6LNs that subscribed to the address as the leaves.
+   As prescribed in section 12 of <xref target="RFC6550"/>, the 6LR forwards a
+   multicast packet as an individual unicast MAC frame to each peer along the
+   multicast tree, excepting to the node it received the packet from.
    </t><t>
    In the new RPL "Non-Storing Mode of Operation with multicast support" that is
-   introduced here, the DAO messages register multicast addresses as Targets,
-   though never as Transit. The multicast distribution is hub-and-spoke from
-   the Root to all the 6LRs that are transit for the multicast address, using
-   the same source-routing header as for unicast targets attached to the 6LR,
-   but for the ultimate entry that is the multicast address.
+   introduced here, the DAO messages announce the multicast addresses as Targets
+   though never as Transit. The multicast distribution is an ingress replication
+   whereby the Root encapsulates the multicast packets to all the 6LRs that are
+   transit for the multicast address, using the same source-routing header as
+   for unicast targets attached to the respective 6LRs.
    </t><t>
-   With this specification, the 6LNs can also register for the anycast
-   addresses they listen to, using a new A flag in the EARO to signal a
-   registration for an anycast address. Multiple 6LN can register for the same
-   anycast address to the same 6LR, but the RPL routing ensures that only one
-   of the 6LN gets the particular packet.
+   Broadcasting is typically unreliable in LLNs (no ack) and forces a listener
+   to remain awake, so it generally discouraged. The expectation is thus that in
+   either mode, the 6LRs deliver the multicast packets as individual unicast MAC
+   frames to each of the 6LNs that subscribed to the multicast address.
+   </t><t>
+   With this specification, anycast addresses can be injected in RPL in both
+   Storing and Non-Storing modes. In Storing Mode the RPL router accepts DAO
+   from multiple children for the same anycast address, but only forwards a
+   packet to one of the children.
+   In Non-Storing Mode, the Root maintains the list of all the RPL nodes that
+   announced the anycast address as Target, but forwards a given packet to only
+   one of them.
    </t>
  <t>For backward compatibility, this specification allows to build a single
-    DODAG signaled as MOP 1, that conveys both unicast and multicast traffic in
-    Non-Storing Mode, more in <xref target='deploy'/>.
+    DODAG signaled as MOP 1, that conveys anycast, unicast and multicast packets
+    using the same source routing mechanism, more in <xref target="deploy"/>.
    </t>
  <t>
    It is also possible to leverage this specification between the 6LN and the
-   6LR for the registration of an anycast or a multicast addresses in networks
-   that are not necessarily LLNs, and/or where the routing protocol between
-   the 6LR and above is not necessarily RPL.
+   6LR for the registration of unicast, anycast and multicast IPv6 addresses in
+   networks that are not necessarily LLNs, and/or where the routing protocol
+   between the 6LR and above is not necessarily RPL. In that case, the
+   distribution of packets between the 6LR and the 6LNs may effectively rely
+   on a broadcast or multicast support at the lower layer.
    </t>
  <t>
    For instance, it is possible to operate a RPL Instance in the new
    "Non-Storing Mode of Operation with multicast support" (while possibly
-   signaling a MOP of 1) and use <xref target='RFC7731'>"Multicast Protocol
+   signaling a MOP of 1) and use <xref target="RFC7731">"Multicast Protocol
    for Low-Power and Lossy Networks (MPL)"</xref> for the multicast operation.
    MPL floods the DODAG with the multicast messages independently of the RPL
    DODAG topologies. Two variations are possible:
@@ -368,7 +381,7 @@ docName="draft-thubert-6lo-multicast-registration-02" >
 </section> <!-- end section "Overview" -->
 
 
-    <section anchor='CIO'><name>Extending RFC 7400</name>
+    <section anchor="CIO"><name>Extending RFC 7400</name>
 
     <t>
    This specification defines a new capability bit for use in the
@@ -384,10 +397,10 @@ docName="draft-thubert-6lo-multicast-registration-02" >
    R flag set.
     </t>
     <t>
-   <xref target='fig6CIO'/> illustrates the M flag in its suggested position
+   <xref target="fig6CIO"/> illustrates the M flag in its suggested position
    (8, counting 0 to 15 in network order in the 16-bit array), to be confirmed by IANA.
    </t>
-   <figure anchor='fig6CIO'><name>New Capability Bits in the 6CIO</name>
+   <figure anchor="fig6CIO"><name>New Capability Bits in the 6CIO</name>
    <artwork>
     <![CDATA[
     0                   1                   2                   3
@@ -411,13 +424,13 @@ docName="draft-thubert-6lo-multicast-registration-02" >
 
 
 
-<section anchor='coex'><name>Updating RFC 6550</name>
+<section anchor="coex"><name>Updating RFC 6550</name>
 
-<section anchor='mop3'><name>Updating MOP 3</name>
+<section anchor="mop3"><name>Updating MOP 3</name>
 <t>
    RPL supports multicast operations in the "Storing Mode of Operation with
    multicast support" (MOP 3) which provides source-independent multicast
-   routing in RPL, as prescribed in section 12 of <xref target='RFC6550'/>.
+   routing in RPL, as prescribed in section 12 of <xref target="RFC6550"/>.
    MOP 3 is a storing Mode of Operation. This operation builds a multicast
    tree within the RPL DODAG for each multicast address. This specification
    provides additional details for the MOP 3 operation.
@@ -428,13 +441,13 @@ docName="draft-thubert-6lo-multicast-registration-02" >
    Though it is preferred to build separate RPL Instances, one in MOP 1 and one
    in MOP 3, this specification allows to hybrid the Storing Mode for multicast
    and Non-Storing Mode for unicast in the same RPL Instance, more in
-   <xref target='deploy'/>.
+   <xref target="deploy"/>.
 </t>
   </section>	<!-- end section "Updating MOP 3" -->
 
 
 
-<section anchor='mop5'><name>New Non-Storing Multicast MOP</name>
+<section anchor="mop5"><name>New Non-Storing Multicast MOP</name>
 <t>
    This specification adds a "Non-Storing Mode of Operation with multicast
    support" (MOP to be assigned by IANA) whereby the non-storing Mode DAO to
@@ -454,62 +467,64 @@ docName="draft-thubert-6lo-multicast-registration-02" >
    for the muticast address.
 </t> <t>
    For a packet that is generated by the Root, this means that the Root builds a
-   source routing header as shown in section 8.1.3 of <xref target='RFC9008'/>,
+   source routing header as shown in section 8.1.3 of <xref target="RFC9008"/>,
    but for which the last and only the last address is multicast.
    For a packet that is not generated by the Root,the Root encapsulates the
-   multicast packet as per section 8.2.4 of <xref target='RFC9008'/>. In that
+   multicast packet as per section 8.2.4 of <xref target="RFC9008"/>. In that
    case, the outer header is purely unicast, and the encapsulated packet is
    purely multicast.
 </t> <t>
    For this new mode as well, this specification allows to enable the operation
-   in a MOP 1 brown field, more in  <xref target='deploy'/>.
+   in a MOP 1 brown field, more in  <xref target="deploy"/>.
 </t>
 
 </section>	<!-- end section "New Non-Storing Multicast MOP" -->
 
-<section anchor='anic'><name>RPL Anycast Operation</name>
+<section anchor="anic"><name>RPL Anycast Operation</name>
 
 <t>
-   With multicast, the address has a recognizable format, and a multicast
-   packet is to be delivered to all the registered listeners. In contrast with
-   anycast, the format of the address may not be distinguishable from unicast.
-   In fact, an external destination (address or prefix) that may be injected
-   from multiple border routers MUST be injected as anycast in RPL.
+   With multicast, the address has a recognizable format, and a multicast packet
+   is to be delivered to all the active subscribers.
+   In contrast with anycast, the format of the address is not distinguishable
+   from that of unicast. In fact, an external destination (address or prefix)
+   that may be injected from multiple border routers MUST be injected as anycast
+   in RPL.
 </t> <t>
-   For both multicast and anycast, there is no concept of duplication, and
-   there might be multiple registrations from multiple parties, each using a
-   different value of the ROVR field that identifies that registration. The 6LR
-   MUST conserve one registration per value of the ROVR per multicast or
-   anycast address, but inject the route into RPL only once for each address.
+   For either multicast and anycast, there can be multiple registrations from
+   multiple parties, each using a different value of the ROVR field that
+   identifies the individual registration. The 6LR MUST maintain a registration
+   state per value of the ROVR per multicast or anycast address, but inject
+   the route into RPL only once for each address.
    Since the registrations are considered separate, the check on the TID that
    acts as registration sequence only applies to the registration with the
    same ROVR.
 </t> <t>
-   The 6LRs that inject multicast and anycast routes into RPL may not be synchronized to advertise same value of the Path Sequence in the RPL TIO. It results that the value the Path Sequence is irrelevant when the target
+   The 6LRs that inject multicast and anycast routes into RPL may not be
+   synchronized to advertise same value of the Path Sequence in the RPL TIO.
+   It results that the value the Path Sequence is irrelevant when the target
    is anycast or multicast, and that it MUST be ignored.
-   Like the 6LR, a RPL router in Storing Mode propagates the route to its
-   parent(s) in DAO messages once and only once for each address, but it MUST retain a routing table entry for each of the children that advertised the
-   address. Note that typically the router advertises the multicast and
-   anycast addresses only to its preferred parents, in which case the
-   resulting routes form a tree down the DODAG.
 </t> <t>
-   When forwarding multicast packets down the DODAG, the RPL router MUST copy
+   Like the 6LR, a RPL router in Storing Mode propagates the route to its
+   parent(s) in DAO messages once and only once for each address, but it MUST
+   retain a routing table entry for each of the children that advertised the
+   address.
+</t> <t>
+   When forwarding multicast packets down the DODAG, the RPL router copies
    all the children that advertised the address in their DAO messages. In
    contrast, when forwarding anycast packets down the DODAG, the RPL router
    MUST copy one and only one of the children that advertised the address in
-   their DAO messages. Typically this is done through MAC-Layer unicast which
-   makes the operation more reliable.
+   their DAO messages, and forward to one parent if there is no such child.
 </t>
 
   </section>	<!-- end section "RPL Anycast Operation" -->
 
 
-<section anchor='newrtoflg'><name>New RPL Target Option Flags</name>
+<section anchor="newrtoflg"><name>New RPL Target Option Flags</name>
 <t>
-   <xref target='RFC6550'/> recognizes a multicast address by its format
-   (as specified in section 2.7 of <xref target='RFC4291'/>) and applies the
+   <xref target="RFC6550"/> recognizes a multicast address by its format
+   (as specified in section 2.7 of <xref target="RFC4291"/>) and applies the
    specified multicast operation if the address is recognized as multicast.
-   This specification updates <xref target='RFC6550'/> to add the M and A flags
+   This specification updates <xref target="RFC6550"/> to add the M and A flags
    to the RTO to indicate that the target address is to be processed as
    multicast or anycast, respectively.
 </t> <t>
@@ -519,10 +534,10 @@ docName="draft-thubert-6lo-multicast-registration-02" >
    The M and A flags are mutually exclusive and MUST NOT be both set.
 </t> <t>
    The suggested position for the A and M flags are 2 and 3 counting from 0 to
-   7 in network order as shown in <xref target='rto-fmt'/>, based on figure 4
-   of <xref target='RFC9010'/> which defines the flags in position 0 and 1:
+   7 in network order as shown in <xref target="rto-fmt"/>, based on figure 4
+   of <xref target="RFC9010"/> which defines the flags in position 0 and 1:
 </t>
-<figure anchor='rto-fmt'><name>Format of the RPL Target Option</name>
+<figure anchor="rto-fmt"><name>Format of the RPL Target Option</name>
               <artwork align="center">
    0                   1                   2                   3
    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -542,14 +557,14 @@ docName="draft-thubert-6lo-multicast-registration-02" >
 </section>	<!-- end section "New RPL Target Option Flags" -->
 </section>	<!-- end section "Updating RFC 6550" -->
 
-<section anchor='updating'><name>Updating RFC 8505</name>
+<section anchor="updating"><name>Updating RFC 8505</name>
 
 
-<section anchor='R8505E'><name>New EARO flag</name>
+<section anchor="R8505E"><name>New EARO flag</name>
 
 <t>
-   Section 4.1 of <xref target='RFC8505'/> defines the EARO as an extension to
-   the ARO option defined in <xref target='RFC6775'/>.
+   Section 4.1 of <xref target="RFC8505"/> defines the EARO as an extension to
+   the ARO option defined in <xref target="RFC6775"/>.
 
 </t>
 <t>
@@ -569,11 +584,11 @@ docName="draft-thubert-6lo-multicast-registration-02" >
    and Non-Storing Modes.
 </t>
 <t>
-   <xref target='EARO'/> illustrates the A and M flags in their suggested
+   <xref target="EARO"/> illustrates the A and M flags in their suggested
    positions (2 and 3, respectively, counting 0 to 7 in network order in the
    8-bit array), to be confirmed by IANA.
 </t>
- <figure anchor='EARO'><name>EARO Option Format</name>
+ <figure anchor="EARO"><name>EARO Option Format</name>
  <artwork align="center">
    0                   1                   2                   3
    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -599,9 +614,9 @@ docName="draft-thubert-6lo-multicast-registration-02" >
 </section> <!-- end section "New EARO flag" -->
 
 
-<section anchor='multireg'><name>Registering Extensions</name>
+<section anchor="multireg"><name>Registering Extensions</name>
 <t>
-   With <xref target='RFC8505'/>:
+   With <xref target="RFC8505"/>:
    </t>
 <ul>
    <li>
@@ -634,7 +649,7 @@ docName="draft-thubert-6lo-multicast-registration-02" >
    The 6LN MAY set the R flag in the EARO to obtain the delivery of the
    multicast packets by the 6LR, e.g., by MLD proxy operations, or by injecting
    the address in a route-over subnet or in the Protocol Independent Multicast
-   <xref target='RFC7761'/> protocol.
+   <xref target="RFC7761"/> protocol.
    </li>
    <li>
    The 6LN MUST also register all the IPv6 anycast addresses that it supports
@@ -644,7 +659,7 @@ docName="draft-thubert-6lo-multicast-registration-02" >
     The Registration Ownership Verifier (ROVR) in the EARO identifies uniquely
     a registration within the namespace of the Registered Address. The 6LR MUST
     maintain a registration state per tuple (IPv6 address, ROVR) for both
-    anycast and multicast types of address, since multiple 6LNs may register for the same address of these types.
+    anycast and multicast types of address, since multiple 6LNs may subscribe to the same address of these types.
    </li>
 
    </ul>
@@ -654,9 +669,9 @@ docName="draft-thubert-6lo-multicast-registration-02" >
 </section> <!-- end section "Updating RFC 8505"-->
 
 
-<section anchor='updating2'><name>Updating RFC 9010</name>
+<section anchor="updating2"><name>Updating RFC 9010</name>
 <t>
-   With <xref target='RFC9010'/>:
+   With <xref target="RFC9010"/>:
    </t>
    <ul>
    <li>
@@ -697,17 +712,17 @@ docName="draft-thubert-6lo-multicast-registration-02" >
    a multicast address that needs to span a RPL DODAG MUST use a scope
    of Realm-Local whereas a multicast address that needs to span a RPL Instance
    MUST use a scope of Admin-Local as discussed in section 3 of <xref
-   target='RFC7346'>"IPv6 Multicast Address Scopes"</xref>.
+   target="RFC7346">"IPv6 Multicast Address Scopes"</xref>.
 </t>
 <t>
-   <xref target='RFC6052'>"IPv6 Addressing of IPv4/IPv6 Translators"</xref>
+   <xref target="RFC6052">"IPv6 Addressing of IPv4/IPv6 Translators"</xref>
    enables to embed IPv4 addresses in IPv6 addresses. The Root of a DODAG
    may leverage that technique to translate IPv4 traffic in IPv6 and route
    along the RPL domain. When encapsulating an packet with an IPv4 multicast
    Destination Address, it MUST use form a multicast address and use the
    appropriate scope, Realm-Local or Admin-Local.
 </t>
-<t><xref target='RFC3306'>"Unicast-Prefix-based IPv6 Multicast Addresses"</xref>
+<t><xref target="RFC3306">"Unicast-Prefix-based IPv6 Multicast Addresses"</xref>
    enables to form 2^32 multicast addresses from a single /64 prefix.
    If an IPv6 prefix is associated to an Instance or a RPL DODAG, this provides
    a namespace that can be used in any desired fashion. It is for instance
@@ -808,7 +823,7 @@ docName="draft-thubert-6lo-multicast-registration-02" >
 <t>
    When the DODAG is operated in MOP 3, a legacy node will not set the M flag
    and still expect multicast service as specified in section 12 of <xref
-   target='RFC6550'/>.
+   target="RFC6550"/>.
    In MOP 3 an RTO that is received with a target that is multicast and the M bit set to 0 MUST be considered as multicast and MUST be processed as if the M flag is set.
 </t>
 </section>	<!-- end section "Backward Compatibility" -->
@@ -823,12 +838,12 @@ docName="draft-thubert-6lo-multicast-registration-02" >
 </t>
 <t>
     IANA is requested to make  changes under the "Internet Control Message
-    Protocol version 6 (ICMPv6) Parameters" <xref target='IANA.ICMP'/> and the
-    "Routing Protocol for Low Power and Lossy Networks (RPL)" <xref target='IANA.RPL'/> registries, as follows:
+    Protocol version 6 (ICMPv6) Parameters" <xref target="IANA.ICMP"/> and the
+    "Routing Protocol for Low Power and Lossy Networks (RPL)" <xref target="IANA.RPL"/> registries, as follows:
 </t>
 
     <section><name>New RTO flags</name>
-	<t> IANA is requested to make additions to the "RPL Target Option Flags" <xref target='IANA.RPL.RTO.FLG'/> subregistry of the "Routing Protocol for Low Power and Lossy Networks (RPL)" registry as indicated in <xref target="RTOflags"/>:
+	<t> IANA is requested to make additions to the "RPL Target Option Flags" <xref target="IANA.RPL.RTO.FLG"/> subregistry of the "Routing Protocol for Low Power and Lossy Networks (RPL)" registry as indicated in <xref target="RTOflags"/>:
 	</t>
 
 	<table anchor="RTOflags" ><name>New RTO flags</name>
@@ -842,7 +857,7 @@ docName="draft-thubert-6lo-multicast-registration-02" >
     </section>	<!-- end section "New RTO flags -->
 
     <section><name>New RPL Mode of Operation</name>
-	<t> IANA is requested to make an addition to the "Mode of Operation" <xref target='IANA.RPL.MOP'/> subregistry of the "Routing Protocol for Low Power and Lossy Networks (RPL)" registry as indicated in <xref target="RMOP"/>:
+	<t> IANA is requested to make an addition to the "Mode of Operation" <xref target="IANA.RPL.MOP"/> subregistry of the "Routing Protocol for Low Power and Lossy Networks (RPL)" registry as indicated in <xref target="RMOP"/>:
 	</t>
 
 	<table anchor="RMOP" ><name>New RPL Mode of Operation</name>
@@ -857,7 +872,7 @@ docName="draft-thubert-6lo-multicast-registration-02" >
 
     <section><name>New EARO flags</name>
 	<t> IANA is requested to make additions to the "Address Registration Option
-    Flags" <xref target='IANA.ICMP.ARO.FLG'/> of the "Internet Control
+    Flags" <xref target="IANA.ICMP.ARO.FLG"/> of the "Internet Control
     Message Protocol version 6 (ICMPv6) Parameters" registry as indicated in
     <xref target="AROflags"/>:
 	</t>
@@ -876,7 +891,7 @@ docName="draft-thubert-6lo-multicast-registration-02" >
     <section title="New 6LoWPAN Capability Bits">
 	<t>
     IANA is requested to make an addition to the
-    "6LoWPAN Capability Bits" <xref target='IANA.ICMP.6CIO'/> subregistry  subregistry of the "Internet Control Message Protocol version 6 (ICMPv6) Parameters" registry as indicated in <xref target="CIOdat"/>:
+    "6LoWPAN Capability Bits" <xref target="IANA.ICMP.6CIO"/> subregistry  subregistry of the "Internet Control Message Protocol version 6 (ICMPv6) Parameters" registry as indicated in <xref target="CIOdat"/>:
 	</t>
 
 	<table anchor="CIOdat" ><name>New 6LoWPAN Capability Bits</name>
@@ -912,22 +927,22 @@ docName="draft-thubert-6lo-multicast-registration-02" >
 <displayreference   target="IEEE80211"             to="IEEE Std 802.11"/>
 <displayreference   target="I-D.heile-lpwan-wisun-overview"   to="Wi-SUN"/>
 
-    <references title='Normative References'>
+    <references title="Normative References">
 	<!-- RFC  -->
 
-	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml'/>
-    <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.3306.xml'/>
-    <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4291.xml'/>
- 	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4861.xml'/>
-	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4862.xml'/>
-	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6550.xml'/>
-	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6775.xml'/>
-	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7346.xml'/>
-	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7400.xml'/>
-	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml'/>
-	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8200.xml'/>
-	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8505.xml'/>
-	<xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9010.xml'/>
+	<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml"/>
+    <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.3306.xml"/>
+    <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4291.xml"/>
+ 	<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4861.xml"/>
+	<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4862.xml"/>
+	<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6550.xml"/>
+	<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6775.xml"/>
+	<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7346.xml"/>
+	<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7400.xml"/>
+	<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
+	<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8200.xml"/>
+	<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8505.xml"/>
+	<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9010.xml"/>
 
 	   <reference anchor="IANA.ICMP">
 		<front>
@@ -1013,19 +1028,19 @@ docName="draft-thubert-6lo-multicast-registration-02" >
     </references>
 
 
-    <references title='Informative References'>
+    <references title="Informative References">
 	<!-- RFC  -->
 
     <!-- I-D -->
-    <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.3810.xml'/>
-    <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4919.xml'/>
-    <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6282.xml'/>
-    <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7731.xml'/>
-     <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7761.xml'/>
-    <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6052.xml'/>
-    <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9008.xml'/>
-    <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.heile-lpwan-wisun-overview.xml'/>
-      <reference anchor='IEEE802154'>
+    <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.3810.xml"/>
+    <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.4919.xml"/>
+    <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6282.xml"/>
+    <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7731.xml"/>
+     <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7761.xml"/>
+    <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6052.xml"/>
+    <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9008.xml"/>
+    <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.heile-lpwan-wisun-overview.xml"/>
+      <reference anchor="IEEE802154">
          <front>
             <title>IEEE Std 802.15.4, Part. 15.4: Wireless Medium Access
             Control (MAC) and Physical Layer (PHY) Specifications for Low-Rate
@@ -1038,7 +1053,7 @@ docName="draft-thubert-6lo-multicast-registration-02" >
          </front>
       </reference>
 
-      <reference anchor='IEEE80211'
+      <reference anchor="IEEE80211"
                  target="https://ieeexplore.ieee.org/document/9363693" >
         <front>
           <title>
