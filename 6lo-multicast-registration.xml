@@ -16,7 +16,7 @@
 <?rfc tocappendix="yes"?>
 <rfc  xmlns:xi="http://www.w3.org/2001/XInclude" category="std" ipr="trust200902"
 tocInclude="true" indexInclude="true" obsoletes=""  consensus="true"
-submissionType="IETF" xml:lang="en" version="3"  updates="6550, 8505, 9010"
+submissionType="IETF" xml:lang="en" version="3"  updates="6550, 6553, 8505, 9010"
 docName="draft-ietf-6lo-multicast-registration-02" >
 
 <front>
@@ -44,9 +44,10 @@ docName="draft-ietf-6lo-multicast-registration-02" >
    <t>
     This document updates RFC 8505 to enable a listener to register an IPv6
     anycast or and subscribe to an IPv6 multicast address; the draft updates
-    RFC 6550 (RPL) to add a new Non-Storing multicast mode and a new support for
-    anycast addresses. This document extends RFC 9010 to enable the 6LR to
-    inject the anycast and multicast addresses in RPL.
+    RFC 6550 (RPL) to add a new Non-Storing Multicast Mode and a new support for
+    anycast addresses in Storing and Non-Storing Modes.
+    This document extends RFC 9010 to enable the 6LR to inject the anycast and
+    multicast addresses in RPL.
    </t>
    </abstract>
 </front>
@@ -134,8 +135,9 @@ docName="draft-ietf-6lo-multicast-registration-02" >
    implements <xref target="RFC8505"/> for unicast reachability, it makes sense
    to extend to that support to register the multicast addresses they listen to.
 </t><t>
-   This specification extends <xref target="RFC8505"/> and <xref target="RFC9010"/> to add the capability for the 6LN to register multicast
-   addresses and for the 6LR to inject them in the RPL multicast support.
+   This specification extends <xref target="RFC8505"/> and <xref target="RFC9010"/>
+   to add the capability for the 6LN to register anycast and multicast addresses
+   and for the 6LR to inject them in RPL.
 </t>
 
 
@@ -498,9 +500,20 @@ docName="draft-ietf-6lo-multicast-registration-02" >
    With multicast, the address has a recognizable format, and a multicast packet
    is to be delivered to all the active subscribers.
    In contrast with anycast, the format of the address is not distinguishable
-   from that of unicast. In fact, an external destination (address or prefix)
-   that may be injected from multiple border routers MUST be injected as anycast
-   in RPL.
+   from that of unicast. A legacy node may issue a DAO message without setting
+   the A flag, the unicast behaviour may apply to anycast traffic in a subDAGs.
+   A target is routed as anycast by a parent (or the Root) that received at
+   least one DAO message for that target with the A flag set to 1.
+   As for multicast, the freshness comparison cannot apply to an anycast target,
+   and the TID field is ignored.
+</t> <t>
+   As opposed to multicast, the anycast operation described therein applies to
+   both addresses and prefixes, and the A flag can be set for both.
+   An external destination (address or prefix) that may be injected as a RPL
+   target from multiple border routers SHOULD be injected as anycast in RPL to
+   enable load balancing. A mobile target that is multihomed SHOULD in contrast
+   be advertised as unicast over the multiple interfaces to favor the TID
+   comparision and vs. the multipath load balancing.
 </t> <t>
    For either multicast and anycast, there can be multiple registrations from
    multiple parties, each using a different value of the ROVR field that
