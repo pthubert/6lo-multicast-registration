@@ -299,11 +299,13 @@ docName="draft-ietf-6lo-multicast-registration-02" >
 
 
    <t>
-   A leaf acting as a 6LN registers its unicast addresses to a RPL router
-   acting as a 6LR, using a unicast NS message with an EARO as specified in
-   <xref target="RFC8505"/>.
+   A leaf acting as a 6LN registers its unicast and anycast addresses a RPL
+   router acting as a 6LR, using a layer-2 unicast NS message with an EARO as
+   specified in <xref target="RFC8505"/>.
    The registration state is periodically renewed by the Registering Node,
-   before the lifetime indicated in the EARO expires.
+   before the lifetime indicated in the EARO expires. As for unicast IPv6
+   addresses, the 6LR uses an EDAR/EDAR exchange with the 6LBR to notify the
+   6LBR of the presence of the listeners.
    </t><t>
    With this specification, the 6LNs can now subscribe to the multicast
    addresses they listen to, using a new M flag in the EARO to signal that the
@@ -587,6 +589,9 @@ docName="draft-ietf-6lo-multicast-registration-02" >
 <section anchor="updating"><name>Updating RFC 8505</name>
 
 
+
+
+
 <section anchor="R8505E"><name>New EARO flag</name>
 
 <t>
@@ -640,6 +645,60 @@ docName="draft-ietf-6lo-multicast-registration-02" >
 
 </section> <!-- end section "New EARO flag" -->
 
+<section anchor="R8505D"><name>New EDAR Message Flag field</name>
+
+<t>
+   Section 4 of <xref target="RFC6775"/> provides the same format for DAR and
+   DAC messages by but the status field is only used in DAC message and has to
+   set to zero in DAC messages. <xref target="RFC8505"/> extends the DAC message
+   as an EDAC but does not change the status field in the EDAR.
+
+</t>
+<t>
+   This specification repurposes the status field in the EDAR and a Flags field.
+   It adds a new M flag to the EDAR flags field to signal that the Registered
+   Address is a multicast address and a new A flag to signal that the Registered
+   Address is an anycast address. As for EARO, the flags are mutually exclusive.
+</t>
+<t>
+   <xref target="EDAR"/> illustrates the A and M flags in their suggested
+   positions (0 and 1, respectively, counting 0 to 7 in network order in the
+   8-bit array), to be confirmed by IANA.
+</t>
+ <figure anchor="EDAR"><name>Extended Duplicate Address Message Format</name>
+ <artwork align="center">
+  0                   1                   2                   3
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |     Type      |CodePfx|CodeSfx|          Checksum             |
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |A|M| Reserved  |     TID       |     Registration Lifetime     |
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |                                                               |
+...            Registration Ownership Verifier (ROVR)           ...
+ |                                                               |
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |                                                               |
+ +                                                               +
+ |                                                               |
+ +                       Registered Address                      +
+ |                                                               |
+ +                                                               +
+ |                                                               |
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</artwork>
+ </figure><!-- end figure "EDAR Message Format" -->
+
+    <t> New and updated Option Fields:    </t>
+	<dl>
+	<dt>Reserved</dt><dd> 6-bit field: reserved, MUST be set to 0 and ignored by the receiver</dd>
+	<dt>A</dt><dd> 1-bit flag: "Registration for Anycast Address" </dd>
+	<dt>M</dt><dd> 1-bit flag: "Registration for Multicast Address" </dd>
+	</dl>
+
+</section> <!-- end section "New EARO flag" -->
+
+
 
 <section anchor="multireg"><name>Registering Extensions</name>
 <t>
@@ -666,7 +725,12 @@ docName="draft-ietf-6lo-multicast-registration-02" >
   </t>
    <ul>
    <li>
-   Registration for multicast and anycast addresses is now supported.
+   Registration for multicast and anycast addresses is now supported. New flags
+   are added to the EARO to signal when the registered address is anycast or
+   multicast.
+   </li>
+   <li>
+   The Status field in the EDAR message that was reserved and not used in RFC 8505 is repurposed to transport the flags to signal multicast and anycast.
    </li>
    <li>
    The 6LN MUST also register all the IPv6 multicast addresses that it listens
@@ -683,15 +747,24 @@ docName="draft-ietf-6lo-multicast-registration-02" >
    and it MUST set the A flag in the EARO for those addresses.
    </li>
    <li>
-    The Registration Ownership Verifier (ROVR) in the EARO identifies uniquely
-    a registration within the namespace of the Registered Address. The 6LR MUST
-    maintain a registration state per tuple (IPv6 address, ROVR) for both
-    anycast and multicast types of address, since multiple 6LNs may subscribe to the same address of these types.
+   The 6LR and the 6LBR are extended to accept more than one registration for
+   the same address when it is anycast or multicast, since multiple 6LNs may
+   subscribe to the same address of these types. In both cases, the
+   Registration Ownership Verifier (ROVR) in the EARO identifies uniquely
+   a registration within the namespace of the Registered Address.
+   </li>
+   <li>
+    The 6LR MUST maintain a registration state per tuple (IPv6 address, ROVR)
+    for both anycast and multicast types of address. It SHOULD notify the 6LBR
+    with an EDAR message, unless it determined that the 6LBR is legacy and does
+    not support this specification. In turn, the 6LBR MUST maintain a
+    registration state per tuple (IPv6 address, ROVR) for both anycast and
+    multicast types of address.
    </li>
 
    </ul>
 
-</section> <!-- end section "Multicast Registration"-->
+</section> <!-- end section "Registering Extensions"-->
 
 </section> <!-- end section "Updating RFC 8505"-->
 
@@ -845,8 +918,14 @@ docName="draft-ietf-6lo-multicast-registration-02" >
    in the 6CIO and an upgraded 6LN will not register multicast addresses.
 </t>
 <t>
+   Upon an EDAR message, a legacy 6LBR may not realize that the address being
+   registered is anycast or multicast, and return that it is duplicate in the
+   EDAC status. The 6LR MUST ignore a duplicate status in the EDAR for anycast
+   and multicast addresses.
+</t>
+<t>
    As detailed in <xref target="deploy"/>, it is possible to add multicast on
-   an existing MOP 1 deployment,
+   an existing MOP 1 deployment.
 </t>
 
 <t>
@@ -878,35 +957,23 @@ docName="draft-ietf-6lo-multicast-registration-02" >
     "Routing Protocol for Low Power and Lossy Networks (RPL)" <xref target="IANA.RPL"/> registries, as follows:
 </t>
 
-    <section><name>New RTO flags</name>
-	<t> IANA is requested to make additions to the "RPL Target Option Flags" <xref target="IANA.RPL.RTO.FLG"/> subregistry of the "Routing Protocol for Low Power and Lossy Networks (RPL)" registry as indicated in <xref target="RTOflags"/>:
+    <section><name>New EDAR Message Flags Subregistry</name>
+	<t> IANA is requested to create a new "EDAR Message Flags" subregistry of
+    the "Internet Control Message Protocol version 6 (ICMPv6) Parameters" registry as indicated in <xref target="EDARflags"/>:
 	</t>
 
-	<table anchor="RTOflags" ><name>New RTO flags</name>
+	<table anchor="EDARflags" ><name>EDAR Message flags</name>
    <thead>
       <tr><td>Bit Number</td><td>Meaning</td><td>Reference</td></tr>
    </thead><tbody>
-      <tr><td>2 (suggested)</td><td>A flag: Target is an Anycast Address</td><td>This RFC</td></tr>
-      <tr><td>3 (suggested)</td><td>M flag: Target is a Multicast Address</td><td>This RFC</td></tr>
+      <tr><td>0 (suggested)</td><td>A flag: Registered Address is Anycast </td><td>This RFC</td></tr>
+      <tr><td>1 (suggested)</td><td>M flag: Registered Address is Multicast </td><td>This RFC</td></tr>
    </tbody>
-	</table>	<!-- end table "New  RTO flags" +-->
-    </section>	<!-- end section "New RTO flags -->
-
-    <section><name>New RPL Mode of Operation</name>
-	<t> IANA is requested to make an addition to the "Mode of Operation" <xref target="IANA.RPL.MOP"/> subregistry of the "Routing Protocol for Low Power and Lossy Networks (RPL)" registry as indicated in <xref target="RMOP"/>:
-	</t>
-
-	<table anchor="RMOP" ><name>New RPL Mode of Operation</name>
-   <thead>
-      <tr><td>Value</td><td>Description</td><td>Reference</td></tr>
-   </thead><tbody>
-      <tr><td>5 (suggested)</td><td>Non-Storing Mode of Operation with multicast support</td><td>This RFC</td></tr>
-   </tbody>
-	</table>	<!-- end table "New  RTO flags" +-->
-    </section>	<!-- end section "New RTO flags -->
+	</table>	<!-- end table "EDAR Message flags" +-->
+    </section>	<!-- end section "New EDAR Message flags Subregistry -->
 
 
-    <section><name>New EARO flags</name>
+ <section><name>New EARO flags</name>
 	<t> IANA is requested to make additions to the "Address Registration Option
     Flags" <xref target="IANA.ICMP.ARO.FLG"/> of the "Internet Control
     Message Protocol version 6 (ICMPv6) Parameters" registry as indicated in
@@ -923,6 +990,43 @@ docName="draft-ietf-6lo-multicast-registration-02" >
    </tbody>
 	</table>	<!-- end table "New  ARO flag" +-->
     </section>	<!-- end section "New ARO flag -->
+
+
+
+    <section><name>New RTO flags</name>
+	<t> IANA is requested to make additions to the "RPL Target Option Flags" <xref target="IANA.RPL.RTO.FLG"/> subregistry of the "Routing Protocol for Low Power and Lossy Networks (RPL)" registry as indicated in <xref target="RTOflags"/>:
+	</t>
+
+	<table anchor="RTOflags" ><name>New RTO flags</name>
+   <thead>
+      <tr><td>Bit Number</td><td>Meaning</td><td>Reference</td></tr>
+   </thead><tbody>
+      <tr><td>2 (suggested)</td><td>A flag: Registered Address is Anycast</td><td>This RFC</td></tr>
+      <tr><td>3 (suggested)</td><td>M flag: Registered Address is Multicast</td><td>This RFC</td></tr>
+   </tbody>
+	</table>	<!-- end table "New  RTO flags" +-->
+    </section>	<!-- end section "New RTO flags -->
+
+
+
+
+
+
+    <section><name>New RPL Mode of Operation</name>
+	<t> IANA is requested to make an addition to the "Mode of Operation" <xref target="IANA.RPL.MOP"/> subregistry of the "Routing Protocol for Low Power and Lossy Networks (RPL)" registry as indicated in <xref target="RMOP"/>:
+	</t>
+
+	<table anchor="RMOP" ><name>New RPL Mode of Operation</name>
+   <thead>
+      <tr><td>Value</td><td>Description</td><td>Reference</td></tr>
+   </thead><tbody>
+      <tr><td>5 (suggested)</td><td>Non-Storing Mode of Operation with multicast support</td><td>This RFC</td></tr>
+   </tbody>
+	</table>	<!-- end table "New  RTO flags" +-->
+    </section>	<!-- end section "New RTO flags -->
+
+
+
 
     <section title="New 6LoWPAN Capability Bits">
 	<t>
