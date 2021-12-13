@@ -17,7 +17,7 @@
 <rfc  xmlns:xi="http://www.w3.org/2001/XInclude" category="std" ipr="trust200902"
 tocInclude="true" indexInclude="true" obsoletes=""  consensus="true"
 submissionType="IETF" xml:lang="en" version="3"  updates="6550, 6553, 8505, 9010"
-docName="draft-ietf-6lo-multicast-registration-02" >
+docName="draft-ietf-6lo-multicast-registration-03" >
 
 <front>
 
@@ -814,6 +814,44 @@ docName="draft-ietf-6lo-multicast-registration-02" >
 </section> <!-- end section "Updating RFC 9010"-->
 
 
+<section  anchor="sec8928"><name>Leveraging RFC 8929</name>
+<t>
+    <xref target="RFC8928"> Address-Protected Neighbor Discovery for
+    Low-Power and Lossy Networks </xref> was defined to protect the ownership of unicast IPv6 addresses that are registered with
+    <xref target="RFC8505"/>.
+
+</t>
+<t>
+    With <xref target="RFC8928"/>, it is possible for a node to autoconfigure a
+    pair of public and private keys and use them to sign the registration of
+    addresses that are either autoconfigured or obtained through other methods.
+
+</t>
+<t>
+    The first hop router (the 6LR) may then validate a registration and
+    perform source address validation on packets coming from the sender node
+    (the 6LN).
+
+</t>
+<t>
+    Anycast and multicast addresses are not owned by one node. Multiple nodes
+    may subscribe to the same address. Also, anycast and multicast addresses
+    are not used to source traffic.
+    In that context, the method specified in <xref target="RFC8928"/> cannot be used with autoconfigured keypairs to protect a single ownership.
+</t>
+<t>
+    For an anycast or a multicast address, it is still possible to leverage
+    <xref target="RFC8928"/> to enforce the right to subscribe. A keypair MUST
+    be associated with the address before it is deployed, and a ROVR MUST be
+    generated from that keypair as specified in <xref target="RFC8928"/>.
+    The address and the ROVR MUST then be installed in the 6LBR so it can recognize the address and compare the ROVR on the first registration.
+</t>
+<t>
+    The keypair MUST then be provisioned in each node that needs to
+    subscribe to the anycast or multicast address, so the node can follow the
+    steps in <xref target="RFC8928"/> to register the address.
+</t>
+</section>  <!-- Leveraging RFC 8929 -->
 
 <section anchor="deploy"><name>Deployment considerations</name>
 <t>
@@ -908,6 +946,19 @@ docName="draft-ietf-6lo-multicast-registration-02" >
     the security section of that document also applies to this document.
     In particular, the link layer SHOULD be sufficiently
     protected to prevent rogue access.
+</t>
+<t>
+   <xref target="sec8928"/> leverages <xref target="RFC8928"/> to prevent an
+   unwanted subscriber to register for an anycast of a multicast address. This
+   mechanism comes with a keypair that is shared between all subscribers.
+   A shared key is prone to be stolen and the level of protection can only go down with time.
+</t>
+<t>
+   It is possible to update the keys associated to an address in all the
+   6LNs, but the flow is not clearly documented and may not complete in due
+   time for all nodes in LLN use cases. It may be simpler to install a
+   all-new address with new keys over a period of time, and switch the traffic
+   to that address when the migreaiton is complete.
 </t>
 </section>	<!-- end section "Security Considerations" -->
 
@@ -1082,7 +1133,10 @@ docName="draft-ietf-6lo-multicast-registration-02" >
 	<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
 	<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8200.xml"/>
 	<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8505.xml"/>
-	<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9010.xml"/>
+
+    <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8928.xml"/>
+
+    <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9010.xml"/>
 
 	   <reference anchor="IANA.ICMP">
 		<front>
