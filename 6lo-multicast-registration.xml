@@ -734,7 +734,9 @@ docName="draft-ietf-6lo-multicast-registration-03" >
    </li>
    <li>
    The 6LN MUST also register all the IPv6 multicast addresses that it listens
-   to and it MUST set the M flag in the EARO for those addresses.
+   to but the all_nodes link-scope multicast address FF02::1
+   <xref target="RFC4291"/> which is implicitly registered, and it MUST set the
+   M flag in the EARO for those addresses.
    </li>
    <li>
    The 6LN MAY set the R flag in the EARO to obtain the delivery of the
@@ -752,6 +754,11 @@ docName="draft-ietf-6lo-multicast-registration-03" >
    subscribe to the same address of these types. In both cases, the
    Registration Ownership Verifier (ROVR) in the EARO identifies uniquely
    a registration within the namespace of the Registered Address.
+   </li>
+   <li>
+   The 6LR MUST also consider that all the nodes that registered an address to
+   it (as known by the SLLAO) also registered to the all nodes link-scope
+   multicast address FF02::1 <xref target="RFC4291"/>.
    </li>
    <li>
     The 6LR MUST maintain a registration state per tuple (IPv6 address, ROVR)

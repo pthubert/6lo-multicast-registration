@@ -4,9 +4,9 @@
 
 6lo                                                      P. Thubert, Ed.
 Internet-Draft                                             Cisco Systems
-Updates: 6550, 6553, 8505, 9010 (if approved)           13 December 2021
+Updates: 6550, 6553, 8505, 9010 (if approved)               1 March 2022
 Intended status: Standards Track                                        
-Expires: 16 June 2022
+Expires: 2 September 2022
 
 
     IPv6 Neighbor Discovery Multicast Address Listener Registration
@@ -36,11 +36,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 June 2022.
+   This Internet-Draft will expire on 2 September 2022.
 
 Copyright Notice
 
-   Copyright (c) 2021 IETF Trust and the persons identified as the
+   Copyright (c) 2022 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Thubert                   Expires 16 June 2022                  [Page 1]
+Thubert                 Expires 2 September 2022                [Page 1]
 
-Internet-Draft       Multicast Address Registration        December 2021
+Internet-Draft       Multicast Address Registration           March 2022
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -86,10 +86,10 @@ Table of Contents
      6.2.  New EDAR Message Flag field . . . . . . . . . . . . . . .  14
      6.3.  Registering Extensions  . . . . . . . . . . . . . . . . .  15
    7.  Updating RFC 9010 . . . . . . . . . . . . . . . . . . . . . .  16
-   8.  Leveraging RFC 8929 . . . . . . . . . . . . . . . . . . . . .  16
+   8.  Leveraging RFC 8929 . . . . . . . . . . . . . . . . . . . . .  17
    9.  Deployment considerations . . . . . . . . . . . . . . . . . .  17
    10. Security Considerations . . . . . . . . . . . . . . . . . . .  19
-   11. Backward Compatibility  . . . . . . . . . . . . . . . . . . .  19
+   11. Backward Compatibility  . . . . . . . . . . . . . . . . . . .  20
    12. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  20
      12.1.  New EDAR Message Flags Subregistry . . . . . . . . . . .  20
      12.2.  New EARO flags . . . . . . . . . . . . . . . . . . . . .  21
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Thubert                   Expires 16 June 2022                  [Page 2]
+Thubert                 Expires 2 September 2022                [Page 2]
 
-Internet-Draft       Multicast Address Registration        December 2021
+Internet-Draft       Multicast Address Registration           March 2022
 
 
 1.  Introduction
@@ -165,9 +165,9 @@ Internet-Draft       Multicast Address Registration        December 2021
 
 
 
-Thubert                   Expires 16 June 2022                  [Page 3]
+Thubert                 Expires 2 September 2022                [Page 3]
 
-Internet-Draft       Multicast Address Registration        December 2021
+Internet-Draft       Multicast Address Registration           March 2022
 
 
    defines a new Address Registration Option (ARO) that is placed in
@@ -221,9 +221,9 @@ Internet-Draft       Multicast Address Registration        December 2021
 
 
 
-Thubert                   Expires 16 June 2022                  [Page 4]
+Thubert                 Expires 2 September 2022                [Page 4]
 
-Internet-Draft       Multicast Address Registration        December 2021
+Internet-Draft       Multicast Address Registration           March 2022
 
 
 2.2.  References
@@ -277,9 +277,9 @@ Internet-Draft       Multicast Address Registration        December 2021
 
 
 
-Thubert                   Expires 16 June 2022                  [Page 5]
+Thubert                 Expires 2 September 2022                [Page 5]
 
-Internet-Draft       Multicast Address Registration        December 2021
+Internet-Draft       Multicast Address Registration           March 2022
 
 
 3.  Overview
@@ -333,9 +333,9 @@ Internet-Draft       Multicast Address Registration        December 2021
 
 
 
-Thubert                   Expires 16 June 2022                  [Page 6]
+Thubert                 Expires 2 September 2022                [Page 6]
 
-Internet-Draft       Multicast Address Registration        December 2021
+Internet-Draft       Multicast Address Registration           March 2022
 
 
                      |
@@ -389,9 +389,9 @@ Internet-Draft       Multicast Address Registration        December 2021
 
 
 
-Thubert                   Expires 16 June 2022                  [Page 7]
+Thubert                 Expires 2 September 2022                [Page 7]
 
-Internet-Draft       Multicast Address Registration        December 2021
+Internet-Draft       Multicast Address Registration           March 2022
 
 
    In the RPL "Storing Mode of Operation with multicast support", the
@@ -445,9 +445,9 @@ Internet-Draft       Multicast Address Registration        December 2021
 
 
 
-Thubert                   Expires 16 June 2022                  [Page 8]
+Thubert                 Expires 2 September 2022                [Page 8]
 
-Internet-Draft       Multicast Address Registration        December 2021
+Internet-Draft       Multicast Address Registration           March 2022
 
 
    operation.  MPL floods the DODAG with the multicast messages
@@ -501,9 +501,9 @@ Internet-Draft       Multicast Address Registration        December 2021
 
 
 
-Thubert                   Expires 16 June 2022                  [Page 9]
+Thubert                 Expires 2 September 2022                [Page 9]
 
-Internet-Draft       Multicast Address Registration        December 2021
+Internet-Draft       Multicast Address Registration           March 2022
 
 
    New Option Field:
@@ -557,9 +557,9 @@ Internet-Draft       Multicast Address Registration        December 2021
 
 
 
-Thubert                   Expires 16 June 2022                 [Page 10]
+Thubert                 Expires 2 September 2022               [Page 10]
 
-Internet-Draft       Multicast Address Registration        December 2021
+Internet-Draft       Multicast Address Registration           March 2022
 
 
    encapsulates the multicast packet as per section 8.2.4 of [RFC9008].
@@ -613,9 +613,9 @@ Internet-Draft       Multicast Address Registration        December 2021
 
 
 
-Thubert                   Expires 16 June 2022                 [Page 11]
+Thubert                 Expires 2 September 2022               [Page 11]
 
-Internet-Draft       Multicast Address Registration        December 2021
+Internet-Draft       Multicast Address Registration           March 2022
 
 
    When forwarding multicast packets down the DODAG, the RPL router
@@ -669,9 +669,9 @@ Internet-Draft       Multicast Address Registration        December 2021
 
 
 
-Thubert                   Expires 16 June 2022                 [Page 12]
+Thubert                 Expires 2 September 2022               [Page 12]
 
-Internet-Draft       Multicast Address Registration        December 2021
+Internet-Draft       Multicast Address Registration           March 2022
 
 
 6.1.  New EARO flag
@@ -725,9 +725,9 @@ Internet-Draft       Multicast Address Registration        December 2021
 
 
 
-Thubert                   Expires 16 June 2022                 [Page 13]
+Thubert                 Expires 2 September 2022               [Page 13]
 
-Internet-Draft       Multicast Address Registration        December 2021
+Internet-Draft       Multicast Address Registration           March 2022
 
 
 6.2.  New EDAR Message Flag field
@@ -781,9 +781,9 @@ Internet-Draft       Multicast Address Registration        December 2021
 
 
 
-Thubert                   Expires 16 June 2022                 [Page 14]
+Thubert                 Expires 2 September 2022               [Page 14]
 
-Internet-Draft       Multicast Address Registration        December 2021
+Internet-Draft       Multicast Address Registration           March 2022
 
 
 6.3.  Registering Extensions
@@ -813,8 +813,9 @@ Internet-Draft       Multicast Address Registration        December 2021
       multicast and anycast.
 
    *  The 6LN MUST also register all the IPv6 multicast addresses that
-      it listens to and it MUST set the M flag in the EARO for those
-      addresses.
+      it listens to but the all_nodes link-scope multicast address
+      FF02::1 [RFC4291] which is implicitly registered, and it MUST set
+      the M flag in the EARO for those addresses.
 
    *  The 6LN MAY set the R flag in the EARO to obtain the delivery of
       the multicast packets by the 6LR, e.g., by MLD proxy operations,
@@ -836,11 +837,14 @@ Internet-Draft       Multicast Address Registration        December 2021
 
 
 
-
-Thubert                   Expires 16 June 2022                 [Page 15]
+Thubert                 Expires 2 September 2022               [Page 15]
 
-Internet-Draft       Multicast Address Registration        December 2021
+Internet-Draft       Multicast Address Registration           March 2022
 
+
+   *  The 6LR MUST also consider that all the nodes that registered an
+      address to it (as known by the SLLAO) also registered to the all
+      nodes link-scope multicast address FF02::1 [RFC4291].
 
    *  The 6LR MUST maintain a registration state per tuple (IPv6
       address, ROVR) for both anycast and multicast types of address.
@@ -884,19 +888,21 @@ Internet-Draft       Multicast Address Registration        December 2021
       packet as a unicast layer-2 frame to the LLA of exactly one of the
       nodes that registered to that multicast address.
 
+
+
+
+
+
+Thubert                 Expires 2 September 2022               [Page 16]
+
+Internet-Draft       Multicast Address Registration           March 2022
+
+
 8.  Leveraging RFC 8929
 
    Address-Protected Neighbor Discovery for Low-Power and Lossy Networks
    [RFC8928] was defined to protect the ownership of unicast IPv6
    addresses that are registered with [RFC8505].
-
-
-
-
-Thubert                   Expires 16 June 2022                 [Page 16]
-
-Internet-Draft       Multicast Address Registration        December 2021
-
 
    With [RFC8928], it is possible for a node to autoconfigure a pair of
    public and private keys and use them to sign the registration of
@@ -940,20 +946,20 @@ Internet-Draft       Multicast Address Registration        December 2021
    Destination Address, it MUST use form a multicast address and use the
    appropriate scope, Realm-Local or Admin-Local.
 
+
+
+
+Thubert                 Expires 2 September 2022               [Page 17]
+
+Internet-Draft       Multicast Address Registration           March 2022
+
+
    "Unicast-Prefix-based IPv6 Multicast Addresses" [RFC3306] enables to
    form 2^32 multicast addresses from a single /64 prefix.  If an IPv6
    prefix is associated to an Instance or a RPL DODAG, this provides a
    namespace that can be used in any desired fashion.  It is for
    instance possible for a standard defining organization to form its
    own registry and allocate 32-bit values from that namespace to
-
-
-
-Thubert                   Expires 16 June 2022                 [Page 17]
-
-Internet-Draft       Multicast Address Registration        December 2021
-
-
    network functions or device types.  When used within a RPL deployment
    that is associated with a /64 prefix the IPv6 multicast addresses can
    be automatically derived from the prefix and the 32-bit value for
@@ -994,21 +1000,22 @@ Internet-Draft       Multicast Address Registration        December 2021
    the upgraded devices are too sparse, or the devices do not support
    more multiple instances.
 
+
+
+
+
+
+Thubert                 Expires 2 September 2022               [Page 18]
+
+Internet-Draft       Multicast Address Registration           March 2022
+
+
    When using a single RPL Instance, MOP 3 expects the Storing Mode of
    Operation for both unicast and multicast, which is an issue in
    constrained networks that typically use MOP 1 for unicast.  This
    specification allows a mixed mode that is signaled as MOP 1 in the
    DIO messages for backward compatibility, where limited multicast and/
    or anycast is available, under the following conditions:
-
-
-
-
-
-Thubert                   Expires 16 June 2022                 [Page 18]
-
-Internet-Draft       Multicast Address Registration        December 2021
-
 
    *  There MUST be enough density of 6LRs that support the mixed mode
       to cover the all the 6LNs that require multicast or anycast
@@ -1049,22 +1056,22 @@ Internet-Draft       Multicast Address Registration        December 2021
    install a all-new address with new keys over a period of time, and
    switch the traffic to that address when the migreaiton is complete.
 
+
+
+
+
+
+Thubert                 Expires 2 September 2022               [Page 19]
+
+Internet-Draft       Multicast Address Registration           March 2022
+
+
 11.  Backward Compatibility
 
    A legacy 6LN will not register multicast addresses and the service
    will be the same when the network is upgraded.  A legacy 6LR will not
    set the M flag in the 6CIO and an upgraded 6LN will not register
    multicast addresses.
-
-
-
-
-
-
-Thubert                   Expires 16 June 2022                 [Page 19]
-
-Internet-Draft       Multicast Address Registration        December 2021
-
 
    Upon an EDAR message, a legacy 6LBR may not realize that the address
    being registered is anycast or multicast, and return that it is
@@ -1110,16 +1117,9 @@ Internet-Draft       Multicast Address Registration        December 2021
 
 
 
-
-
-
-
-
-
-
-Thubert                   Expires 16 June 2022                 [Page 20]
+Thubert                 Expires 2 September 2022               [Page 20]
 
-Internet-Draft       Multicast Address Registration        December 2021
+Internet-Draft       Multicast Address Registration           March 2022
 
 
    +---------------+---------------------------------------+-----------+
@@ -1173,9 +1173,9 @@ Internet-Draft       Multicast Address Registration        December 2021
 
 
 
-Thubert                   Expires 16 June 2022                 [Page 21]
+Thubert                 Expires 2 September 2022               [Page 21]
 
-Internet-Draft       Multicast Address Registration        December 2021
+Internet-Draft       Multicast Address Registration           March 2022
 
 
    +---------------+---------------------------------------+-----------+
@@ -1229,9 +1229,9 @@ Internet-Draft       Multicast Address Registration        December 2021
 
 
 
-Thubert                   Expires 16 June 2022                 [Page 22]
+Thubert                 Expires 2 September 2022               [Page 22]
 
-Internet-Draft       Multicast Address Registration        December 2021
+Internet-Draft       Multicast Address Registration           March 2022
 
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
@@ -1285,9 +1285,9 @@ Internet-Draft       Multicast Address Registration        December 2021
 
 
 
-Thubert                   Expires 16 June 2022                 [Page 23]
+Thubert                 Expires 2 September 2022               [Page 23]
 
-Internet-Draft       Multicast Address Registration        December 2021
+Internet-Draft       Multicast Address Registration           March 2022
 
 
    [RFC8200]  Deering, S. and R. Hinden, "Internet Protocol, Version 6
@@ -1341,9 +1341,9 @@ Internet-Draft       Multicast Address Registration        December 2021
 
 
 
-Thubert                   Expires 16 June 2022                 [Page 24]
+Thubert                 Expires 2 September 2022               [Page 24]
 
-Internet-Draft       Multicast Address Registration        December 2021
+Internet-Draft       Multicast Address Registration           March 2022
 
 
 15.  Informative References
@@ -1397,9 +1397,9 @@ Internet-Draft       Multicast Address Registration        December 2021
 
 
 
-Thubert                   Expires 16 June 2022                 [Page 25]
+Thubert                 Expires 2 September 2022               [Page 25]
 
-Internet-Draft       Multicast Address Registration        December 2021
+Internet-Draft       Multicast Address Registration           March 2022
 
 
    [IEEE Std 802.15.4]
@@ -1453,4 +1453,4 @@ Author's Address
 
 
 
-Thubert                   Expires 16 June 2022                 [Page 26]
+Thubert                 Expires 2 September 2022               [Page 26]
