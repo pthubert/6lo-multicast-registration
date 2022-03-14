@@ -17,7 +17,7 @@
 <rfc  xmlns:xi="http://www.w3.org/2001/XInclude" category="std" ipr="trust200902"
 tocInclude="true" indexInclude="true" obsoletes=""  consensus="true"
 submissionType="IETF" xml:lang="en" version="3"  updates="6550, 6553, 8505, 9010"
-docName="draft-ietf-6lo-multicast-registration-03" >
+docName="draft-ietf-6lo-multicast-registration-04" >
 
 <front>
 
@@ -821,7 +821,7 @@ docName="draft-ietf-6lo-multicast-registration-03" >
 </section> <!-- end section "Updating RFC 9010"-->
 
 
-<section  anchor="sec8928"><name>Leveraging RFC 8929</name>
+<section  anchor="sec8928"><name>Leveraging RFC 8928</name>
 <t>
     <xref target="RFC8928"> Address-Protected Neighbor Discovery for
     Low-Power and Lossy Networks </xref> was defined to protect the ownership of unicast IPv6 addresses that are registered with
@@ -965,7 +965,7 @@ docName="draft-ietf-6lo-multicast-registration-03" >
    6LNs, but the flow is not clearly documented and may not complete in due
    time for all nodes in LLN use cases. It may be simpler to install a
    all-new address with new keys over a period of time, and switch the traffic
-   to that address when the migreaiton is complete.
+   to that address when the migration is complete.
 </t>
 </section>	<!-- end section "Security Considerations" -->
 
