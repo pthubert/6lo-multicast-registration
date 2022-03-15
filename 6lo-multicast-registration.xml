@@ -137,7 +137,7 @@ docName="draft-ietf-6lo-multicast-registration-05" >
 </t><t>
    This specification extends <xref target="RFC8505"/> and <xref target="RFC9010"/>
    to add the capability for the 6LN to register anycast and multicast addresses
-   and for the 6LR to inject them in RPL.
+   and for the 6LR to inject them in RPL when appropriate.
 </t>
 
 
@@ -321,9 +321,9 @@ docName="draft-ietf-6lo-multicast-registration-05" >
    same anycast address to the same 6LR.
    </t><t>
    If the R flag is set in the registration of one or more 6LNs for the same
-   address, the 6LR injects the anycast and multicast addresses in RPL, based on
-   the longest registration lifetime across the active registrations for the
-   address.
+   address, the 6LR injects the anycast addresses and multicast addresses of a
+   scope larger than link-scope in RPL, based on the longest registration
+   lifetime across the active registrations for the address.
    </t><t>
    In the RPL "Storing Mode of Operation with multicast support", the DAO
    messages for the multicast address percolate along the RPL preferred parent
@@ -521,7 +521,8 @@ docName="draft-ietf-6lo-multicast-registration-05" >
    multiple parties, each using a different value of the ROVR field that
    identifies the individual registration. The 6LR MUST maintain a registration
    state per value of the ROVR per multicast or anycast address, but inject
-   the route into RPL only once for each address.
+   the route into RPL only once for each address, and in the case of a
+   multicast address, only if its scope is larger than link-scope (3 or more).
    Since the registrations are considered separate, the check on the TID that
    acts as registration sequence only applies to the registration with the
    same ROVR.
@@ -797,9 +798,10 @@ docName="draft-ietf-6lo-multicast-registration-05" >
    </t>
    <ul>
    <li>
-   Upon a registration with the R and the M flags set to 1 in the EARO, the
-   6LR injects the address in the RPL multicast support and sets the M flag
-   in the RTO.
+   Upon a registration with the R and the M flags set to 1 in the EARO, if the
+   scope of the multicast address is above link-scope <xref target="RFC7346"/>,
+   then the 6LR injects the address in the RPL multicast support and sets the M
+   flag in the RTO.
    </li><li>
    Upon a registration with the R and the A flags set to 1 in the EARO, the
    6LR injects the address in the new RPL anycast support and sets the A flag
