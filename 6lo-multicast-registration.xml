@@ -236,7 +236,7 @@ docName="draft-ietf-6lo-multicast-registration-05" >
 <section anchor="overview"><name>Overview</name>
    <t>
    This specification inherits from <xref target="RFC6550"/>,
-   <xref target="RFC8505"/>, and <xref target="RFC8505"/> to provide additional
+   <xref target="RFC8505"/>, and <xref target="RFC9010"/> to provide additional
    capabilities for anycast and multicast. Unless specified otherwise therein,
    the behavior of the 6LBR that acts as RPL Root, of the intermediate routers
    down the RPL graph, of the 6LR that act as access routers and of the 6LNs
@@ -270,7 +270,7 @@ docName="draft-ietf-6lo-multicast-registration-05" >
     <t>
 	The LLN may be a hub-and-spoke access link such	as (Low-Power) Wi-Fi
     <xref target="IEEE80211"/> and Bluetooth (Low Energy)
-    <xref target="IEEE802151"/>, or a Route-Over LLN such as the Wi-SUN mesh
+    <xref target="IEEE802151"/>, or a Route-Over LLN such as the Wi-SUN and 6TiSCH meshes
     <xref target="I-D.heile-lpwan-wisun-overview"/> that leverages 6LoWPAN
     <xref target="RFC4919"/><xref target="RFC6282"/>
     and RPL <xref target="RFC6550"/> over <xref target="IEEE802154"/>.
@@ -307,7 +307,11 @@ docName="draft-ietf-6lo-multicast-registration-05" >
    addresses, the 6LR uses an EDAR/EDAR exchange with the 6LBR to notify the
    6LBR of the presence of the listeners.
    </t><t>
-   With this specification, the 6LNs can now subscribe to the multicast
+   This specification updates the EARO with two new flags, the A flag for
+   Anycast, and the M flag for Multicast, as detailed in <xref target="R8505E"/>.
+   The existing R flag that requests reachability for the registered address
+   gets new behaviour.
+   With this extension the 6LNs can now subscribe to the multicast
    addresses they listen to, using a new M flag in the EARO to signal that the
    registration is for a multicast address. Multiple 6LN may subscribe to
    the same multicast address to the same 6LR. Note the use of the term
@@ -363,8 +367,13 @@ docName="draft-ietf-6lo-multicast-registration-05" >
    networks that are not necessarily LLNs, and/or where the routing protocol
    between the 6LR and above is not necessarily RPL. In that case, the
    distribution of packets between the 6LR and the 6LNs may effectively rely
-   on a broadcast or multicast support at the lower layer.
-   </t>
+   on a broadcast or multicast support at the lower layer, e.g., using this
+   specification as a replacement to MLD in an Ethernet bridged domain and
+   still using either plain MAC-layer broadcast or snooping this protocol to
+   control the flooding. It may also rely on overlay services to optimize
+   the impact of Broadcast, Unknown and Multicast (BUM) over a fabric, e.g.
+   registering with <xref target="I-D.thubert-bess-secure-evpn-mac-signaling"/>
+   and forwarding with <xref target="I-D.ietf-bess-evpn-optimized-ir"/>. </t>
  <t>
    For instance, it is possible to operate a RPL Instance in the new
    "Non-Storing Mode of Operation with multicast support" (while possibly
@@ -407,13 +416,14 @@ docName="draft-ietf-6lo-multicast-registration-05" >
    for use in IPv6 ND messages.
     </t>
     <t>
-   The new "Registration for Multicast Address Supported" (M) flag indicates
-   to the 6LN that the 6LR accepts multicast address registrations as
-   specified in this document and will ensure that packets for the multicast Registered Address will be routed to the 6LNs that registered with the
-   R flag set.
+   The new "Registration for xcast Address Supported" (X) flag indicates
+   to the 6LN that the 6LR accepts unicast, multicast, and anycast address
+   registrations as specified in this document and will ensure that packets
+   for the Registered Address will be routed to the 6LNs that registered with
+   the R flag set appropriately.
     </t>
     <t>
-   <xref target="fig6CIO"/> illustrates the M flag in its suggested position
+   <xref target="fig6CIO"/> illustrates the X flag in its suggested position
    (8, counting 0 to 15 in network order in the 16-bit array), to be confirmed by IANA.
    </t>
    <figure anchor="fig6CIO"><name>New Capability Bits in the 6CIO</name>
@@ -422,7 +432,7 @@ docName="draft-ietf-6lo-multicast-registration-05" >
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |     Type      |   Length = 1  |    Reserved   |M|A|D|L|B|P|E|G|
+   |     Type      |   Length = 1  |    Reserved   |X|A|D|L|B|P|E|G|
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
    |                           Reserved                            |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -431,7 +441,7 @@ docName="draft-ietf-6lo-multicast-registration-05" >
 
     <t> New Option Field:    </t>
 	<dl>
-	<dt>M</dt><dd> 1-bit flag: "Registration for Multicast and Anycast
+	<dt>X</dt><dd> 1-bit flag: "Registration for Unicast, Multicast, and Anycast
     Addresses Supported" </dd>
 	</dl>
 
@@ -465,8 +475,9 @@ docName="draft-ietf-6lo-multicast-registration-05" >
 
 <section anchor="mop5"><name>New Non-Storing Multicast MOP</name>
 <t>
-   This specification adds a "Non-Storing Mode of Operation with multicast
-   support" (MOP to be assigned by IANA) whereby the non-storing Mode DAO to
+   This specification adds a "Non-Storing Mode of Operation with ingress
+   replication multicast support" (MOP to be assigned by IANA) whereby the
+   non-storing Mode DAO to
    the Root may contain multicast addresses in the RPL Target Option (RTO),
    whereas the Transit Information Option (TIO) cannot.
 
@@ -501,13 +512,19 @@ docName="draft-ietf-6lo-multicast-registration-05" >
 <t>
    With multicast, the address has a recognizable format, and a multicast packet
    is to be delivered to all the active subscribers.
-   In contrast with anycast, the format of the address is not distinguishable
+   In contrast, the format of an anycast address is not distinguishable
    from that of unicast. A legacy node may issue a DAO message without setting
    the A flag, the unicast behaviour may apply to anycast traffic in a subDAGs.
+   That message will be undistinguishible from a unicast advertisement and the
+   anycast behaviour in the dataplane can only happen if all the nodes that
+   advertise the same anycast address are synchronised with the same TID. That
+   way, the multiple paths can remain in the RPL DODAG.
+</t> <t>
+   With the A flag, this specification allevates the issue of synchronizing
+   the TIDs, and as for multicast, the freshness comparison based on the TID
+   field is ignored.
    A target is routed as anycast by a parent (or the Root) that received at
    least one DAO message for that target with the A flag set to 1.
-   As for multicast, the freshness comparison cannot apply to an anycast target,
-   and the TID field is ignored.
 </t> <t>
    As opposed to multicast, the anycast operation described therein applies to
    both addresses and prefixes, and the A flag can be set for both.
@@ -650,7 +667,7 @@ docName="draft-ietf-6lo-multicast-registration-05" >
 
 <t>
    Section 4 of <xref target="RFC6775"/> provides the same format for DAR and
-   DAC messages by but the status field is only used in DAC message and has to
+   DAC messages but the status field is only used in DAC message and has to
    set to zero in DAC messages. <xref target="RFC8505"/> extends the DAC message
    as an EDAC but does not change the status field in the EDAR.
 
@@ -707,6 +724,13 @@ docName="draft-ietf-6lo-multicast-registration-05" >
    </t>
 <ul>
    <li>
+   A router that expects to reboot may send a final RA message, upon which
+   nodes should register elsewhere or reregister to this router upon reboot.
+   In all other cases, a node reboot is silent.
+   When the node comes back to life, existing registration
+   state might be lost if it was not persisted, e.g., in persistent memory.
+   </li>
+   <li>
    Only unicast addresses can be registered.
    </li>
    <li>
@@ -725,6 +749,50 @@ docName="draft-ietf-6lo-multicast-registration-05" >
    This specification adds the following behavior:
   </t>
    <ul>
+   <li>
+   <t>
+   A new ARO Status is introduced to indicate a "Registration Refresh Request"
+   (see <xref target="AROstat"/>).
+   </t>
+   <t>
+   This status is used in asynchronous NA(EARO) messages to indicate to peer 6LNs
+   that they are requested to reregister all addresses that were previously
+   registered to the originating node. The NA message may be sent to a unicast
+   or a multicast link-scope address and should be contained within the L2 range
+   where nodes may effectively register to this, e.g., a radio broadcast domain.
+   </t>
+   <t>
+   A device that wishes to refresh its state, e.g., upon reboot if it may have
+   lost some registration state, may send an asynchronous NA(EARO) with this new
+   status value. That asynchronous NA(ARO) SHOULD be sent to the all-nodes link
+   scope multicast address (FF02::1) and Target MUST be set to the link local
+   address that was exposed previously by this node to accept registrations,
+   and the TID MUST be set to 0.
+   </t>
+   <t>
+   In an unreliable environment, the multicast NA(EARO) message may be resent in
+   a fast sequence, in which case the TID must be incremented each time.
+   A 6LN that has recently
+   processed the NA(ARO) ignores the NA(EARO) with a newer TID received
+   within the duration of the fast sequence. That duration depends on the
+   environent and has to be configured. By default, it is of 10 seconds.
+   </t>
+   </li>
+   <li>
+   <t>
+   A new IPv6 ND Node Uptime option (NUO) is introduced to be placed in IPv6 ND
+   messages. The NUO carries a Node State Sequence Information (NSSI) and a Node
+   Uptime.  See <xref target="NUO"/> for the option
+   details.
+   </t>
+   <t>
+   A node that receives the NUO checks whether it is indicative of a loss of
+   state, such as an address registration, in the sender. If so, it may attempt
+   to reform the state, e.g., by re-registering an address. A loss of state is
+   inferred if the NSSI has changed since last sight, or the Node Uptime is
+   less than the time since the state was installed.
+   </t>
+   </li>
    <li>
    Registration for multicast and anycast addresses is now supported. New flags
    are added to the EARO to signal when the registered address is anycast or
@@ -862,6 +930,64 @@ docName="draft-ietf-6lo-multicast-registration-05" >
 </t>
 </section>  <!-- Leveraging RFC 8929 -->
 
+<section anchor="NUO"><name>Node Uptime Option </name>
+<t>This specification introduces a new option that characterizes the
+  uptime of the sender. The option may be used by routers in RA messages and
+  by any node in NA, NA, and RS messages. It is used by the receiver to infer
+  whether some state synchronizaton might be lost, e.g., due to reboot.
+</t>
+ <figure anchor="NUOF"><name>Node Uptime Option Format</name>
+ <artwork align="center">
+  0                   1                   2                   3
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |     Type      |     Length    |          Checksum             |
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+ |S|  flags  |       NSSI        |  Uptime Mantissa  | Exponent  |
+ +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</artwork>
+ </figure><!-- end figure "Node Uptime Option Format" -->
+
+<dl>
+<dt> Type </dt>
+    <dd>To be assigned by IANA, see <xref target="NDOpt"/> </dd>
+<dt> Length </dt>
+    <dd> 1 </dd>
+<dt>S</dt>
+    <dd> 1-bit flag, set to indicate that the device is low-power and may sleep.</dd>
+<dt>flags</dt>
+    <dd> 5-bit, reserved. MUST be set to 0 by the sender and ignored by the receiver.</dd>
+<dt> NSSI </dt>
+    <dd>10-bits unsigned integer: The Node State Sequence Information</dd>
+<dt> Uptime Mantissa </dt>
+    <dd>10-bits unsigned integer: The mantissa of the uptime value </dd>
+<dt> Uptime Exponent </dt>
+    <dd>6-bits unsigned integer: The 2-exponent of the uptime unit </dd>
+</dl>
+
+<t>The Node Uptime indicates how long the sender has been continuously up and
+   unning without loss of state. It is expressed by the Uptime Mantissa in units
+   of 2 at the power of the Uptime Exponent milliseconds.
+</t>
+	<table anchor="timex" ><name>Node Uptime Rough Values</name>
+   <thead>
+      <tr><td>Mantissa</td><td>Exponent</td><td>Resolution</td><td>Uptime</td></tr>
+   </thead><tbody>
+      <tr><td>1</td><td>0</td><td>1ms</td><td>1ms</td></tr>
+      <tr><td>5</td><td>10</td><td>1s</td><td>5 seconds</td></tr>
+      <tr><td>2</td><td>15</td><td>30s</td><td>1mn</td></tr>
+      <tr><td>2</td><td>21</td><td>33mn</td><td>1 hour</td></tr>
+   </tbody>
+	</table>	<!-- end table "Node Uptime Example Values" +-->
+
+<t>
+   The NSSI SHOULD be stored by this node in persistent memory by the
+   sender and incremented when it reboots and lost state. When persisting is not
+   possible, then the NSSI is randomly generated upon a loss of state.
+</t>
+
+</section><!-- Node Uptime Option -->
+
 <section anchor="deploy"><name>Deployment considerations</name>
 <t>
    With this specification, a RPL DODAG forms a realm, and multiple RPL DODAGs
@@ -876,7 +1002,7 @@ docName="draft-ietf-6lo-multicast-registration-05" >
    enables to embed IPv4 addresses in IPv6 addresses. The Root of a DODAG
    may leverage that technique to translate IPv4 traffic in IPv6 and route
    along the RPL domain. When encapsulating an packet with an IPv4 multicast
-   Destination Address, it MUST use form a multicast address and use the
+   Destination Address, it MUST use a multicast address with the
    appropriate scope, Realm-Local or Admin-Local.
 </t>
 <t><xref target="RFC3306">"Unicast-Prefix-based IPv6 Multicast Addresses"</xref>
@@ -1080,7 +1206,8 @@ docName="draft-ietf-6lo-multicast-registration-05" >
    <thead>
       <tr><td>Value</td><td>Description</td><td>Reference</td></tr>
    </thead><tbody>
-      <tr><td>5 (suggested)</td><td>Non-Storing Mode of Operation with multicast support</td><td>This RFC</td></tr>
+      <tr><td>5 (suggested)</td><td>Non-Storing Mode of Operation with ingress
+   replication multicast support</td><td>This RFC</td></tr>
    </tbody>
 	</table>	<!-- end table "New  RTO flags" +-->
     </section>	<!-- end section "New RTO flags -->
@@ -1098,11 +1225,53 @@ docName="draft-ietf-6lo-multicast-registration-05" >
    <thead>
       <tr><td>Capability Bit</td><td>Meaning</td><td>Reference</td></tr>
    </thead><tbody>
-      <tr><td>8 (suggested)</td><td>M flag: Registration for Multicast and Anycast Addresses Supported</td><td>This RFC</td></tr>
+      <tr><td>8 (suggested)</td><td>X flag: Registration for Unicast, Multicast, and Anycast Addresses Supported</td><td>This RFC</td></tr>
 
    </tbody>
 	</table>	<!-- end table "New 6LoWPAN Capability Bits" -->
     </section>	<!-- end section "New 6LoWPAN Capability Bits" -->
+
+
+
+    <section title="New Address Registration Option Status Values">
+	<t>
+   IANA has made additions to the "Address Registration Option Status
+   Values" subregistry under the "Internet Control Message
+   Protocol version 6 (ICMPv6) Parameters" registry, as follows:
+	</t>
+
+	<table anchor="AROstat" ><name>New Address Registration Option Status Values"</name>
+   <thead>
+      <tr><td>Value </td><td>Description</td><td>Reference</td></tr>
+   </thead><tbody>
+      <tr><td>11 (suggested)</td><td>Registration Refresh Request</td><td>This RFC</td></tr>
+
+   </tbody>
+	</table>	<!-- end table "New Address Registration Option Status Values" -->
+    </section>	<!-- end section "New Address Registration Option Status Values" -->
+
+
+
+    <section title="New IPv6 Neighbor Discovery Option">
+	<t>
+   IANA has made additions to the "IPv6 Neighbor Discovery Option Formats"
+   subregistry under the "Internet Control Message
+   Protocol version 6 (ICMPv6) Parameters" registry, as follows:
+	</t>
+
+	<table anchor="NDOpt" ><name>New IPv6 Neighbor Discovery Option"</name>
+   <thead>
+      <tr><td>Value </td><td>Description</td><td>Reference</td></tr>
+   </thead><tbody>
+      <tr><td>42 (suggested)</td><td>Node Uptime Option</td><td>This RFC</td></tr>
+
+   </tbody>
+	</table>	<!-- end table "IPv6 Neighbor Discovery Option" -->
+    </section>	<!-- end section "IPv6 Neighbor Discovery Option" -->
+
+
+
+
 
 </section>	<!-- end section "IANA Considerations" -->
 
@@ -1242,7 +1411,8 @@ docName="draft-ietf-6lo-multicast-registration-05" >
      <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7761.xml"/>
     <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6052.xml"/>
     <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9008.xml"/>
-    <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.heile-lpwan-wisun-overview.xml"/>
+    <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-bess-evpn-optimized-ir.xml"/>
+    <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.heile-lpwan-wisun-overview.xml"/><xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.thubert-bess-secure-evpn-mac-signaling.xml"/>
       <reference anchor="IEEE802154">
          <front>
             <title>IEEE Std 802.15.4, Part. 15.4: Wireless Medium Access
