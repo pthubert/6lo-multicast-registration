@@ -10,7 +10,7 @@ Expires: 19 November 2022
 
 
     IPv6 Neighbor Discovery Multicast Address Listener Registration
-                draft-ietf-6lo-multicast-registration-05
+                draft-ietf-6lo-multicast-registration-06
 
 Abstract
 
