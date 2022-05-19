@@ -970,10 +970,11 @@ docName="draft-ietf-6lo-multicast-registration-06" >
    of 2 at the power of the Uptime Exponent milliseconds.
 </t>
 <t>
-  The initial value and the steps of the Uptime Exponent are chosen freely
-  by the implemetnaion, but the value MUST NOT decrease over time. This means
-  thet 2 values of time can be compared when the aggregate Exponent + Mantissa
-  Uptime field is considered globally as a 16-bits unsigned integer.
+  The initial value and the steps of the Uptime Exponent are chosen freely by
+  the implementation, but the value MUST NOT decrease over time. This means that
+  2 expressions of time from the same node can be compared by aggregating the
+  Exponent + Mantissa Uptime fields and considering the aggregate globally as a
+  16-bits unsigned integer.
 </t>
 	<table anchor="timex" ><name>Node Uptime Rough Values</name>
    <thead>
@@ -990,6 +991,10 @@ docName="draft-ietf-6lo-multicast-registration-06" >
    The NSSI SHOULD be stored by this node in persistent memory by the
    sender and incremented when it reboots and lost state. When persisting is not
    possible, then the NSSI is randomly generated upon a loss of state.
+   Any change in the value of the NSSI from a node is an indication that the
+   node lost state and that the needful state should eb reinstalled, e.g.,
+   addresses registered to that node should be registered again with a
+   minimal temporisation to avoid collisions.
 </t>
 
 </section><!-- Node Uptime Option -->

@@ -1072,10 +1072,10 @@ Internet-Draft       Multicast Address Registration             May 2022
    milliseconds.
 
    The initial value and the steps of the Uptime Exponent are chosen
-   freely by the implemetnaion, but the value MUST NOT decrease over
-   time.  This means thet 2 values of time can be compared when the
-   aggregate Exponent + Mantissa Uptime field is considered globally as
-   a 16-bits unsigned integer.
+   freely by the implementation, but the value MUST NOT decrease over
+   time.  This means that 2 expressions of time from the same node can
+   be compared by aggregating the Exponent + Mantissa Uptime fields and
+   considering the aggregate globally as a 16-bits unsigned integer.
 
              +----------+----------+------------+-----------+
              | Mantissa | Exponent | Resolution | Uptime    |
@@ -1094,7 +1094,10 @@ Internet-Draft       Multicast Address Registration             May 2022
    The NSSI SHOULD be stored by this node in persistent memory by the
    sender and incremented when it reboots and lost state.  When
    persisting is not possible, then the NSSI is randomly generated upon
-   a loss of state.
+   a loss of state.  Any change in the value of the NSSI from a node is
+   an indication that the node lost state and that the needful state
+   should eb reinstalled, e.g., addresses registered to that node should
+   be registered again with a minimal temporisation to avoid collisions.
 
 10.  Deployment considerations
 
@@ -1111,9 +1114,6 @@ Internet-Draft       Multicast Address Registration             May 2022
    RPL domain.  When encapsulating an packet with an IPv4 multicast
    Destination Address, it MUST use a multicast address with the
    appropriate scope, Realm-Local or Admin-Local.
-
-
-
 
 
 
