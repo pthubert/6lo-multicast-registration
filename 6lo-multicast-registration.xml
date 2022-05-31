@@ -17,7 +17,7 @@
 <rfc  xmlns:xi="http://www.w3.org/2001/XInclude" category="std" ipr="trust200902"
 tocInclude="true" indexInclude="true" obsoletes=""  consensus="true"
 submissionType="IETF" xml:lang="en" version="3"  updates="6550, 6553, 8505, 9010"
-docName="draft-ietf-6lo-multicast-registration-06" >
+docName="draft-ietf-6lo-multicast-registration-07" >
 
 <front>
 
@@ -515,12 +515,12 @@ docName="draft-ietf-6lo-multicast-registration-06" >
    In contrast, the format of an anycast address is not distinguishable
    from that of unicast. A legacy node may issue a DAO message without setting
    the A flag, the unicast behavior may apply to anycast traffic in a subDAGs.
-   That message will be undistinguishible from a unicast advertisement and the
+   That message will be undistinguishable from a unicast advertisement and the
    anycast behavior in the dataplane can only happen if all the nodes that
-   advertise the same anycast address are synchronised with the same TID. That
+   advertise the same anycast address are synchronized with the same TID. That
    way, the multiple paths can remain in the RPL DODAG.
 </t> <t>
-   With the A flag, this specification allevates the issue of synchronizing
+   With the A flag, this specification alleviates the issue of synchronizing
    the TIDs, and as for multicast, the freshness comparison based on the TID
    field is ignored.
    A target is routed as anycast by a parent (or the Root) that received at
@@ -803,7 +803,7 @@ docName="draft-ietf-6lo-multicast-registration-06" >
    </li>
    <li>
    The 6LN MUST also register all the IPv6 multicast addresses that it listens
-   to but the all_nodes link-scope multicast address FF02::1
+   to but the all-nodes link-scope multicast address FF02::1
    <xref target="RFC4291"/> which is implicitly registered, and it MUST set the
    M flag in the EARO for those addresses.
    </li>
@@ -934,7 +934,7 @@ docName="draft-ietf-6lo-multicast-registration-06" >
 <t>This specification introduces a new option that characterizes the
   uptime of the sender. The option may be used by routers in RA messages and
   by any node in NA, NA, and RS messages. It is used by the receiver to infer
-  whether some state synchronizaton might be lost, e.g., due to reboot.
+  whether some state synchronization might be lost, e.g., due to reboot.
 </t>
  <figure anchor="NUOF"><name>Node Uptime Option Format</name>
  <artwork align="center">
@@ -966,7 +966,7 @@ docName="draft-ietf-6lo-multicast-registration-06" >
 </dl>
 
 <t>The Node Uptime indicates how long the sender has been continuously up and
-   unning without loss of state. It is expressed by the Uptime Mantissa in units
+   running without loss of state. It is expressed by the Uptime Mantissa in units
    of 2 at the power of the Uptime Exponent milliseconds.
 </t>
 <t>
@@ -994,7 +994,7 @@ docName="draft-ietf-6lo-multicast-registration-06" >
    Any change in the value of the NSSI from a node is an indication that the
    node lost state and that the needful state should eb reinstalled, e.g.,
    addresses registered to that node should be registered again with a
-   minimal temporisation to avoid collisions.
+   minimal temporization to avoid collisions.
 </t>
 
 </section><!-- Node Uptime Option -->

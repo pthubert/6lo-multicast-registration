@@ -10,7 +10,7 @@ Expires: 2 December 2022
 
 
     IPv6 Neighbor Discovery Multicast Address Listener Registration
-                draft-ietf-6lo-multicast-registration-06
+                draft-ietf-6lo-multicast-registration-07
 
 Abstract
 
@@ -585,13 +585,13 @@ Internet-Draft       Multicast Address Registration             May 2022
    In contrast, the format of an anycast address is not distinguishable
    from that of unicast.  A legacy node may issue a DAO message without
    setting the A flag, the unicast behavior may apply to anycast traffic
-   in a subDAGs.  That message will be undistinguishible from a unicast
+   in a subDAGs.  That message will be undistinguishable from a unicast
    advertisement and the anycast behavior in the dataplane can only
    happen if all the nodes that advertise the same anycast address are
-   synchronised with the same TID.  That way, the multiple paths can
+   synchronized with the same TID.  That way, the multiple paths can
    remain in the RPL DODAG.
 
-   With the A flag, this specification allevates the issue of
+   With the A flag, this specification alleviates the issue of
    synchronizing the TIDs, and as for multicast, the freshness
    comparison based on the TID field is ignored.  A target is routed as
    anycast by a parent (or the Root) that received at least one DAO
@@ -903,7 +903,7 @@ Internet-Draft       Multicast Address Registration             May 2022
       multicast and anycast.
 
    *  The 6LN MUST also register all the IPv6 multicast addresses that
-      it listens to but the all_nodes link-scope multicast address
+      it listens to but the all-nodes link-scope multicast address
       FF02::1 [RFC4291] which is implicitly registered, and it MUST set
       the M flag in the EARO for those addresses.
 
@@ -1026,7 +1026,7 @@ Internet-Draft       Multicast Address Registration             May 2022
    This specification introduces a new option that characterizes the
    uptime of the sender.  The option may be used by routers in RA
    messages and by any node in NA, NA, and RS messages.  It is used by
-   the receiver to infer whether some state synchronizaton might be
+   the receiver to infer whether some state synchronization might be
    lost, e.g., due to reboot.
 
       0                   1                   2                   3
@@ -1067,7 +1067,7 @@ Internet-Draft       Multicast Address Registration             May 2022
 
 
    The Node Uptime indicates how long the sender has been continuously
-   up and unning without loss of state.  It is expressed by the Uptime
+   up and running without loss of state.  It is expressed by the Uptime
    Mantissa in units of 2 at the power of the Uptime Exponent
    milliseconds.
 
@@ -1097,7 +1097,7 @@ Internet-Draft       Multicast Address Registration             May 2022
    a loss of state.  Any change in the value of the NSSI from a node is
    an indication that the node lost state and that the needful state
    should eb reinstalled, e.g., addresses registered to that node should
-   be registered again with a minimal temporisation to avoid collisions.
+   be registered again with a minimal temporization to avoid collisions.
 
 10.  Deployment considerations
 
