@@ -310,7 +310,7 @@ docName="draft-ietf-6lo-multicast-registration-06" >
    This specification updates the EARO with two new flags, the A flag for
    Anycast, and the M flag for Multicast, as detailed in <xref target="R8505E"/>.
    The existing R flag that requests reachability for the registered address
-   gets new behaviour.
+   gets new behavior.
    With this extension the 6LNs can now subscribe to the multicast
    addresses they listen to, using a new M flag in the EARO to signal that the
    registration is for a multicast address. Multiple 6LN may subscribe to
@@ -514,9 +514,9 @@ docName="draft-ietf-6lo-multicast-registration-06" >
    is to be delivered to all the active subscribers.
    In contrast, the format of an anycast address is not distinguishable
    from that of unicast. A legacy node may issue a DAO message without setting
-   the A flag, the unicast behaviour may apply to anycast traffic in a subDAGs.
+   the A flag, the unicast behavior may apply to anycast traffic in a subDAGs.
    That message will be undistinguishible from a unicast advertisement and the
-   anycast behaviour in the dataplane can only happen if all the nodes that
+   anycast behavior in the dataplane can only happen if all the nodes that
    advertise the same anycast address are synchronised with the same TID. That
    way, the multiple paths can remain in the RPL DODAG.
 </t> <t>
@@ -532,7 +532,7 @@ docName="draft-ietf-6lo-multicast-registration-06" >
    target from multiple border routers SHOULD be injected as anycast in RPL to
    enable load balancing. A mobile target that is multihomed SHOULD in contrast
    be advertised as unicast over the multiple interfaces to favor the TID
-   comparision and vs. the multipath load balancing.
+   comparison and vs. the multipath load balancing.
 </t> <t>
    For either multicast and anycast, there can be multiple registrations from
    multiple parties, each using a different value of the ROVR field that
