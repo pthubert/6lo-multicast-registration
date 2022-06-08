@@ -468,6 +468,13 @@ docName="draft-ietf-6lo-multicast-registration-07" >
    in MOP 3, this specification allows to hybrid the Storing Mode for multicast
    and Non-Storing Mode for unicast in the same RPL Instance, more in
    <xref target="deploy"/>.
+</t> <t>
+   Though it was implicit in <xref target="RFC6550"/>, this specification
+   clarifies that the freshness comparison based on the TID field is ignored
+   for RPL multicast operations. A RPL router maintains a remaining Path
+   Lifetime for each DAO that it receives for a multicast target, and sends it
+   own DAO for that target with the longest remaining lifetime across its
+   listening children.
 </t>
   </section>	<!-- end section "Updating MOP 3" -->
 
@@ -500,6 +507,12 @@ docName="draft-ietf-6lo-multicast-registration-07" >
    multicast packet as per section 8.2.4 of <xref target="RFC9008"/>. In that
    case, the outer header is purely unicast, and the encapsulated packet is
    purely multicast.
+</t><t>
+   As with MOP 3, the freshness comparison based on the TID field is ignored
+   for RPL MOP 5 multicast operations. The Root maintains a remaining Path
+   Lifetime for each DAO that it receives, and the 6LRs generate the DAO for
+   multicast addresses with the longest remaining lifetime across its registered
+   6LNs.
 </t> <t>
    For this new mode as well, this specification allows to enable the operation
    in a MOP 1 brown field, more in  <xref target="deploy"/>.
@@ -992,7 +1005,7 @@ docName="draft-ietf-6lo-multicast-registration-07" >
    sender and incremented when it reboots and lost state. When persisting is not
    possible, then the NSSI is randomly generated upon a loss of state.
    Any change in the value of the NSSI from a node is an indication that the
-   node lost state and that the needful state should eb reinstalled, e.g.,
+   node lost state and that the needful state should be reinstalled, e.g.,
    addresses registered to that node should be registered again with a
    minimal temporization to avoid collisions.
 </t>
