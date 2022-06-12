@@ -69,7 +69,7 @@ docName="draft-ietf-6lo-multicast-registration-07" >
    with the radio turned off at most times.
 </t><t>
    The <xref target="RFC6550">"Routing Protocol for Low Power
-   and Lossy Networks"</xref> (RPL) to provide IPv6 <xref target="RFC8200"/>
+   and Lossy Networks"</xref> (RPL) provides IPv6 <xref target="RFC8200"/>
    routing services within such constraints.
    To save signaling and routing state in constrained networks, the RPL routing
    is only performed along a Destination-Oriented Directed Acyclic Graph (DODAG)
@@ -240,7 +240,7 @@ docName="draft-ietf-6lo-multicast-registration-07" >
    capabilities for anycast and multicast. Unless specified otherwise therein,
    the behavior of the 6LBR that acts as RPL Root, of the intermediate routers
    down the RPL graph, of the 6LR that act as access routers and of the 6LNs
-   that are the RFC-unaware destinations, is the same as for unicast. In
+   that are the RPL-unaware destinations, is the same as for unicast. In
    particular, forwarding a packet happens as specified in section 11 of
    <xref target="RFC6550"/>, including loop avoidance and detection, though in
    the case of multicast multiple copies might be generated.
@@ -304,7 +304,7 @@ docName="draft-ietf-6lo-multicast-registration-07" >
    specified in <xref target="RFC8505"/>.
    The registration state is periodically renewed by the Registering Node,
    before the lifetime indicated in the EARO expires. As for unicast IPv6
-   addresses, the 6LR uses an EDAR/EDAR exchange with the 6LBR to notify the
+   addresses, the 6LR uses an EDAR/EDAC exchange with the 6LBR to notify the
    6LBR of the presence of the listeners.
    </t><t>
    This specification updates the EARO with two new flags, the A flag for
@@ -322,7 +322,7 @@ docName="draft-ietf-6lo-multicast-registration-07" >
    With this specification, the 6LNs can also register the anycast addresses
    they accept, using a new A flag in the EARO to signal that the registration
    is for an anycast address. As for multicast, multiple 6LN may register the
-   same anycast address to the same 6LR.
+   same multicast address to the same 6LR.
    </t><t>
    If the R flag is set in the registration of one or more 6LNs for the same
    address, the 6LR injects the anycast addresses and multicast addresses of a
