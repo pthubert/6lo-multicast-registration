@@ -322,7 +322,7 @@ docName="draft-ietf-6lo-multicast-registration-07" >
    With this specification, the 6LNs can also register the anycast addresses
    they accept, using a new A flag in the EARO to signal that the registration
    is for an anycast address. As for multicast, multiple 6LN may register the
-   same multicast address to the same 6LR.
+   same anycast address to the same 6LR.
    </t><t>
    If the R flag is set in the registration of one or more 6LNs for the same
    address, the 6LR injects the anycast addresses and multicast addresses of a
@@ -485,7 +485,7 @@ docName="draft-ietf-6lo-multicast-registration-07" >
    This specification adds a "Non-Storing Mode of Operation with ingress
    replication multicast support" (MOP to be assigned by IANA) whereby the
    non-storing Mode DAO to
-   the Root may contain multicast addresses in the RPL Target Option (RTO),
+   the Root may advertise a multicast address in the RPL Target Option (RTO),
    whereas the Transit Information Option (TIO) cannot.
 
 </t> <t>
@@ -513,6 +513,10 @@ docName="draft-ietf-6lo-multicast-registration-07" >
    Lifetime for each DAO that it receives, and the 6LRs generate the DAO for
    multicast addresses with the longest remaining lifetime across its registered
    6LNs.
+</t><t>
+   The route disappears when the associated path lifetime in the transit
+   option times out, but the procedure to remove a unicast route based on TID
+   cannot apply to multicast and anycast.
 </t> <t>
    For this new mode as well, this specification allows to enable the operation
    in a MOP 1 brown field, more in  <xref target="deploy"/>.
