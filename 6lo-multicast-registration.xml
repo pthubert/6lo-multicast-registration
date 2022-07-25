@@ -11,7 +11,7 @@
 <?rfc comments="yes"?>
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
-<!-- <?rfc subcompact="no"?> -->
+<?rfc subcompact="no"?>
 <?rfc authorship="yes"?>
 <?rfc tocappendix="yes"?>
 <rfc  xmlns:xi="http://www.w3.org/2001/XInclude" category="std" ipr="trust200902"
@@ -1166,14 +1166,17 @@ docName="draft-ietf-6lo-multicast-registration-08" >
     the subregistry, so the bit positions must be added for completeness.
 </t>
 <t>
-    IANA is requested to make  changes under the "Internet Control Message
+    IANA is requested to make changes under the "Internet Control Message
     Protocol version 6 (ICMPv6) Parameters" <xref target="IANA.ICMP"/> and the
-    "Routing Protocol for Low Power and Lossy Networks (RPL)" <xref target="IANA.RPL"/> registries, as follows:
+    "Routing Protocol for Low Power and Lossy Networks (RPL)" <xref target="IANA.RPL"/>
+    registry groupings, as follows:
 </t>
 
     <section><name>New EDAR Message Flags Subregistry</name>
-	<t> IANA is requested to create a new "EDAR Message Flags" subregistry of
-    the "Internet Control Message Protocol version 6 (ICMPv6) Parameters" registry as indicated in <xref target="EDARflags"/>:
+	<t>
+    IANA is requested to create a new "EDAR Message Flags" registry under the
+    heading "Internet Control Message Protocol version 6 (ICMPv6) Parameters"
+    as indicated in <xref target="EDARflags"/>:
 	</t>
 
 	<table anchor="EDARflags" ><name>EDAR Message flags</name>
@@ -1182,6 +1185,7 @@ docName="draft-ietf-6lo-multicast-registration-08" >
    </thead><tbody>
       <tr><td>0 (suggested)</td><td>A flag: Registered Address is Anycast </td><td>This RFC</td></tr>
       <tr><td>1 (suggested)</td><td>M flag: Registered Address is Multicast </td><td>This RFC</td></tr>
+      <tr><td>2..7</td><td>Unassigned </td><td></td></tr>
    </tbody>
 	</table>	<!-- end table "EDAR Message flags" +-->
     </section>	<!-- end section "New EDAR Message flags Subregistry -->
@@ -1189,9 +1193,9 @@ docName="draft-ietf-6lo-multicast-registration-08" >
 
  <section><name>New EARO flags</name>
 	<t> IANA is requested to make additions to the "Address Registration Option
-    Flags" <xref target="IANA.ICMP.ARO.FLG"/> of the "Internet Control
-    Message Protocol version 6 (ICMPv6) Parameters" registry as indicated in
-    <xref target="AROflags"/>:
+    Flags" <xref target="IANA.ICMP.ARO.FLG"/> registry under the heading
+    "Internet Control Message Protocol version 6 (ICMPv6) Parameters" as
+    indicated in <xref target="AROflags"/>:
 	</t>
 
 	<table anchor="AROflags" ><name>New ARO flags</name>
@@ -1208,7 +1212,8 @@ docName="draft-ietf-6lo-multicast-registration-08" >
 
 
     <section><name>New RTO flags</name>
-	<t> IANA is requested to make additions to the "RPL Target Option Flags" <xref target="IANA.RPL.RTO.FLG"/> subregistry of the "Routing Protocol for Low Power and Lossy Networks (RPL)" registry as indicated in <xref target="RTOflags"/>:
+	<t> IANA is requested to make additions to the "RPL Target Option Flags" <xref target="IANA.RPL.RTO.FLG"/>  registry under the heading "Routing Protocol for Low Power and Lossy Networks (RPL)"
+    as indicated in <xref target="RTOflags"/>:
 	</t>
 
 	<table anchor="RTOflags" ><name>New RTO flags</name>
@@ -1227,7 +1232,8 @@ docName="draft-ietf-6lo-multicast-registration-08" >
 
 
     <section><name>New RPL Mode of Operation</name>
-	<t> IANA is requested to make an addition to the "Mode of Operation" <xref target="IANA.RPL.MOP"/> subregistry of the "Routing Protocol for Low Power and Lossy Networks (RPL)" registry as indicated in <xref target="RMOP"/>:
+	<t> IANA is requested to make an addition to the "Mode of Operation" <xref target="IANA.RPL.MOP"/> registry under the heading "Routing Protocol for Low Power and Lossy Networks (RPL)"
+    as indicated in <xref target="RMOP"/>:
 	</t>
 
 	<table anchor="RMOP" ><name>New RPL Mode of Operation</name>
@@ -1246,7 +1252,9 @@ docName="draft-ietf-6lo-multicast-registration-08" >
     <section title="New 6LoWPAN Capability Bits">
 	<t>
     IANA is requested to make an addition to the
-    "6LoWPAN Capability Bits" <xref target="IANA.ICMP.6CIO"/> subregistry  subregistry of the "Internet Control Message Protocol version 6 (ICMPv6) Parameters" registry as indicated in <xref target="CIOdat"/>:
+    "6LoWPAN Capability Bits" <xref target="IANA.ICMP.6CIO"/> registry under the
+    heading "Internet Control Message Protocol version 6 (ICMPv6) Parameters"
+    as indicated in <xref target="CIOdat"/>:
 	</t>
 
 	<table anchor="CIOdat" ><name>New 6LoWPAN Capability Bits</name>
@@ -1264,8 +1272,8 @@ docName="draft-ietf-6lo-multicast-registration-08" >
     <section title="New Address Registration Option Status Values">
 	<t>
    IANA has made additions to the "Address Registration Option Status
-   Values" subregistry under the "Internet Control Message
-   Protocol version 6 (ICMPv6) Parameters" registry, as follows:
+   Values"  registry under the heading "Internet Control Message
+   Protocol version 6 (ICMPv6) Parameters", as follows:
 	</t>
 
 	<table anchor="AROstat" ><name>New Address Registration Option Status Values"</name>
@@ -1283,8 +1291,8 @@ docName="draft-ietf-6lo-multicast-registration-08" >
     <section title="New IPv6 Neighbor Discovery Option">
 	<t>
    IANA has made additions to the "IPv6 Neighbor Discovery Option Formats"
-   subregistry under the "Internet Control Message
-   Protocol version 6 (ICMPv6) Parameters" registry, as follows:
+   registry under the heading "Internet Control Message
+   Protocol version 6 (ICMPv6) Parameters", as follows:
 	</t>
 
 	<table anchor="NDOpt" ><name>New IPv6 Neighbor Discovery Option"</name>
