@@ -92,7 +92,7 @@ Table of Contents
    11. Security Considerations . . . . . . . . . . . . . . . . . . .  23
    12. Backward Compatibility  . . . . . . . . . . . . . . . . . . .  23
    13. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  24
-     13.1.  New EDAR Message Flags Subregistry . . . . . . . . . . .  24
+     13.1.  New EDAR Message Flags Registry  . . . . . . . . . . . .  24
      13.2.  New EARO flags . . . . . . . . . . . . . . . . . . . . .  24
      13.3.  New RTO flags  . . . . . . . . . . . . . . . . . . . . .  25
      13.4.  New RPL Mode of Operation  . . . . . . . . . . . . . . .  25
@@ -1295,15 +1295,15 @@ Internet-Draft       Multicast Address Registration            July 2022
    Note to RFC Editor, to be removed: please replace "This RFC"
    throughout this document by the RFC number for this specification
    once it is allocated.  Also, the I Field is defined in [RFC9010] but
-   is missing from the subregistry, so the bit positions must be added
-   for completeness.
+   is missing from the registry, so the bit positions must be added for
+   completeness.
 
    IANA is requested to make changes under the "Internet Control Message
    Protocol version 6 (ICMPv6) Parameters" [IANA.ICMP] and the "Routing
    Protocol for Low Power and Lossy Networks (RPL)" [IANA.RPL] registry
    groupings, as follows:
 
-13.1.  New EDAR Message Flags Subregistry
+13.1.  New EDAR Message Flags Registry
 
    IANA is requested to create a new "EDAR Message Flags" registry under
    the heading "Internet Control Message Protocol version 6 (ICMPv6)

@@ -1163,7 +1163,7 @@ docName="draft-ietf-6lo-multicast-registration-08" >
     Note to RFC Editor, to be removed: please replace "This RFC" throughout this
     document by the RFC number for this specification once it is allocated.
     Also, the I Field is defined in <xref target="RFC9010"/> but is missing from
-    the subregistry, so the bit positions must be added for completeness.
+    the registry, so the bit positions must be added for completeness.
 </t>
 <t>
     IANA is requested to make changes under the "Internet Control Message
@@ -1172,7 +1172,7 @@ docName="draft-ietf-6lo-multicast-registration-08" >
     registry groupings, as follows:
 </t>
 
-    <section><name>New EDAR Message Flags Subregistry</name>
+    <section><name>New EDAR Message Flags Registry</name>
 	<t>
     IANA is requested to create a new "EDAR Message Flags" registry under the
     heading "Internet Control Message Protocol version 6 (ICMPv6) Parameters"
@@ -1188,7 +1188,7 @@ docName="draft-ietf-6lo-multicast-registration-08" >
       <tr><td>2..7</td><td>Unassigned </td><td></td></tr>
    </tbody>
 	</table>	<!-- end table "EDAR Message flags" +-->
-    </section>	<!-- end section "New EDAR Message flags Subregistry -->
+    </section>	<!-- end section "New EDAR Message flags Registry -->
 
 
  <section><name>New EARO flags</name>
