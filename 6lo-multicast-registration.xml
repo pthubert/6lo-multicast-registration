@@ -42,7 +42,7 @@ docName="draft-ietf-6lo-multicast-registration-08" >
 
    <abstract>
    <t>
-    This document updates RFC 8505 to enable a listener to register an IPv6
+    This document updates RFC 8505 to enable a listener to subscribe an IPv6
     anycast or and subscribe to an IPv6 multicast address; the draft updates
     RFC 6550 (RPL) to add a new Non-Storing Multicast Mode and a new support for
     anycast addresses in Storing and Non-Storing Modes.
@@ -133,10 +133,10 @@ docName="draft-ietf-6lo-multicast-registration-08" >
    maintain the state associated to their multicast addresses in the 6LR, e.g.,
    during their own wake time. In the case of a constrained node that already
    implements <xref target="RFC8505"/> for unicast reachability, it makes sense
-   to extend to that support to register the multicast addresses they listen to.
+   to extend to that support to subscribe the multicast addresses they listen to.
 </t><t>
    This specification extends <xref target="RFC8505"/> and <xref target="RFC9010"/>
-   to add the capability for the 6LN to register anycast and multicast addresses
+   to add the capability for the 6LN to subscribe anycast and multicast addresses
    and for the 6LR to inject them in RPL when appropriate.
 </t>
 
@@ -184,6 +184,7 @@ docName="draft-ietf-6lo-multicast-registration-08" >
   </section> <!--	 end section "References" -->
 
 
+
   <section anchor="acronyms"><name>Glossary</name>
     <t> This document uses the following acronyms:</t>
        <dl newline="false" indent="7" spacing="compact" >
@@ -219,6 +220,32 @@ docName="draft-ietf-6lo-multicast-registration-08" >
 
   </section>	<!-- end section "Glossary" -->
 
+
+  <section anchor="terms"><name>New terms</name>
+
+    <t> This document introduces the following terms:</t>
+
+       <dl newline="false" indent="7" spacing="compact" >
+
+       <dt>Origin</dt><dd> The node that issued an anycast or multicast
+       advertisement, either in the form of a NS(EARO) or as a DAO(TIO, RTO) </dd>
+       <dt>Merge/merging</dt><dd> The action of receiving multiple anycast or
+       multicast advertisements, either internally from self, in the form of
+       a NS(EARO), or as a DAO(TIO, RTO), and generating a single DAO(TIO, RTO).
+       The 6RPL router maintains a state per origin for each advertised address, and merges the advertisements for all subsriptions for the same
+       address in a single advertisement.
+       A RPL router that merges becomes the origin of the merged advertisement
+       and uses its own values for the Path Sequence and ROVR fields.
+       </dd>
+       <dt>Subscribe/subscription</dt><dd> The equivalent of a registration
+       but for a multicast or an anycast address, using an NS(EARO) to
+       advertise the address.
+       </dd>
+
+       </dl>
+
+
+  </section> <!--	 end section "New terms" -->
 
 </section>	<!-- end section "Terminology" -->
 
@@ -319,9 +346,9 @@ docName="draft-ietf-6lo-multicast-registration-08" >
    unicast addresses that it owns, but subscribes to the multicast addresses
    that it listens to.
    </t><t>
-   With this specification, the 6LNs can also register the anycast addresses
+   With this specification, the 6LNs can also subscribe the anycast addresses
    they accept, using a new A flag in the EARO to signal that the registration
-   is for an anycast address. As for multicast, multiple 6LN may register the
+   is for an anycast address. As for multicast, multiple 6LN may subscribe the
    same anycast address to the same 6LR.
    </t><t>
    If the R flag is set in the registration of one or more 6LNs for the same
@@ -451,7 +478,45 @@ docName="draft-ietf-6lo-multicast-registration-08" >
 
 
 <section anchor="coex"><name>Updating RFC 6550</name>
+<t>
+   <xref target="RFC6550"/> uses the Path Sequence in the Transit Information
+   Option (TIO) to retain only the freshest unicast route and remove stale ones,
+   e.g., in the case of mobility. <xref target="RFC9010"/> copies the TID from
+   the EARO into the Path Sequence, and the ROVR field into the associated RPL
+   Target Option (RTO).
+   This way, it is possible to identify both the registering node and the
+   order of registration in RPL for each individual route advertisement, so the
+   most recent path and lifetime values are used.
+</t><t>
+   For anycast and multicast advertisements (in NS or DAO messages), multiple
+   origins may subscribe to the same address, and multiple advertisements from
+   different origins are merged by the common parent which becomes the origin
+   of the merged advertisements.
+   The Path Sequence is to be used between advertisements with the same ROVR
+   value, denoting an update from the same origin, but cannot apply if the
+   origin is not determined.
+   This is why this specification requires the use of the ROVR field as the indication of the origin in the RPL advertisements.
+</t><t>
+   <xref target="RFC6550"/> uses the Path Lifetime in the TIO to indicate the
+   remaining time for which the advertisement is valid for unicast route
+   determination, and a Path Lifetime value of 0 invalidates that route.
+   <xref target="RFC9010"/> maps the Address Registration lifetime in the EARO
+   and the Path Lifetime in the TIO so they are comparable when both forms of
+   advertisements are received.
+</t><t>
+   For anycast and multicast advertisements, the Path Sequence is to be used
+   between advertisements from the same origin only.
+   The RPL router that merges multiple advertisement for the same anycast or
+   multicast addresses must use and advertise the longest remaining lifetime
+   across all the origins of the advertisements for that address.
+   When the lifetime expires, the router sends a no-path DAO (lifetime=0) using
+   the same value for ROVR value as for the preceding advertisements.
+</t><t>
 
+   Note that the Registration Lifetime, TID and ROVR fields are also placed in
+   the EDAR message so the state created by EDAR is also comparable with that created upon an NS(EARO) or a DAO message. For simplicity the text below
+   mentions only EARO but applies also to EDAR.
+</t>
 <section anchor="mop3"><name>Updating MOP 3</name>
 <t>
    RPL supports multicast operations in the "Storing Mode of Operation with
@@ -468,13 +533,23 @@ docName="draft-ietf-6lo-multicast-registration-08" >
    in MOP 3, this specification allows to hybrid the Storing Mode for multicast
    and Non-Storing Mode for unicast in the same RPL Instance, more in
    <xref target="deploy"/>.
+</t><t>
+   For anycast and multicast advertisements, including MOP 3, the ROVR field
+   is placed in the RPL Target Option as specified in <xref target=
+   "RFC9010"/> for both MOP 3 and MOP 5 as it is for unicast advertisements.
 </t> <t>
-   Though it was implicit in <xref target="RFC6550"/>, this specification
-   clarifies that the freshness comparison based on the TID field is ignored
-   for RPL multicast operations. A RPL router maintains a remaining Path
-   Lifetime for each DAO that it receives for a multicast target, and sends it
-   own DAO for that target with the longest remaining lifetime across its
-   listening children.
+   Though it was implicit with <xref target="RFC6550"/>, this specification
+   clarifies that the freshness comparison based on the Path Sequence is not
+   used when the origin cannot be determined, which is the case there.
+   The comparison is to be used only between advertisements from the same
+   origin, which is either an individual subscriber, or a descendant that
+   merged multiple advertisements.
+</t> <t>
+   A RPL router maintains a remaining Path Lifetime for each DAO that it
+   receives for a multicast target, and sends its own DAO for that target with
+   the longest remaining lifetime across its listening children. If the router
+   has only one descendant listening, it propagates the TID and ROVR as
+   received. Conversely, if the router merges multiple advertisements (including possibly one for self as a listener), the router uses its own ROVR and TID values.
 </t>
   </section>	<!-- end section "Updating MOP 3" -->
 
@@ -508,15 +583,13 @@ docName="draft-ietf-6lo-multicast-registration-08" >
    case, the outer header is purely unicast, and the encapsulated packet is
    purely multicast.
 </t><t>
-   As with MOP 3, the freshness comparison based on the TID field is ignored
-   for RPL MOP 5 multicast operations. The Root maintains a remaining Path
-   Lifetime for each DAO that it receives, and the 6LRs generate the DAO for
-   multicast addresses with the longest remaining lifetime across its registered
-   6LNs.
+   For anycast and multicast advertisements in NA (at the 6LR) and DAO (at the Root) messages, as discussed in <xref target="mop3"/>, the freshness
+   comparison based on the TID field is applied only between messages from the
+   same origin, as determined by the same value in the ROVR field.
 </t><t>
-   The route disappears when the associated path lifetime in the transit
-   option times out, but the procedure to remove a unicast route based on TID
-   cannot apply to multicast and anycast.
+   The Root maintains a remaining Path Lifetime for each advertisement it receives,
+   and the 6LRs generate the DAO for multicast addresses with the longest
+   remaining lifetime across its registered 6LNs, using its own ROVR and TID when multiple 6LNs subscribed, or if this 6LR is one of the subscribers.
 </t> <t>
    For this new mode as well, this specification allows to enable the operation
    in a MOP 1 brown field, more in  <xref target="deploy"/>.
@@ -538,43 +611,45 @@ docName="draft-ietf-6lo-multicast-registration-08" >
    way, the multiple paths can remain in the RPL DODAG.
 </t> <t>
    With the A flag, this specification alleviates the issue of synchronizing
-   the TIDs, and as for multicast, the freshness comparison based on the TID
-   field is ignored.
+   the TIDs and ROVR fields. As for multicast, the freshness comparison based
+   on the TID (in EARO) and the Path Sequence (in TIO) is ignored unless the
+   messages have the same origin, as inferred by the same ROVR in RTO and/or
+   EARO, and the latest value of the lifetime is retained for each origin.
+   </t>
+   <t>
+   A RPL router that propagates an advertisement from a single origin uses
+   the ROVR and Path Sequence from that origin, whereas a router that merges
+   multiple subscriptions uses its own ROVR and Path Sequence and the
+   longest lifetime over the different advertisements.
    A target is routed as anycast by a parent (or the Root) that received at
    least one DAO message for that target with the A flag set to 1.
 </t> <t>
    As opposed to multicast, the anycast operation described therein applies to
    both addresses and prefixes, and the A flag can be set for both.
    An external destination (address or prefix) that may be injected as a RPL
-   target from multiple border routers SHOULD be injected as anycast in RPL to
-   enable load balancing. A mobile target that is multihomed SHOULD in contrast
+   target from multiple border routers should be injected as anycast in RPL to
+   enable load balancing. A mobile target that is multihomed should in contrast
    be advertised as unicast over the multiple interfaces to favor the TID
    comparison and vs. the multipath load balancing.
 </t> <t>
-   For either multicast and anycast, there can be multiple registrations from
-   multiple parties, each using a different value of the ROVR field that
-   identifies the individual registration. The 6LR MUST maintain a registration
+   For either multicast and anycast, there can be multiple subscriptions from
+   multiple origins, each using a different value of the ROVR field that
+   identifies the individual subscription. The 6LR  maintains a subscription
    state per value of the ROVR per multicast or anycast address, but inject
    the route into RPL only once for each address, and in the case of a
    multicast address, only if its scope is larger than link-scope (3 or more).
-   Since the registrations are considered separate, the check on the TID that
-   acts as registration sequence only applies to the registration with the
+   Since the subscriptions are considered separate, the check on the TID that
+   acts as subscription sequence only applies to the subscription with the
    same ROVR.
-</t> <t>
-   The 6LRs that inject multicast and anycast routes into RPL may not be
-   synchronized to advertise same value of the Path Sequence in the RPL TIO.
-   It results that the value the Path Sequence is irrelevant when the target
-   is anycast or multicast, and that it MUST be ignored.
-</t> <t>
-   Like the 6LR, a RPL router in Storing Mode propagates the route to its
-   parent(s) in DAO messages once and only once for each address, but it MUST
-   retain a routing table entry for each of the children that advertised the
-   address.
+</t>  <t>
+   Like the 6LR, a RPL router in Storing Mode propagates the merged advertisement to its parent(s) in DAO messages once and only once
+   for each address, but it retains a routing table entry for each of the
+   children that advertised the address.
 </t> <t>
    When forwarding multicast packets down the DODAG, the RPL router copies
    all the children that advertised the address in their DAO messages. In
    contrast, when forwarding anycast packets down the DODAG, the RPL router
-   MUST copy one and only one of the children that advertised the address in
+   must copy one and only one of the children that advertised the address in
    their DAO messages, and forward to one parent if there is no such child.
 </t>
 
@@ -691,9 +766,10 @@ docName="draft-ietf-6lo-multicast-registration-08" >
 </t>
 <t>
    This specification repurposes the status field in the EDAR and a Flags field.
-   It adds a new M flag to the EDAR flags field to signal that the Registered
-   Address is a multicast address and a new A flag to signal that the Registered
-   Address is an anycast address. As for EARO, the flags are mutually exclusive.
+   It adds a new M flag to the EDAR flags field to signal that the "Registered
+   Address" field contains a multicast address and a new A flag to signal that
+   the field contains an anycast address. As for EARO, the flags are mutually
+   exclusive.
 </t>
 <t>
    <xref target="EDAR"/> illustrates the A and M flags in their suggested
@@ -742,7 +818,8 @@ docName="draft-ietf-6lo-multicast-registration-08" >
 <ul>
    <li>
    A router that expects to reboot may send a final RA message, upon which
-   nodes should register elsewhere or reregister to this router upon reboot.
+   nodes should subscribe elsewhere or redo the subscription to the same router
+   upon reboot.
    In all other cases, a node reboot is silent.
    When the node comes back to life, existing registration
    state might be lost if it was not persisted, e.g., in persistent memory.
@@ -766,6 +843,12 @@ docName="draft-ietf-6lo-multicast-registration-08" >
    This specification adds the following behavior:
   </t>
    <ul>
+   <li>The concept of subscription is introduced for anycast and multicast
+   addresses as an extension to the unicast address registration.
+   The respective operations are similar from the perspective of the 6LN, but
+   show important differences on the router side, which maintains a separate
+   state for each origin and merges them in its own advertisements.
+   </li>
    <li>
    <t>
    A new ARO Status is introduced to indicate a "Registration Refresh Request"
@@ -776,7 +859,8 @@ docName="draft-ietf-6lo-multicast-registration-08" >
    that they are requested to reregister all addresses that were previously
    registered to the originating node. The NA message may be sent to a unicast
    or a multicast link-scope address and should be contained within the L2 range
-   where nodes may effectively register to this, e.g., a radio broadcast domain.
+   where nodes may effectively have registered/subscribed to this router, e.g.,
+   a radio broadcast domain.
    </t>
    <t>
    A device that wishes to refresh its state, e.g., upon reboot if it may have
@@ -819,7 +903,7 @@ docName="draft-ietf-6lo-multicast-registration-08" >
    The Status field in the EDAR message that was reserved and not used in RFC 8505 is repurposed to transport the flags to signal multicast and anycast.
    </li>
    <li>
-   The 6LN MUST also register all the IPv6 multicast addresses that it listens
+   The 6LN MUST also subscribe all the IPv6 multicast addresses that it listens
    to but the all-nodes link-scope multicast address FF02::1
    <xref target="RFC4291"/> which is implicitly registered, and it MUST set the
    M flag in the EARO for those addresses.
@@ -831,7 +915,7 @@ docName="draft-ietf-6lo-multicast-registration-08" >
    <xref target="RFC7761"/> protocol.
    </li>
    <li>
-   The 6LN MUST also register all the IPv6 anycast addresses that it supports
+   The 6LN MUST also subscribe all the IPv6 anycast addresses that it supports
    and it MUST set the A flag in the EARO for those addresses.
    </li>
    <li>
@@ -943,7 +1027,7 @@ docName="draft-ietf-6lo-multicast-registration-08" >
 <t>
     The keypair MUST then be provisioned in each node that needs to
     subscribe to the anycast or multicast address, so the node can follow the
-    steps in <xref target="RFC8928"/> to register the address.
+    steps in <xref target="RFC8928"/> to subscribe the address.
 </t>
 </section>  <!-- Leveraging RFC 8929 -->
 
@@ -1112,24 +1196,28 @@ docName="draft-ietf-6lo-multicast-registration-08" >
 </t>
 <t>
    <xref target="sec8928"/> leverages <xref target="RFC8928"/> to prevent an
-   unwanted subscriber to register for an anycast of a multicast address. This
-   mechanism comes with a keypair that is shared between all subscribers.
-   A shared key is prone to be stolen and the level of protection can only go down with time.
+   rogue node to register a unicast address that it does not own.
+   The mechanism could be extended to anycast and multicast addresses if the
+   values of the ROVR they use is known in advance, but how this is done is
+   not in scope for this specification.
+   One way would be to authorize in a advance the ROVR of the valid users.
+   A less preferred way could be to synchronize the ROVR and TID values across
+   the valid subscribers as a preshared key material.
 </t>
 <t>
-   It is possible to update the keys associated to an address in all the
-   6LNs, but the flow is not clearly documented and may not complete in due
-   time for all nodes in LLN use cases. It may be simpler to install a
-   all-new address with new keys over a period of time, and switch the traffic
-   to that address when the migration is complete.
+   In the latter case, it could be possible to update the keys associated to
+   an address in all the 6LNs, but the flow is not clearly documented and may
+   not complete in due time for all nodes in LLN use cases. It may be simpler
+   to install a all-new address with new keys over a period of time, and
+   switch the traffic to that address when the migration is complete.
 </t>
 </section>	<!-- end section "Security Considerations" -->
 
 <section anchor="back"><name>Backward Compatibility</name>
 <t>
-   A legacy 6LN will not register multicast addresses and the service will be
+   A legacy 6LN will not subscribe multicast addresses and the service will be
    the same when the network is upgraded. A legacy 6LR will not set the M flag
-   in the 6CIO and an upgraded 6LN will not register multicast addresses.
+   in the 6CIO and an upgraded 6LN will not subscribe multicast addresses.
 </t>
 <t>
    Upon an EDAR message, a legacy 6LBR may not realize that the address being
