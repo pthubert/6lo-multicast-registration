@@ -4,12 +4,12 @@
 
 6lo                                                      P. Thubert, Ed.
 Internet-Draft                                             Cisco Systems
-Updates: 6550, 6553, 8505, 9010 (if approved)               27 July 2022
+Updates: 6550, 6553, 8505, 9010 (if approved)               28 July 2022
 Intended status: Standards Track                                        
-Expires: 28 January 2023
+Expires: 29 January 2023
 
 
-    IPv6 Neighbor Discovery Multicast Address Listener Registration
+    IPv6 Neighbor Discovery Multicast Address Listener Subscription
                 draft-ietf-6lo-multicast-registration-08
 
 Abstract
@@ -36,7 +36,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 January 2023.
+   This Internet-Draft will expire on 29 January 2023.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Thubert                  Expires 28 January 2023                [Page 1]
+Thubert                  Expires 29 January 2023                [Page 1]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thubert                  Expires 28 January 2023                [Page 2]
+Thubert                  Expires 29 January 2023                [Page 2]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -165,7 +165,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023                [Page 3]
+Thubert                  Expires 29 January 2023                [Page 3]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -188,7 +188,7 @@ Internet-Draft       Multicast Address Registration            July 2022
    (GUAs) in RPL.  But though RPL also provides multicast routing,
    6LoWPAN ND supports only the registration of unicast addresses and
    there is no equivalent of [RFC9010] to specify the 6LR behavior upon
-   the registration of one or more multicast address.
+   the subscription of one or more multicast address.
 
    The "Multicast Listener Discovery Version 2 (MLDv2) for IPv6"
    [RFC3810] enables the router to learn which node listens to which
@@ -221,7 +221,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023                [Page 4]
+Thubert                  Expires 29 January 2023                [Page 4]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -277,7 +277,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023                [Page 5]
+Thubert                  Expires 29 January 2023                [Page 5]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -286,19 +286,20 @@ Internet-Draft       Multicast Address Registration            July 2022
 
    This document introduces the following terms:
 
-   Subsciption  The equivalent of a registration but for a multicast or
-          an anycast address. a 6LR / RPL router maintains a state per
-          subscriber for each subscribed multicast and anycast address,
-          and merges the advertisements for all subsriptions for the
-          same address.
    Origin  The node that issued an anycast or multicast advertisement,
           either in the form of a NS(EARO) or as a DAO(TIO, RTO)
-   Merging  The action of receiving multiple anycast or multicast
-          advertisements, either internally from self or in the form of
-          a NS(EARO) or as a DAO(TIO, RTO), and generating a single
-          DAO(TIO, RTO).  A RPL router that merges becomes the origin of
+   Merge/merging  The action of receiving multiple anycast or multicast
+          advertisements, either internally from self, in the form of a
+          NS(EARO), or as a DAO(TIO, RTO), and generating a single
+          DAO(TIO, RTO).  The 6RPL router maintains a state per origin
+          for each advertised address, and merges the advertisements for
+          all subsriptions for the same address in a single
+          advertisement.  A RPL router that merges becomes the origin of
           the merged advertisement and uses its own values for the Path
           Sequence and ROVR fields.
+   Subscribe/subscription  The speciel form of registration that
+          leverages NS(EARO) to register (subscribe) a multicast or an
+          anycast address.
 
 3.  Overview
 
@@ -332,8 +333,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-
-Thubert                  Expires 28 January 2023                [Page 6]
+Thubert                  Expires 29 January 2023                [Page 6]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -389,7 +389,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023                [Page 7]
+Thubert                  Expires 29 January 2023                [Page 7]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -399,10 +399,10 @@ Internet-Draft       Multicast Address Registration            July 2022
    the registration is for an anycast address.  As for multicast,
    multiple 6LN may subscribe the same anycast address to the same 6LR.
 
-   If the R flag is set in the registration of one or more 6LNs for the
+   If the R flag is set in the subscription of one or more 6LNs for the
    same address, the 6LR injects the anycast addresses and multicast
    addresses of a scope larger than link-scope in RPL, based on the
-   longest registration lifetime across the active registrations for the
+   longest subscription lifetime across the active subscriptions for the
    address.
 
    In the RPL "Storing Mode of Operation with multicast support", the
@@ -445,7 +445,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023                [Page 8]
+Thubert                  Expires 29 January 2023                [Page 8]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -501,7 +501,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023                [Page 9]
+Thubert                  Expires 29 January 2023                [Page 9]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -557,7 +557,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023               [Page 10]
+Thubert                  Expires 29 January 2023               [Page 10]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -613,7 +613,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023               [Page 11]
+Thubert                  Expires 29 January 2023               [Page 11]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -669,7 +669,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023               [Page 12]
+Thubert                  Expires 29 January 2023               [Page 12]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -704,35 +704,32 @@ Internet-Draft       Multicast Address Registration            July 2022
    the lifetime is retained for each origin.
 
    A RPL router that propagates an advertisement from a single origin
-   MUST use the ROVR and Path Sequence from that origin, whereas a
-   router that merges multiple subscriptions MUST use its own ROVR and
-   Path Sequence and the longest lifetime over the different
-   advertisements.  A target is routed as anycast by a parent (or the
-   Root) that received at least one DAO message for that target with the
-   A flag set to 1.
+   uses the ROVR and Path Sequence from that origin, whereas a router
+   that merges multiple subscriptions uses its own ROVR and Path
+   Sequence and the longest lifetime over the different advertisements.
+   A target is routed as anycast by a parent (or the Root) that received
+   at least one DAO message for that target with the A flag set to 1.
 
    As opposed to multicast, the anycast operation described therein
    applies to both addresses and prefixes, and the A flag can be set for
    both.  An external destination (address or prefix) that may be
-   injected as a RPL target from multiple border routers SHOULD be
+   injected as a RPL target from multiple border routers should be
    injected as anycast in RPL to enable load balancing.  A mobile target
-   that is multihomed SHOULD in contrast be advertised as unicast over
+   that is multihomed should in contrast be advertised as unicast over
    the multiple interfaces to favor the TID comparison and vs. the
    multipath load balancing.
 
+   For either multicast and anycast, there can be multiple subscriptions
+   from multiple origins, each using a different value of the ROVR field
+   that identifies the individual subscription.  The 6LR maintains a
 
 
 
-
-
-Thubert                  Expires 28 January 2023               [Page 13]
+Thubert                  Expires 29 January 2023               [Page 13]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
 
-   For either multicast and anycast, there can be multiple subscriptions
-   from multiple origins, each using a different value of the ROVR field
-   that identifies the individual subscription.  The 6LR MUST maintain a
    subscription state per value of the ROVR per multicast or anycast
    address, but inject the route into RPL only once for each address,
    and in the case of a multicast address, only if its scope is larger
@@ -740,20 +737,15 @@ Internet-Draft       Multicast Address Registration            July 2022
    separate, the check on the TID that acts as subscription sequence
    only applies to the subscription with the same ROVR.
 
-   The 6LRs that inject multicast and anycast routes into RPL may not be
-   synchronized to advertise same value of the Path Sequence in the RPL
-   TIO.  It results that the value the Path Sequence is irrelevant when
-   the target is anycast or multicast, and that it MUST be ignored.
-
-   Like the 6LR, a RPL router in Storing Mode propagates the route to
-   its parent(s) in DAO messages once and only once for each address,
-   but it MUST retain a routing table entry for each of the children
-   that advertised the address.
+   Like the 6LR, a RPL router in Storing Mode propagates the merged
+   advertisement to its parent(s) in DAO messages once and only once for
+   each address, but it retains a routing table entry for each of the
+   children that advertised the address.
 
    When forwarding multicast packets down the DODAG, the RPL router
    copies all the children that advertised the address in their DAO
    messages.  In contrast, when forwarding anycast packets down the
-   DODAG, the RPL router MUST copy one and only one of the children that
+   DODAG, the RPL router must copy one and only one of the children that
    advertised the address in their DAO messages, and forward to one
    parent if there is no such child.
 
@@ -781,7 +773,15 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023               [Page 14]
+
+
+
+
+
+
+
+
+Thubert                  Expires 29 January 2023               [Page 14]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -837,7 +837,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023               [Page 15]
+Thubert                  Expires 29 January 2023               [Page 15]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -893,7 +893,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023               [Page 16]
+Thubert                  Expires 29 January 2023               [Page 16]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -949,7 +949,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023               [Page 17]
+Thubert                  Expires 29 January 2023               [Page 17]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -1005,7 +1005,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023               [Page 18]
+Thubert                  Expires 29 January 2023               [Page 18]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -1040,7 +1040,7 @@ Internet-Draft       Multicast Address Registration            July 2022
       addresses.
 
    *  The 6LR and the 6LBR are extended to accept more than one
-      registration for the same address when it is anycast or multicast,
+      subscription for the same address when it is anycast or multicast,
       since multiple 6LNs may subscribe to the same address of these
       types.  In both cases, the Registration Ownership Verifier (ROVR)
       in the EARO identifies uniquely a registration within the
@@ -1050,18 +1050,18 @@ Internet-Draft       Multicast Address Registration            July 2022
       address to it (as known by the SLLAO) also registered to the all
       nodes link-scope multicast address FF02::1 [RFC4291].
 
-   *  The 6LR MUST maintain a registration state per tuple (IPv6
+   *  The 6LR MUST maintain a subscription state per tuple (IPv6
       address, ROVR) for both anycast and multicast types of address.
       It SHOULD notify the 6LBR with an EDAR message, unless it
       determined that the 6LBR is legacy and does not support this
-      specification.  In turn, the 6LBR MUST maintain a registration
+      specification.  In turn, the 6LBR MUST maintain a subscription
       state per tuple (IPv6 address, ROVR) for both anycast and
       multicast types of address.
 
 
 
 
-Thubert                  Expires 28 January 2023               [Page 19]
+Thubert                  Expires 29 January 2023               [Page 19]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -1082,22 +1082,22 @@ Internet-Draft       Multicast Address Registration            July 2022
 
    This specification adds the following behavior:
 
-   *  Upon a registration with the R and the M flags set to 1 in the
+   *  Upon a subscription with the R and the M flags set to 1 in the
       EARO, if the scope of the multicast address is above link-scope
       [RFC7346], then the 6LR injects the address in the RPL multicast
       support and sets the M flag in the RTO.
 
-   *  Upon a registration with the R and the A flags set to 1 in the
+   *  Upon a subscription with the R and the A flags set to 1 in the
       EARO, the 6LR injects the address in the new RPL anycast support
       and sets the A flag in the RTO.
 
    *  Upon receiving a packet directed to a multicast address for which
-      it has at least one registration, the 6LR delivers a copy of the
+      it has at least one subscription, the 6LR delivers a copy of the
       packet as a unicast layer-2 frame to the LLA of each of the nodes
       that registered to that multicast address.
 
    *  Upon receiving a packet directed to a multicast address for which
-      it has at least one registration, the 6LR delivers a copy of the
+      it has at least one subscription, the 6LR delivers a copy of the
       packet as a unicast layer-2 frame to the LLA of exactly one of the
       nodes that registered to that multicast address.
 
@@ -1117,7 +1117,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023               [Page 20]
+Thubert                  Expires 29 January 2023               [Page 20]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -1137,7 +1137,7 @@ Internet-Draft       Multicast Address Registration            July 2022
    be associated with the address before it is deployed, and a ROVR MUST
    be generated from that keypair as specified in [RFC8928].  The
    address and the ROVR MUST then be installed in the 6LBR so it can
-   recognize the address and compare the ROVR on the first registration.
+   recognize the address and compare the ROVR on the first subscription.
 
    The keypair MUST then be provisioned in each node that needs to
    subscribe to the anycast or multicast address, so the node can follow
@@ -1173,7 +1173,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023               [Page 21]
+Thubert                  Expires 29 January 2023               [Page 21]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -1229,7 +1229,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023               [Page 22]
+Thubert                  Expires 29 January 2023               [Page 22]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -1285,7 +1285,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023               [Page 23]
+Thubert                  Expires 29 January 2023               [Page 23]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -1341,7 +1341,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023               [Page 24]
+Thubert                  Expires 29 January 2023               [Page 24]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -1397,7 +1397,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023               [Page 25]
+Thubert                  Expires 29 January 2023               [Page 25]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -1453,7 +1453,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023               [Page 26]
+Thubert                  Expires 29 January 2023               [Page 26]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -1509,7 +1509,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023               [Page 27]
+Thubert                  Expires 29 January 2023               [Page 27]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -1565,7 +1565,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023               [Page 28]
+Thubert                  Expires 29 January 2023               [Page 28]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -1621,7 +1621,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023               [Page 29]
+Thubert                  Expires 29 January 2023               [Page 29]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -1677,7 +1677,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023               [Page 30]
+Thubert                  Expires 29 January 2023               [Page 30]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -1733,7 +1733,7 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023               [Page 31]
+Thubert                  Expires 29 January 2023               [Page 31]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -1789,7 +1789,7 @@ Author's Address
 
 
 
-Thubert                  Expires 28 January 2023               [Page 32]
+Thubert                  Expires 29 January 2023               [Page 32]
 
 Internet-Draft       Multicast Address Registration            July 2022
 
@@ -1845,4 +1845,4 @@ Internet-Draft       Multicast Address Registration            July 2022
 
 
 
-Thubert                  Expires 28 January 2023               [Page 33]
+Thubert                  Expires 29 January 2023               [Page 33]

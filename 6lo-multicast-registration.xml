@@ -21,7 +21,7 @@ docName="draft-ietf-6lo-multicast-registration-08" >
 
 <front>
 
-   <title abbrev="Multicast Address Registration">IPv6 Neighbor Discovery Multicast Address Listener Registration</title>
+   <title abbrev="Multicast Address Registration">IPv6 Neighbor Discovery Multicast Address Listener Subscription</title>
    <author initials="P" surname="Thubert" fullname="Pascal Thubert" role="editor">
       <organization abbrev="Cisco Systems">Cisco Systems, Inc</organization>
       <address>
@@ -122,7 +122,7 @@ docName="draft-ietf-6lo-multicast-registration-08" >
    and Global Unicast Addresses (GUAs) in RPL.
    But though RPL also provides multicast routing, 6LoWPAN ND supports only
    the registration of unicast addresses and there is no equivalent of
-   <xref target="RFC9010"/> to specify the 6LR behavior upon the registration
+   <xref target="RFC9010"/> to specify the 6LR behavior upon the subscription
    of one or more multicast address.
 </t><t>
    The <xref target="RFC3810">"Multicast Listener Discovery Version 2 (MLDv2)
@@ -237,9 +237,9 @@ docName="draft-ietf-6lo-multicast-registration-08" >
        A RPL router that merges becomes the origin of the merged advertisement
        and uses its own values for the Path Sequence and ROVR fields.
        </dd>
-       <dt>Subscribe/subscription</dt><dd> The equivalent of a registration
-       but for a multicast or an anycast address, using an NS(EARO) to
-       advertise the address.
+       <dt>Subscribe/subscription</dt><dd> The speciel form of
+       registration that leverages NS(EARO) to register (subscribe)
+       a multicast or an anycast address.
        </dd>
 
        </dl>
@@ -351,10 +351,10 @@ docName="draft-ietf-6lo-multicast-registration-08" >
    is for an anycast address. As for multicast, multiple 6LN may subscribe the
    same anycast address to the same 6LR.
    </t><t>
-   If the R flag is set in the registration of one or more 6LNs for the same
+   If the R flag is set in the subscription of one or more 6LNs for the same
    address, the 6LR injects the anycast addresses and multicast addresses of a
-   scope larger than link-scope in RPL, based on the longest registration
-   lifetime across the active registrations for the address.
+   scope larger than link-scope in RPL, based on the longest subscription
+   lifetime across the active subscriptions for the address.
    </t><t>
    In the RPL "Storing Mode of Operation with multicast support", the DAO
    messages for the multicast address percolate along the RPL preferred parent
@@ -919,7 +919,7 @@ docName="draft-ietf-6lo-multicast-registration-08" >
    and it MUST set the A flag in the EARO for those addresses.
    </li>
    <li>
-   The 6LR and the 6LBR are extended to accept more than one registration for
+   The 6LR and the 6LBR are extended to accept more than one subscription for
    the same address when it is anycast or multicast, since multiple 6LNs may
    subscribe to the same address of these types. In both cases, the
    Registration Ownership Verifier (ROVR) in the EARO identifies uniquely
@@ -931,11 +931,11 @@ docName="draft-ietf-6lo-multicast-registration-08" >
    multicast address FF02::1 <xref target="RFC4291"/>.
    </li>
    <li>
-    The 6LR MUST maintain a registration state per tuple (IPv6 address, ROVR)
+    The 6LR MUST maintain a subscription state per tuple (IPv6 address, ROVR)
     for both anycast and multicast types of address. It SHOULD notify the 6LBR
     with an EDAR message, unless it determined that the 6LBR is legacy and does
     not support this specification. In turn, the 6LBR MUST maintain a
-    registration state per tuple (IPv6 address, ROVR) for both anycast and
+    subscription state per tuple (IPv6 address, ROVR) for both anycast and
     multicast types of address.
    </li>
 
@@ -967,22 +967,22 @@ docName="draft-ietf-6lo-multicast-registration-08" >
    </t>
    <ul>
    <li>
-   Upon a registration with the R and the M flags set to 1 in the EARO, if the
+   Upon a subscription with the R and the M flags set to 1 in the EARO, if the
    scope of the multicast address is above link-scope <xref target="RFC7346"/>,
    then the 6LR injects the address in the RPL multicast support and sets the M
    flag in the RTO.
    </li><li>
-   Upon a registration with the R and the A flags set to 1 in the EARO, the
+   Upon a subscription with the R and the A flags set to 1 in the EARO, the
    6LR injects the address in the new RPL anycast support and sets the A flag
    in the RTO.
    </li><li>
    Upon receiving a packet directed to a multicast address for which it has at
-   least one registration, the 6LR delivers a copy of the packet as a unicast
+   least one subscription, the 6LR delivers a copy of the packet as a unicast
    layer-2 frame to the LLA of each of the nodes that registered to that
    multicast address.
    </li><li>
    Upon receiving a packet directed to a multicast address for which it has at
-   least one registration, the 6LR delivers a copy of the packet as a unicast
+   least one subscription, the 6LR delivers a copy of the packet as a unicast
    layer-2 frame to the LLA of exactly one of the nodes that registered to that
    multicast address.
    </li>
@@ -1022,7 +1022,7 @@ docName="draft-ietf-6lo-multicast-registration-08" >
     <xref target="RFC8928"/> to enforce the right to subscribe. A keypair MUST
     be associated with the address before it is deployed, and a ROVR MUST be
     generated from that keypair as specified in <xref target="RFC8928"/>.
-    The address and the ROVR MUST then be installed in the 6LBR so it can recognize the address and compare the ROVR on the first registration.
+    The address and the ROVR MUST then be installed in the 6LBR so it can recognize the address and compare the ROVR on the first subscription.
 </t>
 <t>
     The keypair MUST then be provisioned in each node that needs to
