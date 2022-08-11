@@ -16,7 +16,7 @@
 <?rfc tocappendix="yes"?>
 <rfc  xmlns:xi="http://www.w3.org/2001/XInclude" category="std" ipr="trust200902"
 tocInclude="true" indexInclude="true" obsoletes=""  consensus="true"
-submissionType="IETF" xml:lang="en" version="3"  updates="6550, 6553, 8505, 9010"
+submissionType="IETF" xml:lang="en" version="3"  updates="4861, 6550, 6553, 8505, 9010"
 docName="draft-ietf-6lo-multicast-registration-08" >
 
 <front>
@@ -156,6 +156,11 @@ docName="draft-ietf-6lo-multicast-registration-08" >
     they appear in all capitals, as shown here.
 
   </t>
+
+<t>
+  In addition, the terms "Extends" and "Amends" are used as per
+  <xref target="I-D.kuehlewind-update-tag" /> section 3.
+</t>
   </section>	<!-- end section "Requirements Language" -->
 
   <section anchor="lo"><name>References</name>
@@ -433,6 +438,15 @@ docName="draft-ietf-6lo-multicast-registration-08" >
 </section> <!-- end section "Overview" -->
 
 
+<!-- Target Address is not a multicast address. -->
+    <section anchor="tgt4861"><name>Updating RFC 4861</name>
+    <t>
+    <xref target="RFC4861"/> requires to silently drop NS packets when the
+    Target Address is a multicast address. This specification Amends
+    <xref target="RFC4861"/> by allowing toi advertise multicast and anycast
+    addresses in the Target Address field when the NS message is used for a registration, per section 5.5 of <xref target="RFC8505"/>.
+    </t>
+    </section ><!-- Updating RFC 4861 -->
     <section anchor="CIO"><name>Extending RFC 7400</name>
 
     <t>
@@ -1536,6 +1550,8 @@ docName="draft-ietf-6lo-multicast-registration-08" >
     <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6052.xml"/>
     <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9008.xml"/>
     <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-bess-evpn-optimized-ir.xml"/>
+
+      <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.kuehlewind-update-tag.xml'/>
     <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.heile-lpwan-wisun-overview.xml"/><xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.thubert-bess-secure-evpn-mac-signaling.xml"/>
       <reference anchor="IEEE802154">
          <front>
