@@ -443,7 +443,7 @@ docName="draft-ietf-6lo-multicast-registration-08" >
     <t>
     <xref target="RFC4861"/> requires to silently drop NS packets when the
     Target Address is a multicast address. This specification Amends
-    <xref target="RFC4861"/> by allowing toi advertise multicast and anycast
+    <xref target="RFC4861"/> by allowing to advertise multicast and anycast
     addresses in the Target Address field when the NS message is used for a registration, per section 5.5 of <xref target="RFC8505"/>.
     </t>
     </section ><!-- Updating RFC 4861 -->
