@@ -450,11 +450,10 @@ docName="draft-ietf-6lo-multicast-registration-08" >
     <section anchor="CIO"><name>Extending RFC 7400</name>
 
     <t>
-   This specification defines a new capability bit for use in the
-   6CIO as defined by <xref target="RFC7400"> "6LoWPAN-GHC: Generic Header
-   Compression for IPv6 over Low-Power Wireless Personal Area Networks
-   (6LoWPANs)"</xref> and extended in <xref target="RFC8505"/>
-   for use in IPv6 ND messages.
+   This specification Extends <xref target="RFC7400"> "6LoWPAN-GHC: Generic
+   Header Compression for IPv6 over Low-Power Wireless Personal Area Networks
+   (6LoWPANs)"</xref> by defining a new capability bit for use in the
+   6CIO.  <xref target="RFC7400"/> was already extended by <xref target="RFC8505"/> for use in IPv6 ND messages.
     </t>
     <t>
    The new "Registration for xcast Address Supported" (X) flag indicates
@@ -499,17 +498,27 @@ docName="draft-ietf-6lo-multicast-registration-08" >
    the EARO into the Path Sequence, and the ROVR field into the associated RPL
    Target Option (RTO).
    This way, it is possible to identify both the registering node and the
-   order of registration in RPL for each individual route advertisement, so the
+   order of registration in RPL for each individual advertisement, so the
    most recent path and lifetime values are used.
 </t><t>
+
+   This specification requires the use of the ROVR field as the indication of the origin of a Target advertisement in the RPL DAO messages, as specified
+   in section 6.1 of <xref target="RFC9010"/>.
    For anycast and multicast advertisements (in NS or DAO messages), multiple
-   origins may subscribe to the same address, and multiple advertisements from
-   different origins are merged by the common parent which becomes the origin
-   of the merged advertisements.
-   The Path Sequence is to be used between advertisements with the same ROVR
-   value, denoting an update from the same origin, but cannot apply if the
-   origin is not determined.
-   This is why this specification requires the use of the ROVR field as the indication of the origin in the RPL advertisements.
+   origins may subscribe to the same address, in which case the multiple
+   advertisements from the different or unknown origins are merged by the common
+   parent; in that case, the common parent becomes the origin of the merged
+   advertisements and uses its own ROVR value. On the other hand, a parent that
+   propagates an advertisement from a single origin uses the original ROVR in
+   the propagated RTO, as it does for unicast address advertisements, so the
+   origin is recognised across multiple hops.
+
+</t><t>
+   This specification Extends <xref target="RFC6550"/> to require that,
+   for anycast and multicast advertisements, the Path Sequence is used
+   between and only between advertisements for the same Target and from the same
+   origin (i.e, with the same ROVR value); in that case, only the freshest advertisement is retained. But the freshness comparison cannot apply if the
+   origin is not determined (i.e., the origin did not support this specification).
 </t><t>
    <xref target="RFC6550"/> uses the Path Lifetime in the TIO to indicate the
    remaining time for which the advertisement is valid for unicast route
@@ -518,18 +527,17 @@ docName="draft-ietf-6lo-multicast-registration-08" >
    and the Path Lifetime in the TIO so they are comparable when both forms of
    advertisements are received.
 </t><t>
-   For anycast and multicast advertisements, the Path Sequence is to be used
-   between advertisements from the same origin only.
    The RPL router that merges multiple advertisement for the same anycast or
    multicast addresses must use and advertise the longest remaining lifetime
    across all the origins of the advertisements for that address.
-   When the lifetime expires, the router sends a no-path DAO (lifetime=0) using
-   the same value for ROVR value as for the preceding advertisements.
+   When the lifetime expires, the router sends a no-path DAO (i.e. the lifetime
+   is 0) using the same value for ROVR value as for the previous advertisements,
+   that is either self or the single descendant that advertised the Target.
 </t><t>
 
    Note that the Registration Lifetime, TID and ROVR fields are also placed in
    the EDAR message so the state created by EDAR is also comparable with that created upon an NS(EARO) or a DAO message. For simplicity the text below
-   mentions only EARO but applies also to EDAR.
+   mentions only NS(EARO) but applies also to EDAR.
 </t>
 <section anchor="mop3"><name>Updating MOP 3</name>
 <t>
