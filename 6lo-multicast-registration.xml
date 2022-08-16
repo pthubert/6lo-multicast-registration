@@ -439,12 +439,13 @@ docName="draft-ietf-6lo-multicast-registration-08" >
 
 
 <!-- Target Address is not a multicast address. -->
-    <section anchor="tgt4861"><name>Updating RFC 4861</name>
-    <t>
-    <xref target="RFC4861"/> requires to silently drop NS packets when the
-    Target Address is a multicast address. This specification Amends
-    <xref target="RFC4861"/> by allowing to advertise multicast and anycast
-    addresses in the Target Address field when the NS message is used for a registration, per section 5.5 of <xref target="RFC8505"/>.
+   <section anchor="tgt4861"><name>Updating RFC 4861</name>
+   <t>
+   Section 7.1 of <xref target="RFC4861"/> requires to silently discard NS and
+   NA packets when the Target Address is a multicast address. This specification
+   Amends <xref target="RFC4861"/> by allowing to advertise multicast and anycast
+   addresses in the Target Address field when the NS message is used for a
+   registration, per section 5.5 of <xref target="RFC8505"/>.
     </t>
     </section ><!-- Updating RFC 4861 -->
     <section anchor="CIO"><name>Extending RFC 7400</name>
