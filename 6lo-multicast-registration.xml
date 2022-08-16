@@ -887,7 +887,7 @@ docName="draft-ietf-6lo-multicast-registration-08" >
    </t>
    <t>
    A device that wishes to refresh its state, e.g., upon reboot if it may have
-   lost some registration state, may send an asynchronous NA(EARO) with this new
+   lost some registration state, SHOULD send an asynchronous NA(EARO) with this new
    status value. That asynchronous NA(ARO) SHOULD be sent to the all-nodes link
    scope multicast address (FF02::1) and Target MUST be set to the link local
    address that was exposed previously by this node to accept registrations,
@@ -904,17 +904,24 @@ docName="draft-ietf-6lo-multicast-registration-08" >
    </li>
    <li>
    <t>
-   A new IPv6 ND Node Uptime option (NUO) is introduced to be placed in IPv6 ND
-   messages. The NUO carries a Node State Sequence Information (NSSI) and a Node
-   Uptime.  See <xref target="NUO"/> for the option
-   details.
+   A new IPv6 ND Consistent Uptime option (CUO) is introduced to be placed in IPv6 ND
+   messages. The CUO indicates allows to figure the state consistency between the sender and the
+   receiver. For instance, a node that rebooted needs to reset its uptime to 0.
+   A Router that changed information like a prefix information option has to advertise an
+   incremented state sequence. To that effect, the CUO carries a Node State
+   Sequence Information (NSSI) and a Node Uptime.
+   See <xref target="CUO"/> for the option details.
    </t>
    <t>
-   A node that receives the NUO checks whether it is indicative of a loss of
-   state, such as an address registration, in the sender. If so, it may attempt
-   to reform the state, e.g., by re-registering an address. A loss of state is
-   inferred if the NSSI has changed since last sight, or the Node Uptime is
-   less than the time since the state was installed.
+   A node that receives the CUO checks whether it is indicative of a desynchronization
+   between peers. A peer that discovers that a router has changed should reassess which
+   addresses it formed based on the new PIOs from that router, and resync the state that
+   it installed in the router, e.g., the registration state for its addresses.
+   In the process, teh peer may attempt to form new address and register them, deprecate
+   old addresses and deregister them using a Lifetime of 0, and reform any potentially lost state,
+   e.g., by re-registering an existing address that it will keep using. A loss of state is
+   inferred if the Node Uptime of the peer is less than the time since the state was installed,
+   or the NSSI is incremented for a consistent uptime.
    </t>
    </li>
    <li>
@@ -1054,20 +1061,20 @@ docName="draft-ietf-6lo-multicast-registration-08" >
 </t>
 </section>  <!-- Leveraging RFC 8929 -->
 
-<section anchor="NUO"><name>Node Uptime Option </name>
+<section anchor="CUO"><name>Consistent Uptime Option </name>
 <t>This specification introduces a new option that characterizes the
   uptime of the sender. The option may be used by routers in RA messages and
   by any node in NA, NA, and RS messages. It is used by the receiver to infer
   whether some state synchronization might be lost, e.g., due to reboot.
 </t>
- <figure anchor="NUOF"><name>Node Uptime Option Format</name>
+ <figure anchor="CUOF"><name>Node Uptime Option Format</name>
  <artwork align="center">
   0                   1                   2                   3
   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
- |     Type      |     Length    |          Checksum             |
+ |     Type      |     Length    | Exponent  |  Uptime Mantissa  |
  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
- |S|  flags  |       NSSI        | Exponent  |  Uptime Mantissa  |
+ |S|U|   flags   |          NSSI             |    Peer NSSI      |
  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 </artwork>
  </figure><!-- end figure "Node Uptime Option Format" -->
@@ -1078,11 +1085,17 @@ docName="draft-ietf-6lo-multicast-registration-08" >
 <dt> Length </dt>
     <dd> 1 </dd>
 <dt>S</dt>
-    <dd> 1-bit flag, set to indicate that the device is low-power and may sleep.</dd>
+    <dd> 1-bit flag, set to 1 to indicate that the device is low-power and may sleep.</dd>
+<dt>U</dt>
+    <dd> 1-bit flag, set to 1 to indicate that the Peer NSSI field is valid; it MUST be set
+    to 0 when the message is not unicast and MUST be set to 1 when the message is unicast
+    and the sender has an NSSI state for the destination.</dd>
 <dt>flags</dt>
     <dd> 5-bit, reserved. MUST be set to 0 by the sender and ignored by the receiver.</dd>
 <dt> NSSI </dt>
-    <dd>10-bits unsigned integer: The Node State Sequence Information</dd>
+    <dd>12-bits unsigned integer: The Node State Sequence Information</dd>
+<dt> Peer NSSI </dt>
+    <dd>12-bits unsigned integer: The last known NSSI from the peer.</dd>
 <dt> Uptime Exponent </dt>
     <dd>6-bits unsigned integer: The 2-exponent of the uptime unit </dd>
 <dt> Uptime Mantissa </dt>
@@ -1113,12 +1126,17 @@ docName="draft-ietf-6lo-multicast-registration-08" >
 
 <t>
    The NSSI SHOULD be stored by this node in persistent memory by the
-   sender and incremented when it reboots and lost state. When persisting is not
-   possible, then the NSSI is randomly generated upon a loss of state.
+   sender and incremented when it may have missed to lost state about a peer,
+   or updates state that impact a peer, e.g., a host formed a new address or a
+   router advertioses a new prefix.
+   When persisting is not possible, then the NSSI is randomly generated loss.
+</t><t>
    Any change in the value of the NSSI from a node is an indication that the
-   node lost state and that the needful state should be reinstalled, e.g.,
-   addresses registered to that node should be registered again with a
-   minimal temporization to avoid collisions.
+   node updated some state and that the needful state should be reinstalled, e.g.,
+   addresses that where formed based on an RA with a previous NSSI should be
+   reassessed, and the registration state updated in the peer.
+</t><t>
+
 </t>
 
 </section><!-- Node Uptime Option -->
