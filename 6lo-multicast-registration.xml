@@ -17,7 +17,7 @@
 <rfc  xmlns:xi="http://www.w3.org/2001/XInclude" category="std" ipr="trust200902"
 tocInclude="true" indexInclude="true" obsoletes=""  consensus="true"
 submissionType="IETF" xml:lang="en" version="3"  updates="4861, 6550, 6553, 8505, 9010"
-docName="draft-ietf-6lo-multicast-registration-08" >
+docName="draft-ietf-6lo-multicast-registration-09" >
 
 <front>
 
@@ -1067,17 +1067,17 @@ docName="draft-ietf-6lo-multicast-registration-08" >
   by any node in NA, NA, and RS messages. It is used by the receiver to infer
   whether some state synchronization might be lost, e.g., due to reboot.
 </t>
- <figure anchor="CUOF"><name>Node Uptime Option Format</name>
+ <figure anchor="CUOF"><name>Consistent Uptime Option Format</name>
  <artwork align="center">
   0                   1                   2                   3
   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  |     Type      |     Length    | Exponent  |  Uptime Mantissa  |
  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
- |S|U|   flags   |          NSSI             |    Peer NSSI      |
+ |S|U|   flags   |          NSSI         |     Peer NSSI         |
  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 </artwork>
- </figure><!-- end figure "Node Uptime Option Format" -->
+ </figure><!-- end figure "Consistent Uptime Option Format" -->
 
 <dl>
 <dt> Type </dt>
@@ -1085,17 +1085,19 @@ docName="draft-ietf-6lo-multicast-registration-08" >
 <dt> Length </dt>
     <dd> 1 </dd>
 <dt>S</dt>
-    <dd> 1-bit flag, set to 1 to indicate that the device is low-power and may sleep.</dd>
+    <dd> 1-bit flag, set to 1 to indicate that the sender is low-power and may sleep.</dd>
 <dt>U</dt>
     <dd> 1-bit flag, set to 1 to indicate that the Peer NSSI field is valid; it MUST be set
     to 0 when the message is not unicast and MUST be set to 1 when the message is unicast
-    and the sender has an NSSI state for the destination.</dd>
+    and the sender has an NSSI state for the intended receiver.</dd>
 <dt>flags</dt>
-    <dd> 5-bit, reserved. MUST be set to 0 by the sender and ignored by the receiver.</dd>
+    <dd> 6-bit, reserved. MUST be set to 0 by the sender and ignored by the receiver.</dd>
 <dt> NSSI </dt>
-    <dd>12-bits unsigned integer: The Node State Sequence Information</dd>
+    <dd>12-bits unsigned integer: The Node State Sequence Information, MUST be
+    stored by the receiver if it has a dependency on information advertised or
+    stored at the sender.</dd>
 <dt> Peer NSSI </dt>
-    <dd>12-bits unsigned integer: The last known NSSI from the peer.</dd>
+    <dd>12-bits unsigned integer: Echoes the last known NSSI from the peer.</dd>
 <dt> Uptime Exponent </dt>
     <dd>6-bits unsigned integer: The 2-exponent of the uptime unit </dd>
 <dt> Uptime Mantissa </dt>
@@ -1104,14 +1106,18 @@ docName="draft-ietf-6lo-multicast-registration-08" >
 
 <t>The Node Uptime indicates how long the sender has been continuously up and
    running without loss of state. It is expressed by the Uptime Mantissa in units
-   of 2 at the power of the Uptime Exponent milliseconds.
+   of 2 at the power of the Uptime Exponent milliseconds. The receiver derives
+   the boot time of the sender as the current Epoch the sender's Node Uptime.
+   If the sender rebooted since last time state was installed, any state that was
+   installed in the sender before it rebooted needs to be reassessed and
+   reinstalled if it is still needed. Any state that was installed in the receiver
+   from information by the sender before it rebooted must be removed and may or
+   may not be reinstalled later.
 </t>
 <t>
-  The initial value and the steps of the Uptime Exponent are chosen freely by
-  the implementation, but the value MUST NOT decrease over time. This means that
-  2 expressions of time from the same node can be compared by aggregating the
-  Exponent + Mantissa Uptime fields and considering the aggregate globally as a
-  16-bits unsigned integer.
+   The value if the uptime is reset to 0 at some point of the sender's reboot
+   sequence, but may not be still 0 when the first message is sent, so the
+   receiver must not expect a value of 0 as the signal of a reboot.
 </t>
 	<table anchor="timex" ><name>Node Uptime Rough Values</name>
    <thead>
@@ -1125,10 +1131,10 @@ docName="draft-ietf-6lo-multicast-registration-08" >
 	</table>	<!-- end table "Node Uptime Example Values" +-->
 
 <t>
-   The NSSI SHOULD be stored by this node in persistent memory by the
-   sender and incremented when it may have missed to lost state about a peer,
-   or updates state that impact a peer, e.g., a host formed a new address or a
-   router advertioses a new prefix.
+   The NSSI SHOULD be stored in persistent memory by the
+   sender and incremented when it may have missed or lost state about a peer,
+   or has updated some state in a fashion that will that impact a peer, e.g.,
+   a host formed a new address or a router advertises a new prefix.
    When persisting is not possible, then the NSSI is randomly generated loss.
 </t><t>
    Any change in the value of the NSSI from a node is an indication that the

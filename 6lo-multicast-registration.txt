@@ -4,14 +4,14 @@
 
 6lo                                                      P. Thubert, Ed.
 Internet-Draft                                             Cisco Systems
-Updates: 4861, 6550, 6553, 8505, 9010 (if                 16 August 2022
+Updates: 4861, 6550, 6553, 8505, 9010 (if                 17 August 2022
          approved)                                                      
 Intended status: Standards Track                                        
-Expires: 17 February 2023
+Expires: 18 February 2023
 
 
     IPv6 Neighbor Discovery Multicast Address Listener Subscription
-                draft-ietf-6lo-multicast-registration-08
+                draft-ietf-6lo-multicast-registration-09
 
 Abstract
 
@@ -37,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 February 2023.
+   This Internet-Draft will expire on 18 February 2023.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Thubert                 Expires 17 February 2023                [Page 1]
+Thubert                 Expires 18 February 2023                [Page 1]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thubert                 Expires 17 February 2023                [Page 2]
+Thubert                 Expires 18 February 2023                [Page 2]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -165,7 +165,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023                [Page 3]
+Thubert                 Expires 18 February 2023                [Page 3]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -221,7 +221,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023                [Page 4]
+Thubert                 Expires 18 February 2023                [Page 4]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -277,7 +277,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023                [Page 5]
+Thubert                 Expires 18 February 2023                [Page 5]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -333,7 +333,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023                [Page 6]
+Thubert                 Expires 18 February 2023                [Page 6]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -389,7 +389,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023                [Page 7]
+Thubert                 Expires 18 February 2023                [Page 7]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -445,7 +445,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023                [Page 8]
+Thubert                 Expires 18 February 2023                [Page 8]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -501,7 +501,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023                [Page 9]
+Thubert                 Expires 18 February 2023                [Page 9]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -557,7 +557,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023               [Page 10]
+Thubert                 Expires 18 February 2023               [Page 10]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -613,7 +613,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023               [Page 11]
+Thubert                 Expires 18 February 2023               [Page 11]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -669,7 +669,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023               [Page 12]
+Thubert                 Expires 18 February 2023               [Page 12]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -725,7 +725,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023               [Page 13]
+Thubert                 Expires 18 February 2023               [Page 13]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -781,7 +781,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023               [Page 14]
+Thubert                 Expires 18 February 2023               [Page 14]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -837,7 +837,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023               [Page 15]
+Thubert                 Expires 18 February 2023               [Page 15]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -893,7 +893,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023               [Page 16]
+Thubert                 Expires 18 February 2023               [Page 16]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -949,7 +949,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023               [Page 17]
+Thubert                 Expires 18 February 2023               [Page 17]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -1005,7 +1005,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023               [Page 18]
+Thubert                 Expires 18 February 2023               [Page 18]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -1061,7 +1061,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023               [Page 19]
+Thubert                 Expires 18 February 2023               [Page 19]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -1117,7 +1117,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023               [Page 20]
+Thubert                 Expires 18 February 2023               [Page 20]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -1167,38 +1167,40 @@ Internet-Draft       Multicast Address Registration          August 2022
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
      |     Type      |     Length    | Exponent  |  Uptime Mantissa  |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     |S|U|   flags   |          NSSI             |    Peer NSSI      |
+     |S|U|   flags   |          NSSI         |     Peer NSSI         |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 
 
 
-Thubert                 Expires 17 February 2023               [Page 21]
+Thubert                 Expires 18 February 2023               [Page 21]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
 
-                    Figure 6: Node Uptime Option Format
+                 Figure 6: Consistent Uptime Option Format
 
    Type  To be assigned by IANA, see Table 8
 
    Length  1
 
-   S  1-bit flag, set to 1 to indicate that the device is low-power and
+   S  1-bit flag, set to 1 to indicate that the sender is low-power and
       may sleep.
 
    U  1-bit flag, set to 1 to indicate that the Peer NSSI field is
       valid; it MUST be set to 0 when the message is not unicast and
       MUST be set to 1 when the message is unicast and the sender has an
-      NSSI state for the destination.
+      NSSI state for the intended receiver.
 
-   flags  5-bit, reserved.  MUST be set to 0 by the sender and ignored
+   flags  6-bit, reserved.  MUST be set to 0 by the sender and ignored
       by the receiver.
 
-   NSSI  12-bits unsigned integer: The Node State Sequence Information
+   NSSI  12-bits unsigned integer: The Node State Sequence Information,
+      MUST be stored by the receiver if it has a dependency on
+      information advertised or stored at the sender.
 
-   Peer NSSI  12-bits unsigned integer: The last known NSSI from the
-      peer.
+   Peer NSSI  12-bits unsigned integer: Echoes the last known NSSI from
+      the peer.
 
    Uptime Exponent  6-bits unsigned integer: The 2-exponent of the
       uptime unit
@@ -1209,27 +1211,25 @@ Internet-Draft       Multicast Address Registration          August 2022
    The Node Uptime indicates how long the sender has been continuously
    up and running without loss of state.  It is expressed by the Uptime
    Mantissa in units of 2 at the power of the Uptime Exponent
-   milliseconds.
+   milliseconds.  The receiver derives the boot time of the sender as
+   the current Epoch the sender's Node Uptime.  If the sender rebooted
+   since last time state was installed, any state that was installed in
+   the sender before it rebooted needs to be reassessed and reinstalled
+   if it is still needed.  Any state that was installed in the receiver
+   from information by the sender before it rebooted must be removed and
+   may or may not be reinstalled later.
 
-   The initial value and the steps of the Uptime Exponent are chosen
-   freely by the implementation, but the value MUST NOT decrease over
-   time.  This means that 2 expressions of time from the same node can
-   be compared by aggregating the Exponent + Mantissa Uptime fields and
-   considering the aggregate globally as a 16-bits unsigned integer.
-
-
-
-
-
-
-
+   The value if the uptime is reset to 0 at some point of the sender's
+   reboot sequence, but may not be still 0 when the first message is
+   sent, so the receiver must not expect a value of 0 as the signal of a
+   reboot.
 
 
 
 
 
 
-Thubert                 Expires 17 February 2023               [Page 22]
+Thubert                 Expires 18 February 2023               [Page 22]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -1248,11 +1248,12 @@ Internet-Draft       Multicast Address Registration          August 2022
 
                     Table 1: Node Uptime Rough Values
 
-   The NSSI SHOULD be stored by this node in persistent memory by the
-   sender and incremented when it may have missed to lost state about a
-   peer, or updates state that impact a peer, e.g., a host formed a new
-   address or a router advertioses a new prefix.  When persisting is not
-   possible, then the NSSI is randomly generated loss.
+   The NSSI SHOULD be stored in persistent memory by the sender and
+   incremented when it may have missed or lost state about a peer, or
+   has updated some state in a fashion that will that impact a peer,
+   e.g., a host formed a new address or a router advertises a new
+   prefix.  When persisting is not possible, then the NSSI is randomly
+   generated loss.
 
    Any change in the value of the NSSI from a node is an indication that
    the node updated some state and that the needful state should be
@@ -1281,15 +1282,15 @@ Internet-Draft       Multicast Address Registration          August 2022
    form 2^32 multicast addresses from a single /64 prefix.  If an IPv6
    prefix is associated to an Instance or a RPL DODAG, this provides a
    namespace that can be used in any desired fashion.  It is for
-   instance possible for a standard defining organization to form its
 
 
 
-Thubert                 Expires 17 February 2023               [Page 23]
+Thubert                 Expires 18 February 2023               [Page 23]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
 
+   instance possible for a standard defining organization to form its
    own registry and allocate 32-bit values from that namespace to
    network functions or device types.  When used within a RPL deployment
    that is associated with a /64 prefix the IPv6 multicast addresses can
@@ -1340,8 +1341,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-
-Thubert                 Expires 17 February 2023               [Page 24]
+Thubert                 Expires 18 February 2023               [Page 24]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -1397,7 +1397,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023               [Page 25]
+Thubert                 Expires 18 February 2023               [Page 25]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -1453,7 +1453,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023               [Page 26]
+Thubert                 Expires 18 February 2023               [Page 26]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -1509,7 +1509,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023               [Page 27]
+Thubert                 Expires 18 February 2023               [Page 27]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -1565,7 +1565,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023               [Page 28]
+Thubert                 Expires 18 February 2023               [Page 28]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -1621,7 +1621,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023               [Page 29]
+Thubert                 Expires 18 February 2023               [Page 29]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -1677,7 +1677,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023               [Page 30]
+Thubert                 Expires 18 February 2023               [Page 30]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -1733,7 +1733,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023               [Page 31]
+Thubert                 Expires 18 February 2023               [Page 31]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -1789,7 +1789,7 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 17 February 2023               [Page 32]
+Thubert                 Expires 18 February 2023               [Page 32]
 
 Internet-Draft       Multicast Address Registration          August 2022
 
@@ -1845,4 +1845,4 @@ Author's Address
 
 
 
-Thubert                 Expires 17 February 2023               [Page 33]
+Thubert                 Expires 18 February 2023               [Page 33]
