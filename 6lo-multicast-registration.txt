@@ -4,10 +4,10 @@
 
 6lo                                                      P. Thubert, Ed.
 Internet-Draft                                             Cisco Systems
-Updates: 4861, 6550, 6553, 8505, 9010 (if                 17 August 2022
+Updates: 4861, 6550, 6553, 8505, 9010 (if                12 October 2022
          approved)                                                      
 Intended status: Standards Track                                        
-Expires: 18 February 2023
+Expires: 15 April 2023
 
 
     IPv6 Neighbor Discovery Multicast Address Listener Subscription
@@ -15,12 +15,12 @@ Expires: 18 February 2023
 
 Abstract
 
-   This document updates RFC 8505 to enable a listener to subscribe an
-   IPv6 anycast or and subscribe to an IPv6 multicast address; the draft
-   updates RFC 6550 (RPL) to add a new Non-Storing Multicast Mode and a
-   new support for anycast addresses in Storing and Non-Storing Modes.
-   This document extends RFC 9010 to enable the 6LR to inject the
-   anycast and multicast addresses in RPL.
+   This document updates RFC 8505 to enable a listener to register an
+   IPv6 anycast address or subscribe to an IPv6 multicast address; the
+   draft updates RFC 6550 (RPL) to add a new Non-Storing Multicast Mode
+   and a new support for anycast addresses in Storing and Non-Storing
+   Modes.  This document extends RFC 9010 to enable the 6LR to inject
+   the anycast and multicast addresses in RPL.
 
 Status of This Memo
 
@@ -37,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 18 February 2023.
+   This Internet-Draft will expire on 15 April 2023.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Thubert                 Expires 18 February 2023                [Page 1]
+Thubert                   Expires 15 April 2023                 [Page 1]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Thubert                 Expires 18 February 2023                [Page 2]
+Thubert                   Expires 15 April 2023                 [Page 2]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
 1.  Introduction
@@ -165,9 +165,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023                [Page 3]
+Thubert                   Expires 15 April 2023                 [Page 3]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
    defines a new Address Registration Option (ARO) that is placed in
@@ -221,9 +221,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023                [Page 4]
+Thubert                   Expires 15 April 2023                 [Page 4]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
 2.2.  References
@@ -277,9 +277,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023                [Page 5]
+Thubert                   Expires 15 April 2023                 [Page 5]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
 2.4.  New terms
@@ -333,9 +333,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023                [Page 6]
+Thubert                   Expires 15 April 2023                 [Page 6]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
    The LLN may be a hub-and-spoke access link such as (Low-Power) Wi-Fi
@@ -389,9 +389,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023                [Page 7]
+Thubert                   Expires 15 April 2023                 [Page 7]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
    With this specification, the 6LNs can also subscribe the anycast
@@ -445,9 +445,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023                [Page 8]
+Thubert                   Expires 15 April 2023                 [Page 8]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
    It is also possible to leverage this specification between the 6LN
@@ -501,9 +501,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023                [Page 9]
+Thubert                   Expires 15 April 2023                 [Page 9]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
 5.  Extending RFC 7400
@@ -557,9 +557,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023               [Page 10]
+Thubert                   Expires 15 April 2023                [Page 10]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
    multicast advertisements (in NS or DAO messages), multiple origins
@@ -613,9 +613,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023               [Page 11]
+Thubert                   Expires 15 April 2023                [Page 11]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
    The expectation in MOP 3 is that the unicast traffic also follows the
@@ -669,9 +669,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023               [Page 12]
+Thubert                   Expires 15 April 2023                [Page 12]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
    For a packet that is generated by the Root, this means that the Root
@@ -725,9 +725,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023               [Page 13]
+Thubert                   Expires 15 April 2023                [Page 13]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
    A RPL router that propagates an advertisement from a single origin
@@ -781,9 +781,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023               [Page 14]
+Thubert                   Expires 15 April 2023                [Page 14]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
    An RTO that has the M flag set to 1 is called a multicast RTO.  An
@@ -837,9 +837,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023               [Page 15]
+Thubert                   Expires 15 April 2023                [Page 15]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
    Figure 4 illustrates the A and M flags in their suggested positions
@@ -893,9 +893,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023               [Page 16]
+Thubert                   Expires 15 April 2023                [Page 16]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
       0                   1                   2                   3
@@ -949,9 +949,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023               [Page 17]
+Thubert                   Expires 15 April 2023                [Page 17]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
    *  The 6LN may set the R flag in the EARO to obtain return
@@ -1005,9 +1005,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023               [Page 18]
+Thubert                   Expires 15 April 2023                [Page 18]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
       Router that changed information like a prefix information option
@@ -1061,9 +1061,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023               [Page 19]
+Thubert                   Expires 15 April 2023                [Page 19]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
    *  The 6LR MUST also consider that all the nodes that registered an
@@ -1117,9 +1117,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023               [Page 20]
+Thubert                   Expires 15 April 2023                [Page 20]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
 9.  Leveraging RFC 8928
@@ -1173,9 +1173,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023               [Page 21]
+Thubert                   Expires 15 April 2023                [Page 21]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
                  Figure 6: Consistent Uptime Option Format
@@ -1229,9 +1229,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023               [Page 22]
+Thubert                   Expires 15 April 2023                [Page 22]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
              +----------+----------+------------+-----------+
@@ -1285,9 +1285,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023               [Page 23]
+Thubert                   Expires 15 April 2023                [Page 23]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
    instance possible for a standard defining organization to form its
@@ -1341,9 +1341,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023               [Page 24]
+Thubert                   Expires 15 April 2023                [Page 24]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
    *  There MUST be enough density of 6LRs that support the mixed mode
@@ -1397,9 +1397,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023               [Page 25]
+Thubert                   Expires 15 April 2023                [Page 25]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
 13.  Backward Compatibility
@@ -1453,9 +1453,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023               [Page 26]
+Thubert                   Expires 15 April 2023                [Page 26]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
    +---------------+---------------------------------------+-----------+
@@ -1509,9 +1509,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023               [Page 27]
+Thubert                   Expires 15 April 2023                [Page 27]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
    +---------------+---------------------------------------+-----------+
@@ -1565,9 +1565,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023               [Page 28]
+Thubert                   Expires 15 April 2023                [Page 28]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
 14.6.  New Address Registration Option Status Values
@@ -1621,9 +1621,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023               [Page 29]
+Thubert                   Expires 15 April 2023                [Page 29]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
    [RFC4861]  Narten, T., Nordmark, E., Simpson, W., and H. Soliman,
@@ -1677,9 +1677,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023               [Page 30]
+Thubert                   Expires 15 April 2023                [Page 30]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
    [RFC8928]  Thubert, P., Ed., Sarikaya, B., Sethi, M., and R. Struik,
@@ -1733,9 +1733,9 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023               [Page 31]
+Thubert                   Expires 15 April 2023                [Page 31]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
    [RFC4919]  Kushalnagar, N., Montenegro, G., and C. Schumacher, "IPv6
@@ -1764,7 +1764,7 @@ Internet-Draft       Multicast Address Registration          August 2022
               DOI 10.17487/RFC6052, October 2010,
               <https://www.rfc-editor.org/info/rfc6052>.
 
-   [RFC9008]  Robles, M I., Richardson, M., and P. Thubert, "Using RPI
+   [RFC9008]  Robles, M.I., Richardson, M., and P. Thubert, "Using RPI
               Option Type, Routing Header for Source Routes, and IPv6-
               in-IPv6 Encapsulation in the RPL Data Plane", RFC 9008,
               DOI 10.17487/RFC9008, April 2021,
@@ -1789,14 +1789,14 @@ Internet-Draft       Multicast Address Registration          August 2022
 
 
 
-Thubert                 Expires 18 February 2023               [Page 32]
+Thubert                   Expires 15 April 2023                [Page 32]
 
-Internet-Draft       Multicast Address Registration          August 2022
+Internet-Draft       Multicast Address Registration         October 2022
 
 
    [Wi-SUN]   Heile, B., (Remy), B. L., Zhang, M., and C. E. Perkins,
               "Wi-SUN FAN Overview", Work in Progress, Internet-Draft,
-              draft-heile-lpwan-wisun-overview-00, July 2017,
+              draft-heile-lpwan-wisun-overview-00, 3 July 2017,
               <https://www.ietf.org/archive/id/draft-heile-lpwan-wisun-
               overview-00.txt>.
 
@@ -1845,4 +1845,4 @@ Author's Address
 
 
 
-Thubert                 Expires 18 February 2023               [Page 33]
+Thubert                   Expires 15 April 2023                [Page 33]
