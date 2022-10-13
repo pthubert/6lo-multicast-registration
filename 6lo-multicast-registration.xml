@@ -42,10 +42,10 @@ docName="draft-ietf-6lo-multicast-registration-09" >
 
    <abstract>
    <t>
-    This document updates RFC 8505 to enable a listener to register an IPv6
-    anycast address or subscribe to an IPv6 multicast address; the draft updates
-    RFC 6550 (RPL) to add a new Non-Storing Multicast Mode and a new support for
-    anycast addresses in Storing and Non-Storing Modes.
+    This document updates RFC 8505 to enable a listener to subscribe an IPv6
+    anycast or multicast address; the draft updates RFC 6550 (RPL) to add a new
+    Non-Storing Multicast Mode and a new support for anycast addresses in
+    Storing and Non-Storing Modes.
     This document extends RFC 9010 to enable the 6LR to inject the anycast and
     multicast addresses in RPL.
    </t>
@@ -331,7 +331,7 @@ docName="draft-ietf-6lo-multicast-registration-09" >
 
 
    <t>
-   A leaf acting as a 6LN registers its unicast and anycast addresses a RPL
+   A leaf acting as a 6LN registers its unicast addresses to a RPL
    router acting as a 6LR, using a layer-2 unicast NS message with an EARO as
    specified in <xref target="RFC8505"/>.
    The registration state is periodically renewed by the Registering Node,
@@ -339,12 +339,12 @@ docName="draft-ietf-6lo-multicast-registration-09" >
    addresses, the 6LR uses an EDAR/EDAC exchange with the 6LBR to notify the
    6LBR of the presence of the listeners.
    </t><t>
-   This specification updates the EARO with two new flags, the A flag for
-   Anycast, and the M flag for Multicast, as detailed in <xref target="R8505E"/>.
+   This specification updates the EARO with a new two bit fields, the P field,
+   as detailed in <xref target="R8505E"/>.
    The existing R flag that requests reachability for the registered address
    gets new behavior.
-   With this extension the 6LNs can now subscribe to the multicast
-   addresses they listen to, using a new M flag in the EARO to signal that the
+   With this extension the 6LNs can now subscribe to the anycast and multicast
+   addresses they listen to, using a new P field in the EARO to signal that the
    registration is for a multicast address. Multiple 6LN may subscribe to
    the same multicast address to the same 6LR. Note the use of the term
    "subscribe": using the EARO registration mechanism, a node registers the
@@ -352,7 +352,7 @@ docName="draft-ietf-6lo-multicast-registration-09" >
    that it listens to.
    </t><t>
    With this specification, the 6LNs can also subscribe the anycast addresses
-   they accept, using a new A flag in the EARO to signal that the registration
+   they accept, using a new P field in the EARO to signal that the registration
    is for an anycast address. As for multicast, multiple 6LN may subscribe the
    same anycast address to the same 6LR.
    </t><t>
@@ -627,13 +627,13 @@ docName="draft-ietf-6lo-multicast-registration-09" >
    is to be delivered to all the active subscribers.
    In contrast, the format of an anycast address is not distinguishable
    from that of unicast. A legacy node may issue a DAO message without setting
-   the A flag, the unicast behavior may apply to anycast traffic in a subDAGs.
+   the P field to 2, the unicast behavior may apply to anycast traffic in a subDAGs.
    That message will be undistinguishable from a unicast advertisement and the
    anycast behavior in the dataplane can only happen if all the nodes that
    advertise the same anycast address are synchronized with the same TID. That
    way, the multiple paths can remain in the RPL DODAG.
 </t> <t>
-   With the A flag, this specification alleviates the issue of synchronizing
+   With the P field set to 2, this specification alleviates the issue of synchronizing
    the TIDs and ROVR fields. As for multicast, the freshness comparison based
    on the TID (in EARO) and the Path Sequence (in TIO) is ignored unless the
    messages have the same origin, as inferred by the same ROVR in RTO and/or
@@ -645,10 +645,10 @@ docName="draft-ietf-6lo-multicast-registration-09" >
    multiple subscriptions uses its own ROVR and Path Sequence and the
    longest lifetime over the different advertisements.
    A target is routed as anycast by a parent (or the Root) that received at
-   least one DAO message for that target with the A flag set to 1.
+   least one DAO message for that target with the P field set to 2.
 </t> <t>
    As opposed to multicast, the anycast operation described therein applies to
-   both addresses and prefixes, and the A flag can be set for both.
+   both addresses and prefixes, and the P field can be set to 2 for both.
    An external destination (address or prefix) that may be injected as a RPL
    target from multiple border routers should be injected as anycast in RPL to
    enable load balancing. A mobile target that is multihomed should in contrast
@@ -679,23 +679,47 @@ docName="draft-ietf-6lo-multicast-registration-09" >
   </section>	<!-- end section "RPL Anycast Operation" -->
 
 
-<section anchor="newrtoflg"><name>New RPL Target Option Flags</name>
+<section anchor="newpf"><name>New P-Field</name>
+<t> A new P-field is created for use in RPL Target Option, EARO, and EDAR
+    messages. The P-Field is a 2-bits field, capable of storing 4 values,
+    and used to indicate the type of advertisement.
+</t>
+<t>
+    The P field can take the following values:
+</t>
+	 <table anchor="pVALS" ><name>P-field Values</name>
+     <thead>
+      <tr><td>Value</td><td>Meaning</td></tr>
+     </thead><tbody>
+      <tr><td>0</td><td>Registration for a Unicast Address</td></tr>
+      <tr><td>1</td><td>Registration for a Multicast Address</td></tr>
+      <tr><td>2</td><td>Registration for an Anycast Address</td></tr>
+      <tr><td>3</td><td>Reserved, MUST be set to 0 and ignored by the receiver</td></tr>
+     </tbody>
+    </table>  <!-- end table "P-field values" -->
+
+</section><!-- New P-Field -->
+
+
+
+
+
+<section anchor="newrtoflg"><name>New RPL Target Option P-Field</name>
 <t>
    <xref target="RFC6550"/> recognizes a multicast address by its format
    (as specified in section 2.7 of <xref target="RFC4291"/>) and applies the
    specified multicast operation if the address is recognized as multicast.
-   This specification updates <xref target="RFC6550"/> to add the M and A flags
-   to the RTO to indicate that the target address is to be processed as
-   multicast or anycast, respectively.
-</t> <t>
-   An RTO that has the M flag set to 1 is called a multicast RTO.
-   An RTO that has the A flag set to 1 is called an anycast RTO.
-   An RTO that has both the A and the M flags set to 0 is called an unicast RTO.
-   With this specification, the M and A flags are mutually exclusive and MUST
-   NOT be both set to 1. The capability to set both flags is reserved and an RTO
-   that is received with both flags set MUST be ignored.
-</t> <t>
-   The suggested position for the A and M flags are 2 and 3 counting from 0 to
+   This specification updates <xref target="RFC6550"/> to add the 2-bits P field
+   (see <xref target="newpf"/>) to the RTO to indicate that the target address
+   is to be processed as iunicast, multicast or anycast.
+</t> <ul>
+   <li>An RTO that has the P field set to 0 is called a unicast RTO.</li>
+   <li>An RTO that has the P field set to 1 is called a multicast RTO.</li>
+   <li>An RTO that has the P field set to 2 is called an anycast RTO.</li>
+
+
+</ul> <t>
+   The suggested position for the P field is 2 counting from 0 to
    7 in network order as shown in <xref target="rto-fmt"/>, based on figure 4
    of <xref target="RFC9010"/> which defines the flags in position 0 and 1:
 </t>
@@ -704,7 +728,7 @@ docName="draft-ietf-6lo-multicast-registration-09" >
    0                   1                   2                   3
    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |   Type = 0x05 | Option Length |F|X|A|M|ROVRsz | Prefix Length |
+  |   Type = 0x05 | Option Length |F|X| P |ROVRsz | Prefix Length |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |                                                               |
   |                Target Prefix (Variable Length)                |
@@ -716,6 +740,10 @@ docName="draft-ietf-6lo-multicast-registration-09" >
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  </artwork>
 </figure>
+    <t> New and updated Option Fields:    </t>
+	<dl>
+	<dt>P:</dt><dd>2-bit field; see <xref target="newpf"/></dd>
+	</dl>
 </section>	<!-- end section "New RPL Target Option Flags" -->
 </section>	<!-- end section "Updating RFC 6550" -->
 
@@ -734,23 +762,23 @@ docName="draft-ietf-6lo-multicast-registration-09" >
 </t>
 <t>
    This specification adds
-   a new M flag to the EARO flags field to signal that the Registered Address is
-   a multicast address. When both the M and the R flags are set, the 6LR that
+   a new P field to the EARO flags is set to 1 to signal that the
+   Registered Address is a multicast address. When the P field is 1 and the R flag
+   is set to 1 as well, the 6LR that
    conforms to this specification joins the multicast stream,  e.g., by
    injecting the address in the RPL multicast support which is extended in this
    specification for Non-Storing Mode.
 </t>
 <t>
-   This specification adds
-   a new A flag to the EARO flags field to signal that the Registered Address is
-   an anycast address. When both the A and the R flags are set, the 6LR that
+   The new P field to the EARO flags is set to 2 to signal that the Registered Address is
+   an anycast address. When the P field is 2 and the R flag is 1, the 6LR that
    conforms to this specification injects the anycast address in the RPL
    anycast support that is introduced in this specification for both Storing
    and Non-Storing Modes.
 </t>
 <t>
-   <xref target="EARO"/> illustrates the A and M flags in their suggested
-   positions (2 and 3, respectively, counting 0 to 7 in network order in the
+   <xref target="EARO"/> illustrates the P field in its suggested
+   positions (2, counting 0 to 7 in network order in the
    8-bit array), to be confirmed by IANA.
 </t>
  <figure anchor="EARO"><name>EARO Option Format</name>
@@ -760,7 +788,7 @@ docName="draft-ietf-6lo-multicast-registration-09" >
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |     Type      |     Length    |    Status     |    Opaque     |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  |Rsv|A|M| I |R|T|     TID       |     Registration Lifetime     |
+  |Rsv| P | I |R|T|     TID       |     Registration Lifetime     |
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   |                                                               |
  ...             Registration Ownership Verifier                 ...
@@ -771,9 +799,9 @@ docName="draft-ietf-6lo-multicast-registration-09" >
 
     <t> New and updated Option Fields:    </t>
 	<dl>
-	<dt>Rsv</dt><dd> 2-bit field: reserved, MUST be set to 0 and ignored by the receiver</dd>
-	<dt>A</dt><dd> 1-bit flag: "Registration for Anycast Address" </dd>
-	<dt>M</dt><dd> 1-bit flag: "Registration for Multicast Address" </dd>
+	<dt>Rsv:</dt><dd> 2-bit field; reserved, MUST be set to 0 and ignored by the receiver</dd>
+	<dt>P:</dt><dd>2-bit field; see <xref target="newpf"/></dd>
+
 	</dl>
 
 </section> <!-- end section "New EARO flag" -->
@@ -788,16 +816,14 @@ docName="draft-ietf-6lo-multicast-registration-09" >
 
 </t>
 <t>
-   This specification repurposes the status field in the EDAR and a Flags field.
-   It adds a new M flag to the EDAR flags field to signal that the "Registered
-   Address" field contains a multicast address and a new A flag to signal that
-   the field contains an anycast address. As for EARO, the flags are mutually
-   exclusive.
+   This specification repurposes the status field in the EDAR as a Flags field.
+   It adds a new P field to the EDAR flags field to match the P field in the
+   EARO and signal the new types of registration.
 </t>
 <t>
-   <xref target="EDAR"/> illustrates the A and M flags in their suggested
-   positions (0 and 1, respectively, counting 0 to 7 in network order in the
-   8-bit array), to be confirmed by IANA.
+   <xref target="EDAR"/> illustrates the P field in its suggested position
+   (0, counting 0 to 7 in network order in the 8-bit array), to be confirmed by
+   IANA.
 </t>
  <figure anchor="EDAR"><name>Extended Duplicate Address Message Format</name>
  <artwork align="center">
@@ -806,7 +832,7 @@ docName="draft-ietf-6lo-multicast-registration-09" >
  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  |     Type      |CodePfx|CodeSfx|          Checksum             |
  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
- |A|M| Reserved  |     TID       |     Registration Lifetime     |
+ | P | Reserved  |     TID       |     Registration Lifetime     |
  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  |                                                               |
 ...            Registration Ownership Verifier (ROVR)           ...
@@ -826,9 +852,8 @@ docName="draft-ietf-6lo-multicast-registration-09" >
     <t> New and updated Option Fields:    </t>
 	<dl>
 	<dt>Reserved</dt><dd> 6-bit field: reserved, MUST be set to 0 and ignored by the receiver</dd>
-	<dt>A</dt><dd> 1-bit flag: "Registration for Anycast Address" </dd>
-	<dt>M</dt><dd> 1-bit flag: "Registration for Multicast Address" </dd>
-	</dl>
+	<dt>P:</dt><dd>2-bit field; see <xref target="newpf"/></dd>
+    </dl>
 
 </section> <!-- end section "New EARO flag" -->
 
@@ -936,7 +961,7 @@ docName="draft-ietf-6lo-multicast-registration-09" >
    The 6LN MUST also subscribe all the IPv6 multicast addresses that it listens
    to but the all-nodes link-scope multicast address FF02::1
    <xref target="RFC4291"/> which is implicitly registered, and it MUST set the
-   M flag in the EARO for those addresses.
+   P field to 1 in the EARO for those addresses.
    </li>
    <li>
    The 6LN MAY set the R flag in the EARO to obtain the delivery of the
@@ -946,7 +971,7 @@ docName="draft-ietf-6lo-multicast-registration-09" >
    </li>
    <li>
    The 6LN MUST also subscribe all the IPv6 anycast addresses that it supports
-   and it MUST set the A flag in the EARO for those addresses.
+   and it MUST set the P field in the EARO to 2 for those addresses.
    </li>
    <li>
    The 6LR and the 6LBR are extended to accept more than one subscription for
@@ -997,21 +1022,21 @@ docName="draft-ietf-6lo-multicast-registration-09" >
    </t>
    <ul>
    <li>
-   Upon a subscription with the R and the M flags set to 1 in the EARO, if the
+   Upon a subscription with the R and the P field set to 1 in the EARO, if the
    scope of the multicast address is above link-scope <xref target="RFC7346"/>,
    then the 6LR injects the address in the RPL multicast support and sets the M
    flag in the RTO.
    </li><li>
-   Upon a subscription with the R and the A flags set to 1 in the EARO, the
-   6LR injects the address in the new RPL anycast support and sets the A flag
-   in the RTO.
+   Upon a subscription with the R set to 1 and the P field set to 2 in the EARO,
+   the 6LR injects the address in the new RPL anycast support and sets the P field
+   to 2 in the RTO.
    </li><li>
    Upon receiving a packet directed to a multicast address for which it has at
    least one subscription, the 6LR delivers a copy of the packet as a unicast
    layer-2 frame to the LLA of each of the nodes that registered to that
    multicast address.
    </li><li>
-   Upon receiving a packet directed to a multicast address for which it has at
+   Upon receiving a packet directed to a anycast address for which it has at
    least one subscription, the 6LR delivers a copy of the packet as a unicast
    layer-2 frame to the LLA of exactly one of the nodes that registered to that
    multicast address.
@@ -1049,7 +1074,8 @@ docName="draft-ietf-6lo-multicast-registration-09" >
 </t>
 <t>
     For an anycast or a multicast address, it is still possible to leverage
-    <xref target="RFC8928"/> to enforce the right to subscribe. A keypair MUST
+    <xref target="RFC8928"/> to enforce the right to subscribe.
+    If <xref target="RFC8928"/> is used, a keypair MUST
     be associated with the address before it is deployed, and a ROVR MUST be
     generated from that keypair as specified in <xref target="RFC8928"/>.
     The address and the ROVR MUST then be installed in the 6LBR so it can recognize the address and compare the ROVR on the first subscription.
@@ -1263,7 +1289,7 @@ docName="draft-ietf-6lo-multicast-registration-09" >
 <section anchor="back"><name>Backward Compatibility</name>
 <t>
    A legacy 6LN will not subscribe multicast addresses and the service will be
-   the same when the network is upgraded. A legacy 6LR will not set the M flag
+   the same when the network is upgraded. A legacy 6LR will not set the P field
    in the 6CIO and an upgraded 6LN will not subscribe multicast addresses.
 </t>
 <t>
@@ -1278,18 +1304,18 @@ docName="draft-ietf-6lo-multicast-registration-09" >
 </t>
 
 <t>
-   The combination of a multicast address and the M flag set to 0 in an RTO in
+   The combination of a multicast address and the P field set to 0 in an RTO in
    a MOP 3 RPL Instance is understood by the receiver that supports this
    specification (the parent) as an indication that the sender (child) does
    not support this specification, but the RTO is accepted and processed as if
-   the M flag was set for backward compatibility.
+   the P field was set to 1 for backward compatibility.
 </t>
 
 <t>
-   When the DODAG is operated in MOP 3, a legacy node will not set the M flag
+   When the DODAG is operated in MOP 3, a legacy node will not set the P field
    and still expect multicast service as specified in section 12 of <xref
    target="RFC6550"/>.
-   In MOP 3 an RTO that is received with a target that is multicast and the M bit set to 0 MUST be considered as multicast and MUST be processed as if the M flag is set.
+   In MOP 3 an RTO that is received with a target that is multicast and the M bit set to 0 MUST be considered as multicast and MUST be processed as if the P field is set to 1.
 </t>
 </section>	<!-- end section "Backward Compatibility" -->
 
@@ -1307,6 +1333,28 @@ docName="draft-ietf-6lo-multicast-registration-09" >
     registry groupings, as follows:
 </t>
 
+    <section anchor="PF"><name>New P-Field Registry</name>
+
+	<t>
+    IANA is requested to create a new "P-field values" registry under the
+    heading "Internet Control Message Protocol version 6 (ICMPv6) Parameters"
+    as indicated in <xref target="AM2"/>:
+	</t>
+
+	 <table anchor="AM2" ><name>P-field values</name>
+     <thead>
+      <tr><td>Value</td><td>Meaning</td><td>Reference</td></tr>
+     </thead><tbody>
+      <tr><td>0</td><td>Registration for a Unicast Address</td> <td>This RFC</td></tr>
+      <tr><td>1</td><td>Registration for a Multicast Address</td> <td>This RFC</td></tr>
+      <tr><td>2</td><td>Registration for an Anycast Address</td> <td>This RFC</td></tr>
+      <tr><td>3</td><td>Unassigned</td><td>This RFC</td></tr>
+     </tbody>
+    </table>  <!-- end table "P-field values" -->
+
+    </section><!-- New P-Field Registry -->
+
+
     <section><name>New EDAR Message Flags Registry</name>
 	<t>
     IANA is requested to create a new "EDAR Message Flags" registry under the
@@ -1318,12 +1366,20 @@ docName="draft-ietf-6lo-multicast-registration-09" >
    <thead>
       <tr><td>Bit Number</td><td>Meaning</td><td>Reference</td></tr>
    </thead><tbody>
-      <tr><td>0 (suggested)</td><td>A flag: Registered Address is Anycast </td><td>This RFC</td></tr>
-      <tr><td>1 (suggested)</td><td>M flag: Registered Address is Multicast </td><td>This RFC</td></tr>
+      <tr><td>0..1 (suggested)</td><td> P-field (2 bits), see <xref target="PF"/>
+      </td><td>This RFC</td></tr>
       <tr><td>2..7</td><td>Unassigned </td><td></td></tr>
    </tbody>
 	</table>	<!-- end table "EDAR Message flags" +-->
+
+
+
     </section>	<!-- end section "New EDAR Message flags Registry -->
+
+
+
+
+
 
 
  <section><name>New EARO flags</name>
@@ -1337,8 +1393,7 @@ docName="draft-ietf-6lo-multicast-registration-09" >
    <thead>
       <tr><td>ARO flag</td><td>Meaning</td><td>Reference</td></tr>
    </thead><tbody>
-      <tr><td>2 (suggested)</td><td>A flag: Registration for Anycast Address</td><td>This RFC</td></tr>
-      <tr><td>3 (suggested)</td><td>M flag: Registration for Multicast Address</td><td>This RFC</td></tr>
+      <tr><td>2..3 (suggested)</td><td> P-field (2 bits), see <xref target="PF"/></td><td>This RFC</td></tr>
       <tr><td>4 and 5</td><td>"I" Field</td><td>RFC 8505</td></tr>
    </tbody>
 	</table>	<!-- end table "New  ARO flag" +-->
@@ -1355,8 +1410,7 @@ docName="draft-ietf-6lo-multicast-registration-09" >
    <thead>
       <tr><td>Bit Number</td><td>Meaning</td><td>Reference</td></tr>
    </thead><tbody>
-      <tr><td>2 (suggested)</td><td>A flag: Registered Address is Anycast</td><td>This RFC</td></tr>
-      <tr><td>3 (suggested)</td><td>M flag: Registered Address is Multicast</td><td>This RFC</td></tr>
+      <tr><td>2..3 (suggested)</td><td> P-field (2 bits), see <xref target="PF"/></td><td>This RFC</td></tr>
    </tbody>
 	</table>	<!-- end table "New  RTO flags" +-->
     </section>	<!-- end section "New RTO flags -->
