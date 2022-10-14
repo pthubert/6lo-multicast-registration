@@ -711,7 +711,7 @@ docName="draft-ietf-6lo-multicast-registration-11" >
    specified multicast operation if the address is recognized as multicast.
    This specification updates <xref target="RFC6550"/> to add the 2-bits P field
    (see <xref target="newpf"/>) to the RTO to indicate that the target address
-   is to be processed as iunicast, multicast or anycast.
+   is to be processed as unicast, multicast or anycast.
 </t> <ul>
    <li>An RTO that has the P field set to 0 is called a unicast RTO.</li>
    <li>An RTO that has the P field set to 1 is called a multicast RTO.</li>
@@ -753,7 +753,7 @@ docName="draft-ietf-6lo-multicast-registration-11" >
 
 
 
-<section anchor="R8505E"><name>New EARO flag</name>
+<section anchor="R8505E"><name>Placing the New P field in the EARO</name>
 
 <t>
    Section 4.1 of <xref target="RFC8505"/> defines the EARO as an extension to
@@ -804,9 +804,9 @@ docName="draft-ietf-6lo-multicast-registration-11" >
 
 	</dl>
 
-</section> <!-- end section "New EARO flag" -->
+</section> <!-- end section "Placing the New P field in the EARO" -->
 
-<section anchor="R8505D"><name>New EDAR Message Flag field</name>
+<section anchor="R8505D"><name>Placing the New P field in the EDAR Message</name>
 
 <t>
    Section 4 of <xref target="RFC6775"/> provides the same format for DAR and
@@ -818,14 +818,15 @@ docName="draft-ietf-6lo-multicast-registration-11" >
 <t>
    This specification repurposes the status field in the EDAR as a Flags field.
    It adds a new P field to the EDAR flags field to match the P field in the
-   EARO and signal the new types of registration.
+   EARO and signal the new types of registration. The EDAC message is not
+   modified.
 </t>
 <t>
    <xref target="EDAR"/> illustrates the P field in its suggested position
    (0, counting 0 to 7 in network order in the 8-bit array), to be confirmed by
    IANA.
 </t>
- <figure anchor="EDAR"><name>Extended Duplicate Address Message Format</name>
+ <figure anchor="EDAR"><name>Extended Duplicate Address Request Message Format</name>
  <artwork align="center">
   0                   1                   2                   3
   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -855,7 +856,7 @@ docName="draft-ietf-6lo-multicast-registration-11" >
 	<dt>P:</dt><dd>2-bit field; see <xref target="newpf"/></dd>
     </dl>
 
-</section> <!-- end section "New EARO flag" -->
+</section> <!-- end section "Placing the New P field in the EDAR Message" -->
 
 
 
@@ -950,9 +951,9 @@ docName="draft-ietf-6lo-multicast-registration-11" >
    </t>
    </li>
    <li>
-   Registration for multicast and anycast addresses is now supported. New flags
-   are added to the EARO to signal when the registered address is anycast or
-   multicast.
+   Registration for multicast and anycast addresses is now supported. The P
+   field is added to the EARO to signal when the registered address is anycast
+   or multicast.
    </li>
    <li>
    The Status field in the EDAR message that was reserved and not used in RFC 8505 is repurposed to transport the flags to signal multicast and anycast.

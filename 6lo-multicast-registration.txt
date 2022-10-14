@@ -4,14 +4,14 @@
 
 6lo                                                      P. Thubert, Ed.
 Internet-Draft                                             Cisco Systems
-Updates: 4861, 6550, 6553, 8505, 9010 (if                13 October 2022
+Updates: 4861, 6550, 6553, 8505, 9010 (if                14 October 2022
          approved)                                                      
 Intended status: Standards Track                                        
-Expires: 16 April 2023
+Expires: 17 April 2023
 
 
     IPv6 Neighbor Discovery Multicast Address Listener Subscription
-                draft-ietf-6lo-multicast-registration-09
+                draft-ietf-6lo-multicast-registration-11
 
 Abstract
 
@@ -37,7 +37,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 April 2023.
+   This Internet-Draft will expire on 17 April 2023.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Thubert                   Expires 16 April 2023                 [Page 1]
+Thubert                   Expires 17 April 2023                 [Page 1]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -85,8 +85,8 @@ Table of Contents
      6.4.  New P-Field . . . . . . . . . . . . . . . . . . . . . . .  15
      6.5.  New RPL Target Option P-Field . . . . . . . . . . . . . .  15
    7.  Updating RFC 8505 . . . . . . . . . . . . . . . . . . . . . .  16
-     7.1.  New EARO flag . . . . . . . . . . . . . . . . . . . . . .  16
-     7.2.  New EDAR Message Flag field . . . . . . . . . . . . . . .  17
+     7.1.  Placing the New P field in the EARO . . . . . . . . . . .  16
+     7.2.  Placing the New P field in the EDAR Message . . . . . . .  17
      7.3.  Registering Extensions  . . . . . . . . . . . . . . . . .  18
    8.  Updating RFC 9010 . . . . . . . . . . . . . . . . . . . . . .  21
    9.  Leveraging RFC 8928 . . . . . . . . . . . . . . . . . . . . .  21
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thubert                   Expires 16 April 2023                 [Page 2]
+Thubert                   Expires 17 April 2023                 [Page 2]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -165,7 +165,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                 [Page 3]
+Thubert                   Expires 17 April 2023                 [Page 3]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -221,7 +221,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                 [Page 4]
+Thubert                   Expires 17 April 2023                 [Page 4]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -277,7 +277,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                 [Page 5]
+Thubert                   Expires 17 April 2023                 [Page 5]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -333,7 +333,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                 [Page 6]
+Thubert                   Expires 17 April 2023                 [Page 6]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -389,7 +389,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                 [Page 7]
+Thubert                   Expires 17 April 2023                 [Page 7]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -445,7 +445,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                 [Page 8]
+Thubert                   Expires 17 April 2023                 [Page 8]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -501,7 +501,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                 [Page 9]
+Thubert                   Expires 17 April 2023                 [Page 9]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -557,7 +557,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                [Page 10]
+Thubert                   Expires 17 April 2023                [Page 10]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -613,7 +613,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                [Page 11]
+Thubert                   Expires 17 April 2023                [Page 11]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -669,7 +669,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                [Page 12]
+Thubert                   Expires 17 April 2023                [Page 12]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -725,7 +725,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                [Page 13]
+Thubert                   Expires 17 April 2023                [Page 13]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -781,7 +781,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                [Page 14]
+Thubert                   Expires 17 April 2023                [Page 14]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -827,7 +827,7 @@ Internet-Draft       Multicast Address Registration         October 2022
    operation if the address is recognized as multicast.  This
    specification updates [RFC6550] to add the 2-bits P field (see
    Section 6.4) to the RTO to indicate that the target address is to be
-   processed as iunicast, multicast or anycast.
+   processed as unicast, multicast or anycast.
 
    *  An RTO that has the P field set to 0 is called a unicast RTO.
 
@@ -837,7 +837,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                [Page 15]
+Thubert                   Expires 17 April 2023                [Page 15]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -868,7 +868,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 7.  Updating RFC 8505
 
-7.1.  New EARO flag
+7.1.  Placing the New P field in the EARO
 
    Section 4.1 of [RFC8505] defines the EARO as an extension to the ARO
    option defined in [RFC6775].
@@ -893,7 +893,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                [Page 16]
+Thubert                   Expires 17 April 2023                [Page 16]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -919,7 +919,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
    P:  2-bit field; see Section 6.4
 
-7.2.  New EDAR Message Flag field
+7.2.  Placing the New P field in the EDAR Message
 
    Section 4 of [RFC6775] provides the same format for DAR and DAC
    messages but the status field is only used in DAC message and has to
@@ -928,7 +928,8 @@ Internet-Draft       Multicast Address Registration         October 2022
 
    This specification repurposes the status field in the EDAR as a Flags
    field.  It adds a new P field to the EDAR flags field to match the P
-   field in the EARO and signal the new types of registration.
+   field in the EARO and signal the new types of registration.  The EDAC
+   message is not modified.
 
    Figure 5 illustrates the P field in its suggested position (0,
    counting 0 to 7 in network order in the 8-bit array), to be confirmed
@@ -948,8 +949,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-
-Thubert                   Expires 16 April 2023                [Page 17]
+Thubert                   Expires 17 April 2023                [Page 17]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -974,7 +974,7 @@ Internet-Draft       Multicast Address Registration         October 2022
      |                                                               |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-            Figure 5: Extended Duplicate Address Message Format
+        Figure 5: Extended Duplicate Address Request Message Format
 
    New and updated Option Fields:
 
@@ -1005,7 +1005,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                [Page 18]
+Thubert                   Expires 17 April 2023                [Page 18]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -1061,7 +1061,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                [Page 19]
+Thubert                   Expires 17 April 2023                [Page 19]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -1080,7 +1080,7 @@ Internet-Draft       Multicast Address Registration         October 2022
       is incremented for a consistent uptime.
 
    *  Registration for multicast and anycast addresses is now supported.
-      New flags are added to the EARO to signal when the registered
+      The P field is added to the EARO to signal when the registered
       address is anycast or multicast.
 
    *  The Status field in the EDAR message that was reserved and not
@@ -1117,7 +1117,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                [Page 20]
+Thubert                   Expires 17 April 2023                [Page 20]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -1173,7 +1173,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                [Page 21]
+Thubert                   Expires 17 April 2023                [Page 21]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -1229,7 +1229,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                [Page 22]
+Thubert                   Expires 17 April 2023                [Page 22]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -1285,7 +1285,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                [Page 23]
+Thubert                   Expires 17 April 2023                [Page 23]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -1341,7 +1341,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                [Page 24]
+Thubert                   Expires 17 April 2023                [Page 24]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -1397,7 +1397,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                [Page 25]
+Thubert                   Expires 17 April 2023                [Page 25]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -1453,7 +1453,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                [Page 26]
+Thubert                   Expires 17 April 2023                [Page 26]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -1509,7 +1509,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                [Page 27]
+Thubert                   Expires 17 April 2023                [Page 27]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -1565,7 +1565,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                [Page 28]
+Thubert                   Expires 17 April 2023                [Page 28]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -1621,7 +1621,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                [Page 29]
+Thubert                   Expires 17 April 2023                [Page 29]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -1677,7 +1677,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                [Page 30]
+Thubert                   Expires 17 April 2023                [Page 30]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -1733,7 +1733,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                [Page 31]
+Thubert                   Expires 17 April 2023                [Page 31]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -1789,7 +1789,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                [Page 32]
+Thubert                   Expires 17 April 2023                [Page 32]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -1845,7 +1845,7 @@ Internet-Draft       Multicast Address Registration         October 2022
 
 
 
-Thubert                   Expires 16 April 2023                [Page 33]
+Thubert                   Expires 17 April 2023                [Page 33]
 
 Internet-Draft       Multicast Address Registration         October 2022
 
@@ -1901,4 +1901,4 @@ Author's Address
 
 
 
-Thubert                   Expires 16 April 2023                [Page 34]
+Thubert                   Expires 17 April 2023                [Page 34]
