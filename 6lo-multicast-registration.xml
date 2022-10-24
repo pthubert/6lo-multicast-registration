@@ -17,7 +17,7 @@
 <rfc  xmlns:xi="http://www.w3.org/2001/XInclude" category="std" ipr="trust200902"
 tocInclude="true" indexInclude="true" obsoletes=""  consensus="true"
 submissionType="IETF" xml:lang="en" version="3"  updates="4861, 6550, 6553, 8505, 9010"
-docName="draft-ietf-6lo-multicast-registration-11" >
+docName="draft-ietf-6lo-multicast-registration-12" >
 
 <front>
 
@@ -620,8 +620,8 @@ docName="draft-ietf-6lo-multicast-registration-11" >
 
 </section>	<!-- end section "New Non-Storing Multicast MOP" -->
 
-<section anchor="anic"><name>RPL Anycast Operation</name>
 
+<section anchor="anic"><name>RPL Anycast Operation</name>
 <t>
    With multicast, the address has a recognizable format, and a multicast packet
    is to be delivered to all the active subscribers.
@@ -680,7 +680,7 @@ docName="draft-ietf-6lo-multicast-registration-11" >
 
 
 <section anchor="newpf"><name>New P-Field</name>
-<t> A new P-field is created for use in RPL Target Option, EARO, and EDAR
+<t> The new P-field is created for use in RPL Target Option, EARO, and EDAR
     messages. The P-Field is a 2-bits field, capable of storing 4 values,
     and used to indicate the type of advertisement.
 </t>
@@ -943,7 +943,7 @@ docName="draft-ietf-6lo-multicast-registration-11" >
    between peers. A peer that discovers that a router has changed should reassess which
    addresses it formed based on the new PIOs from that router, and resync the state that
    it installed in the router, e.g., the registration state for its addresses.
-   In the process, teh peer may attempt to form new address and register them, deprecate
+   In the process, the peer may attempt to form new address and register them, deprecate
    old addresses and deregister them using a Lifetime of 0, and reform any potentially lost state,
    e.g., by re-registering an existing address that it will keep using. A loss of state is
    inferred if the Node Uptime of the peer is less than the time since the state was installed,
@@ -1023,10 +1023,10 @@ docName="draft-ietf-6lo-multicast-registration-11" >
    </t>
    <ul>
    <li>
-   Upon a subscription with the R and the P field set to 1 in the EARO, if the
-   scope of the multicast address is above link-scope <xref target="RFC7346"/>,
-   then the 6LR injects the address in the RPL multicast support and sets the M
-   flag in the RTO.
+   Upon a subscription with the R flag and the P field both set to 1 in the EARO,
+   if the scope of the multicast address is above link-scope <xref target="RFC7346"/>,
+   then the 6LR injects the address in the RPL multicast support and sets the P
+   field in the RTO to 1 as well.
    </li><li>
    Upon a subscription with the R set to 1 and the P field set to 2 in the EARO,
    the 6LR injects the address in the new RPL anycast support and sets the P field
@@ -1091,7 +1091,7 @@ docName="draft-ietf-6lo-multicast-registration-11" >
 <section anchor="CUO"><name>Consistent Uptime Option </name>
 <t>This specification introduces a new option that characterizes the
   uptime of the sender. The option may be used by routers in RA messages and
-  by any node in NA, NA, and RS messages. It is used by the receiver to infer
+  by any node in NS, NA, and RS messages. It is used by the receiver to infer
   whether some state synchronization might be lost, e.g., due to reboot.
 </t>
  <figure anchor="CUOF"><name>Consistent Uptime Option Format</name>
@@ -1316,7 +1316,7 @@ docName="draft-ietf-6lo-multicast-registration-11" >
    When the DODAG is operated in MOP 3, a legacy node will not set the P field
    and still expect multicast service as specified in section 12 of <xref
    target="RFC6550"/>.
-   In MOP 3 an RTO that is received with a target that is multicast and the M bit set to 0 MUST be considered as multicast and MUST be processed as if the P field is set to 1.
+   In MOP 3 an RTO that is received with a target that is multicast and the P field set to 0 MUST be considered as multicast and MUST be processed as if the P field is set to 1.
 </t>
 </section>	<!-- end section "Backward Compatibility" -->
 
