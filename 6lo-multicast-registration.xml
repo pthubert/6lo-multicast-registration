@@ -279,10 +279,9 @@ docName="draft-ietf-6lo-multicast-registration-12" >
    </t>
    <t><xref target="RFC8505"/> is a pre-requisite to this specification.
    A node that implements this MUST also implement <xref target="RFC8505"/>.
-   This specification does not introduce a new option; it modifies
-   existing options and updates the associated behaviors to enable the
-   Registration for Multicast Addresses as an extension to
-   <xref target="RFC8505"/>.
+   This specification modifies existing options and updates the associated
+   behaviors to enable the Registration for Multicast Addresses as an extension
+   to <xref target="RFC8505"/>.
    </t>
    <t>
    This specification also extends <xref target="RFC6550"/> and
