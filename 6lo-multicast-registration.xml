@@ -21,7 +21,7 @@ docName="draft-ietf-6lo-multicast-registration-12" >
 
 <front>
 
-   <title abbrev="Multicast Address Registration">IPv6 Neighbor Discovery Multicast Address Listener Subscription</title>
+   <title abbrev="Multicast and Anycast Subscription">IPv6 Neighbor Discovery Multicast and Anycast Address Listener Subscription</title>
    <author initials="P" surname="Thubert" fullname="Pascal Thubert" role="editor">
       <organization abbrev="Cisco Systems">Cisco Systems, Inc</organization>
       <address>
@@ -194,7 +194,7 @@ docName="draft-ietf-6lo-multicast-registration-12" >
     <t> This document uses the following acronyms:</t>
        <dl newline="false" indent="7" spacing="compact" >
        <dt>6BBR</dt><dd> 6LoWPAN Backbone Router </dd>
-       <dt>6BBR</dt><dd> 6LoWPAN Border Router </dd>
+       <dt>6LBR</dt><dd> 6LoWPAN Border Router </dd>
        <dt>6LN</dt><dd> 6LoWPAN Node </dd>
        <dt>6LR</dt><dd> 6LoWPAN Router </dd>
        <dt>6CIO</dt><dd> Capability Indication Option </dd>
@@ -242,7 +242,7 @@ docName="draft-ietf-6lo-multicast-registration-12" >
        A RPL router that merges becomes the origin of the merged advertisement
        and uses its own values for the Path Sequence and ROVR fields.
        </dd>
-       <dt>Subscribe/subscription</dt><dd> The speciel form of
+       <dt>Subscribe/subscription</dt><dd> The special form of
        registration that leverages NS(EARO) to register (subscribe)
        a multicast or an anycast address.
        </dd>
@@ -267,9 +267,18 @@ docName="draft-ietf-6lo-multicast-registration-12" >
 
 <section anchor="overview"><name>Overview</name>
    <t>
-   This specification inherits from <xref target="RFC6550"/>,
-   <xref target="RFC8505"/>, and <xref target="RFC9010"/> to provide additional
-   capabilities for anycast and multicast. Unless specified otherwise therein,
+   This specification extends <xref target="RFC8505"/> and inherits from
+   <xref target="RFC8928"/> to provide a registration method - called
+   subscription in this case - for  anycast and multicast address. As for the
+   unicast address registration, the subscription to anycast and multicast
+   addresses is agnostic to the routing protocol in which this information may
+   be redistributed.
+   </t>
+   <t> In the case of LLNs, RPL <xref target="RFC6550"/> is the routing protocol
+   of choice and <xref target="RFC9010"/> specifies how the unicast address
+   advertised with <xref target="RFC8505"/> is redistributed in RPL. This
+   specification also provides RPL extensions for anycast and multicast address
+   operation and redistribution. In the RPL case and unless specified otherwise,
    the behavior of the 6LBR that acts as RPL Root, of the intermediate routers
    down the RPL graph, of the 6LR that act as access routers and of the 6LNs
    that are the RPL-unaware destinations, is the same as for unicast. In
@@ -301,9 +310,10 @@ docName="draft-ietf-6lo-multicast-registration-12" >
     <t>
 	The LLN may be a hub-and-spoke access link such	as (Low-Power) Wi-Fi
     <xref target="IEEE80211"/> and Bluetooth (Low Energy)
-    <xref target="IEEE802151"/>, or a Route-Over LLN such as the Wi-SUN and 6TiSCH meshes
-    <xref target="I-D.heile-lpwan-wisun-overview"/> that leverages 6LoWPAN
-    <xref target="RFC4919"/><xref target="RFC6282"/>
+    <xref target="IEEE802151"/>, or a Route-Over LLN such as the Wi-SUN
+    <xref target="I-D.heile-lpwan-wisun-overview"/>  and 6TiSCH
+    <xref target="RFC9030"/> meshes that leverages 6LoWPAN
+    <xref target="RFC4919"/> <xref target="RFC6282"/>
     and RPL <xref target="RFC6550"/> over <xref target="IEEE802154"/>.
     </t>
 
@@ -338,7 +348,7 @@ docName="draft-ietf-6lo-multicast-registration-12" >
    addresses, the 6LR uses an EDAR/EDAC exchange with the 6LBR to notify the
    6LBR of the presence of the listeners.
    </t><t>
-   This specification updates the EARO with a new two bit fields, the P field,
+   This specification updates the EARO with a new two-bit field, the P field,
    as detailed in <xref target="R8505E"/>.
    The existing R flag that requests reachability for the registered address
    gets new behavior.
@@ -693,7 +703,7 @@ docName="draft-ietf-6lo-multicast-registration-12" >
       <tr><td>0</td><td>Registration for a Unicast Address</td></tr>
       <tr><td>1</td><td>Registration for a Multicast Address</td></tr>
       <tr><td>2</td><td>Registration for an Anycast Address</td></tr>
-      <tr><td>3</td><td>Reserved, MUST be set to 0 and ignored by the receiver</td></tr>
+      <tr><td>3</td><td>Reserved, MUST be ignored by the receiver</td></tr>
      </tbody>
     </table>  <!-- end table "P-field values" -->
 
@@ -757,24 +767,27 @@ docName="draft-ietf-6lo-multicast-registration-12" >
 <t>
    Section 4.1 of <xref target="RFC8505"/> defines the EARO as an extension to
    the ARO option defined in <xref target="RFC6775"/>.
+   This specification adds a new P field placed in the EARO flags that is set as
+   follows:
 
 </t>
-<t>
-   This specification adds
-   a new P field to the EARO flags is set to 1 to signal that the
+<ul>
+<li>
+   The P field is set to 1 to signal that the
    Registered Address is a multicast address. When the P field is 1 and the R flag
    is set to 1 as well, the 6LR that
    conforms to this specification joins the multicast stream,  e.g., by
-   injecting the address in the RPL multicast support which is extended in this
+   injecting the address in the RPL multicast support that is extended in this
    specification for Non-Storing Mode.
-</t>
-<t>
-   The new P field to the EARO flags is set to 2 to signal that the Registered Address is
+</li>
+<li>
+   The P field is set to 2 to signal that the Registered Address is
    an anycast address. When the P field is 2 and the R flag is 1, the 6LR that
-   conforms to this specification injects the anycast address in the RPL
-   anycast support that is introduced in this specification for both Storing
-   and Non-Storing Modes.
-</t>
+   conforms to this specification injects the anycast address in the routing
+   protocol(s) that it participates to, e.g., in the RPL anycast support that
+   is introduced in this specification for both Storing and Non-Storing Modes.
+</li>
+</ul>
 <t>
    <xref target="EARO"/> illustrates the P field in its suggested
    positions (2, counting 0 to 7 in network order in the
@@ -861,8 +874,8 @@ docName="draft-ietf-6lo-multicast-registration-12" >
 
 <section anchor="multireg"><name>Registering Extensions</name>
 <t>
-   With <xref target="RFC8505"/>:
-   </t>
+   <xref target="RFC8505"/> specifies the following behaviours:
+</t>
 <ul>
    <li>
    A router that expects to reboot may send a final RA message, upon which
@@ -1003,8 +1016,8 @@ docName="draft-ietf-6lo-multicast-registration-12" >
 
 <section anchor="updating2"><name>Updating RFC 9010</name>
 <t>
-   With <xref target="RFC9010"/>:
-   </t>
+   <xref target="RFC9010"/> specifies the following behaviours:
+</t>
    <ul>
    <li>
    The 6LR injects only unicast routes in RPL
@@ -1202,7 +1215,7 @@ docName="draft-ietf-6lo-multicast-registration-12" >
    address as needed in the configuration.
 </t>
 <t>
-   IN a "green field"  deployment where all nodes support this
+   In a "green field"  deployment where all nodes support this
    specification, it is possible to deploy a single RPL Instance using a
    multicast MOP for unicast, multicast and anycast addresses.
 </t><t>
@@ -1322,9 +1335,14 @@ docName="draft-ietf-6lo-multicast-registration-12" >
 <section ><name>IANA Considerations</name>
 <t>
     Note to RFC Editor, to be removed: please replace "This RFC" throughout this
-    document by the RFC number for this specification once it is allocated.
-    Also, the I Field is defined in <xref target="RFC9010"/> but is missing from
-    the registry, so the bit positions must be added for completeness.
+    document by the RFC number for this specification once it is allocated;
+    also, requests to IANA must be edited to reflect the IANA actions once
+    performed.
+</t>
+<t>
+    Note to IANA, to be removed: the I Field is defined in
+    <xref target="RFC9010"/> but is missing from the registry, so the bit
+    positions must be added for completeness in conformance with the RFC.
 </t>
 <t>
     IANA is requested to make changes under the "Internet Control Message
@@ -1337,9 +1355,12 @@ docName="draft-ietf-6lo-multicast-registration-12" >
 
 	<t>
     IANA is requested to create a new "P-field values" registry under the
-    heading "Internet Control Message Protocol version 6 (ICMPv6) Parameters"
-    as indicated in <xref target="AM2"/>:
+    heading "Internet Control Message Protocol version 6 (ICMPv6) Parameters".
 	</t>
+
+ <t> Registration procedure is "Standards Action" <xref target='RFC8126'/>. The initial allocation is as indicated in <xref target="AM2"/>:
+ </t>
+
 
 	 <table anchor="AM2" ><name>P-field values</name>
      <thead>
@@ -1358,10 +1379,13 @@ docName="draft-ietf-6lo-multicast-registration-12" >
     <section><name>New EDAR Message Flags Registry</name>
 	<t>
     IANA is requested to create a new "EDAR Message Flags" registry under the
-    heading "Internet Control Message Protocol version 6 (ICMPv6) Parameters"
-    as indicated in <xref target="EDARflags"/>:
+    heading "Internet Control Message Protocol version 6 (ICMPv6) Parameters".
 	</t>
 
+ <t> Registration procedure is "IETF Review" or "IESG Approval"
+    <xref target='RFC8126'/>. The initial allocation is as indicated
+    in <xref target="EDARflags"/>:
+ </t>
 	<table anchor="EDARflags" ><name>EDAR Message flags</name>
    <thead>
       <tr><td>Bit Number</td><td>Meaning</td><td>Reference</td></tr>
@@ -1494,23 +1518,21 @@ docName="draft-ietf-6lo-multicast-registration-12" >
 	</table>	<!-- end table "IPv6 Neighbor Discovery Option" -->
     </section>	<!-- end section "IPv6 Neighbor Discovery Option" -->
 
-
-
-
-
 </section>	<!-- end section "IANA Considerations" -->
 
 <section title="Acknowledgments">
 <t>
-
+   This work is a production of an effective collaboration between the IETF 6lo
+   WG and the Wi-Sun FAN WG. Thanks to all in both WGs who contributed reviews
+   and productive suggestions, in particular Carsten Bormann, Paul Duffy,
+   Klaus Hueske, Adnan Rashid, Rahul Jadhav, Gene Falendysz, Don Sturek,
+   Dario Tedeschi, Saurabh Jain, and Chris Hett.
+</t>
+<t>
+  The Editor wishes to thank ...
+  and Esko Dijk for their useful WGLC reviews and proposed changes.
 </t>
 </section> <!-- title="Acknowledgments" -->
-
-
-
-
-
-
 
 </middle>
 
@@ -1533,6 +1555,7 @@ docName="draft-ietf-6lo-multicast-registration-12" >
 	<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6775.xml"/>
 	<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7346.xml"/>
 	<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7400.xml"/>
+	<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8126.xml"/>
 	<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml"/>
 	<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8200.xml"/>
 	<xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8505.xml"/>
@@ -1540,6 +1563,7 @@ docName="draft-ietf-6lo-multicast-registration-12" >
     <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8928.xml"/>
 
     <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9010.xml"/>
+    <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9030.xml"/>
 
 	   <reference anchor="IANA.ICMP">
 		<front>
