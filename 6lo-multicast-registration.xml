@@ -269,10 +269,17 @@ docName="draft-ietf-6lo-multicast-registration-12" >
    <t>
    This specification extends <xref target="RFC8505"/> and inherits from
    <xref target="RFC8928"/> to provide a registration method - called
-   subscription in this case - for  anycast and multicast address. As for the
-   unicast address registration, the subscription to anycast and multicast
-   addresses is agnostic to the routing protocol in which this information may
-   be redistributed.
+   subscription in this case - for anycast and multicast address.
+   <xref target="RFC8505"/> is agnostic to the routing protocol in which the
+   address may be redistributed.
+   </t>
+   <t>In classical networks, <xref target="RFC8505"/> may be used for an ND
+   proxy operation as specified in <xref target="RFC8929"/>, or redistributed in
+   a full-fledged routing protocol such as
+   EVPN <xref target="I-D.thubert-bess-secure-evpn-mac-signaling"/> or
+   RIFT <xref target="I-D.ietf-rift-rift"/>. The device mobility can be
+   gracefully supported as long has the routers can exchange and make sense of
+   the sequence counter in the TID field of the EARO.
    </t>
    <t> In the case of LLNs, RPL <xref target="RFC6550"/> is the routing protocol
    of choice and <xref target="RFC9010"/> specifies how the unicast address
@@ -290,7 +297,11 @@ docName="draft-ietf-6lo-multicast-registration-12" >
    A node that implements this MUST also implement <xref target="RFC8505"/>.
    This specification modifies existing options and updates the associated
    behaviors to enable the Registration for Multicast Addresses as an extension
-   to <xref target="RFC8505"/>.
+   to <xref target="RFC8505"/>.  As for the
+   unicast address registration, the subscription to anycast and multicast
+   addresses is agnostic to the routing protocol in which this information may
+   be redistributed, though protocol extensions would be needed in the protocol
+   when multicast services are not available.
    </t>
    <t>
    This specification also extends <xref target="RFC6550"/> and
@@ -926,7 +937,7 @@ docName="draft-ietf-6lo-multicast-registration-12" >
    <t>
    A device that wishes to refresh its state, e.g., upon reboot if it may have
    lost some registration state, SHOULD send an asynchronous NA(EARO) with this new
-   status value. That asynchronous NA(ARO) SHOULD be sent to the all-nodes link
+   status value. That asynchronous NA(EARO) SHOULD be sent to the all-nodes link
    scope multicast address (FF02::1) and Target MUST be set to the link local
    address that was exposed previously by this node to accept registrations,
    and the TID MUST be set to 0.
@@ -935,7 +946,7 @@ docName="draft-ietf-6lo-multicast-registration-12" >
    In an unreliable environment, the multicast NA(EARO) message may be resent in
    a fast sequence, in which case the TID must be incremented each time.
    A 6LN that has recently
-   processed the NA(ARO) ignores the NA(EARO) with a newer TID received
+   processed the NA(EARO) ignores the NA(EARO) with a newer TID received
    within the duration of the fast sequence. That duration depends on the
    environent and has to be configured. By default, it is of 10 seconds.
    </t>
@@ -1659,8 +1670,10 @@ docName="draft-ietf-6lo-multicast-registration-12" >
     <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7731.xml"/>
      <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7761.xml"/>
     <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6052.xml"/>
+    <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.8929.xml"/>
     <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.9008.xml"/>
     <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-bess-evpn-optimized-ir.xml"/>
+    <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.ietf-rift-rift.xml"/>
 
       <xi:include href='https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.kuehlewind-update-tag.xml'/>
     <xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.heile-lpwan-wisun-overview.xml"/><xi:include href="https://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.thubert-bess-secure-evpn-mac-signaling.xml"/>

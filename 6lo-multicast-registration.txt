@@ -4,10 +4,10 @@
 
 6lo                                                      P. Thubert, Ed.
 Internet-Draft                                             Cisco Systems
-Updates: 4861, 6550, 6553, 8505, 9010 (if               17 November 2022
+Updates: 4861, 6550, 6553, 8505, 9010 (if               18 November 2022
          approved)                                                      
 Intended status: Standards Track                                        
-Expires: 21 May 2023
+Expires: 22 May 2023
 
 
      IPv6 Neighbor Discovery Multicast and Anycast Address Listener
@@ -38,7 +38,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 May 2023.
+   This Internet-Draft will expire on 22 May 2023.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Thubert                    Expires 21 May 2023                  [Page 1]
+Thubert                    Expires 22 May 2023                  [Page 1]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thubert                    Expires 21 May 2023                  [Page 2]
+Thubert                    Expires 22 May 2023                  [Page 2]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -165,7 +165,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-Thubert                    Expires 21 May 2023                  [Page 3]
+Thubert                    Expires 22 May 2023                  [Page 3]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -221,7 +221,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-Thubert                    Expires 21 May 2023                  [Page 4]
+Thubert                    Expires 22 May 2023                  [Page 4]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -277,7 +277,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-Thubert                    Expires 21 May 2023                  [Page 5]
+Thubert                    Expires 22 May 2023                  [Page 5]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -305,10 +305,16 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
    This specification extends [RFC8505] and inherits from [RFC8928] to
    provide a registration method - called subscription in this case -
-   for anycast and multicast address.  As for the unicast address
-   registration, the subscription to anycast and multicast addresses is
-   agnostic to the routing protocol in which this information may be
-   redistributed.
+   for anycast and multicast address.  [RFC8505] is agnostic to the
+   routing protocol in which the address may be redistributed.
+
+   In classical networks, [RFC8505] may be used for an ND proxy
+   operation as specified in [RFC8929], or redistributed in a full-
+   fledged routing protocol such as EVPN
+   [I-D.thubert-bess-secure-evpn-mac-signaling] or RIFT
+   [I-D.ietf-rift-rift].  The device mobility can be gracefully
+   supported as long has the routers can exchange and make sense of the
+   sequence counter in the TID field of the EARO.
 
    In the case of LLNs, RPL [RFC6550] is the routing protocol of choice
    and [RFC9010] specifies how the unicast address advertised with
@@ -322,21 +328,25 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
    section 11 of [RFC6550], including loop avoidance and detection,
    though in the case of multicast multiple copies might be generated.
 
+
+
+
+
+
+Thubert                    Expires 22 May 2023                  [Page 6]
+
+Internet-Draft     Multicast and Anycast Subscription      November 2022
+
+
    [RFC8505] is a pre-requisite to this specification.  A node that
    implements this MUST also implement [RFC8505].  This specification
    modifies existing options and updates the associated behaviors to
    enable the Registration for Multicast Addresses as an extension to
-   [RFC8505].
-
-
-
-
-
-
-Thubert                    Expires 21 May 2023                  [Page 6]
-
-Internet-Draft     Multicast and Anycast Subscription      November 2022
-
+   [RFC8505].  As for the unicast address registration, the subscription
+   to anycast and multicast addresses is agnostic to the routing
+   protocol in which this information may be redistributed, though
+   protocol extensions would be needed in the protocol when multicast
+   services are not available.
 
    This specification also extends [RFC6550] and [RFC9010] in the case
    of a route-over multilink subnet based on the RPL routing protocol,
@@ -376,6 +386,14 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
                           Figure 1: Wireless Mesh
 
+
+
+
+Thubert                    Expires 22 May 2023                  [Page 7]
+
+Internet-Draft     Multicast and Anycast Subscription      November 2022
+
+
    A leaf acting as a 6LN registers its unicast addresses to a RPL
    router acting as a 6LR, using a layer-2 unicast NS message with an
    EARO as specified in [RFC8505].  The registration state is
@@ -383,16 +401,6 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
    indicated in the EARO expires.  As for unicast IPv6 addresses, the
    6LR uses an EDAR/EDAC exchange with the 6LBR to notify the 6LBR of
    the presence of the listeners.
-
-
-
-
-
-
-Thubert                    Expires 21 May 2023                  [Page 7]
-
-Internet-Draft     Multicast and Anycast Subscription      November 2022
-
 
    This specification updates the EARO with a new two-bit field, the P
    field, as detailed in Section 7.1.  The existing R flag that requests
@@ -433,6 +441,15 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
    multicast address, using the same source-routing header as for
    unicast targets attached to the respective 6LRs.
 
+
+
+
+
+Thubert                    Expires 22 May 2023                  [Page 8]
+
+Internet-Draft     Multicast and Anycast Subscription      November 2022
+
+
    Broadcasting is typically unreliable in LLNs (no ack) and forces a
    listener to remain awake, so it generally discouraged.  The
    expectation is thus that in either mode, the 6LRs deliver the
@@ -442,14 +459,6 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
    With this specification, anycast addresses can be injected in RPL in
    both Storing and Non-Storing modes.  In Storing Mode the RPL router
    accepts DAO from multiple children for the same anycast address, but
-
-
-
-Thubert                    Expires 21 May 2023                  [Page 8]
-
-Internet-Draft     Multicast and Anycast Subscription      November 2022
-
-
    only forwards a packet to one of the children.  In Non-Storing Mode,
    the Root maintains the list of all the RPL nodes that announced the
    anycast address as Target, but forwards a given packet to only one of
@@ -487,6 +496,16 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
       message to the Root; the Root filters out the multicast messages
       for which there is no listener and only floods when there is.
 
+
+
+
+
+
+Thubert                    Expires 22 May 2023                  [Page 9]
+
+Internet-Draft     Multicast and Anycast Subscription      November 2022
+
+
    *  In a simpler variation, the 6LNs do not set the R flag and the
       Root floods all the multicast packets over the whole DODAG.  Using
       configuration, it is also possible to control the behavior of the
@@ -497,14 +516,6 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
    Note that if the configuration instructs the 6LR not to send the DAO,
    then MPL can really by used in conjunction with RPL Storing Mode as
    well.
-
-
-
-
-Thubert                    Expires 21 May 2023                  [Page 9]
-
-Internet-Draft     Multicast and Anycast Subscription      November 2022
-
 
 4.  Updating RFC 4861
 
@@ -543,24 +554,18 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
                  Figure 2: New Capability Bits in the 6CIO
 
+
+
+
+Thubert                    Expires 22 May 2023                 [Page 10]
+
+Internet-Draft     Multicast and Anycast Subscription      November 2022
+
+
    New Option Field:
 
    X  1-bit flag: "Registration for Unicast, Multicast, and Anycast
       Addresses Supported"
-
-
-
-
-
-
-
-
-
-
-Thubert                    Expires 21 May 2023                 [Page 10]
-
-Internet-Draft     Multicast and Anycast Subscription      November 2022
-
 
 6.  Updating RFC 6550
 
@@ -605,18 +610,17 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
    anycast or multicast addresses must use and advertise the longest
    remaining lifetime across all the origins of the advertisements for
    that address.  When the lifetime expires, the router sends a no-path
-   DAO (i.e. the lifetime is 0) using the same value for ROVR value as
-   for the previous advertisements, that is either self or the single
-   descendant that advertised the Target.
 
 
 
-
-
-Thubert                    Expires 21 May 2023                 [Page 11]
+Thubert                    Expires 22 May 2023                 [Page 11]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
+
+   DAO (i.e. the lifetime is 0) using the same value for ROVR value as
+   for the previous advertisements, that is either self or the single
+   descendant that advertised the Target.
 
    Note that the Registration Lifetime, TID and ROVR fields are also
    placed in the EDAR message so the state created by EDAR is also
@@ -665,11 +669,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-
-
-
-
-Thubert                    Expires 21 May 2023                 [Page 12]
+Thubert                    Expires 22 May 2023                 [Page 12]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -725,7 +725,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-Thubert                    Expires 21 May 2023                 [Page 13]
+Thubert                    Expires 22 May 2023                 [Page 13]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -781,7 +781,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-Thubert                    Expires 21 May 2023                 [Page 14]
+Thubert                    Expires 22 May 2023                 [Page 14]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -837,7 +837,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-Thubert                    Expires 21 May 2023                 [Page 15]
+Thubert                    Expires 22 May 2023                 [Page 15]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -893,7 +893,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-Thubert                    Expires 21 May 2023                 [Page 16]
+Thubert                    Expires 22 May 2023                 [Page 16]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -949,7 +949,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-Thubert                    Expires 21 May 2023                 [Page 17]
+Thubert                    Expires 22 May 2023                 [Page 17]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -1005,7 +1005,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-Thubert                    Expires 21 May 2023                 [Page 18]
+Thubert                    Expires 22 May 2023                 [Page 18]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -1036,7 +1036,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
       A device that wishes to refresh its state, e.g., upon reboot if it
       may have lost some registration state, SHOULD send an asynchronous
-      NA(EARO) with this new status value.  That asynchronous NA(ARO)
+      NA(EARO) with this new status value.  That asynchronous NA(EARO)
       SHOULD be sent to the all-nodes link scope multicast address
       (FF02::1) and Target MUST be set to the link local address that
       was exposed previously by this node to accept registrations, and
@@ -1045,7 +1045,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
       In an unreliable environment, the multicast NA(EARO) message may
       be resent in a fast sequence, in which case the TID must be
       incremented each time.  A 6LN that has recently processed the
-      NA(ARO) ignores the NA(EARO) with a newer TID received within the
+      NA(EARO) ignores the NA(EARO) with a newer TID received within the
       duration of the fast sequence.  That duration depends on the
       environent and has to be configured.  By default, it is of 10
       seconds.
@@ -1061,7 +1061,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-Thubert                    Expires 21 May 2023                 [Page 19]
+Thubert                    Expires 22 May 2023                 [Page 19]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -1117,7 +1117,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-Thubert                    Expires 21 May 2023                 [Page 20]
+Thubert                    Expires 22 May 2023                 [Page 20]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -1173,7 +1173,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-Thubert                    Expires 21 May 2023                 [Page 21]
+Thubert                    Expires 22 May 2023                 [Page 21]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -1229,7 +1229,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-Thubert                    Expires 21 May 2023                 [Page 22]
+Thubert                    Expires 22 May 2023                 [Page 22]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -1285,7 +1285,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-Thubert                    Expires 21 May 2023                 [Page 23]
+Thubert                    Expires 22 May 2023                 [Page 23]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -1341,7 +1341,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-Thubert                    Expires 21 May 2023                 [Page 24]
+Thubert                    Expires 22 May 2023                 [Page 24]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -1397,7 +1397,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-Thubert                    Expires 21 May 2023                 [Page 25]
+Thubert                    Expires 22 May 2023                 [Page 25]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -1453,7 +1453,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-Thubert                    Expires 21 May 2023                 [Page 26]
+Thubert                    Expires 22 May 2023                 [Page 26]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -1509,7 +1509,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-Thubert                    Expires 21 May 2023                 [Page 27]
+Thubert                    Expires 22 May 2023                 [Page 27]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -1565,7 +1565,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-Thubert                    Expires 21 May 2023                 [Page 28]
+Thubert                    Expires 22 May 2023                 [Page 28]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -1621,7 +1621,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-Thubert                    Expires 21 May 2023                 [Page 29]
+Thubert                    Expires 22 May 2023                 [Page 29]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -1677,7 +1677,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-Thubert                    Expires 21 May 2023                 [Page 30]
+Thubert                    Expires 22 May 2023                 [Page 30]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -1733,7 +1733,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-Thubert                    Expires 21 May 2023                 [Page 31]
+Thubert                    Expires 22 May 2023                 [Page 31]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -1789,7 +1789,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-Thubert                    Expires 21 May 2023                 [Page 32]
+Thubert                    Expires 22 May 2023                 [Page 32]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -1845,7 +1845,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 
 
-Thubert                    Expires 21 May 2023                 [Page 33]
+Thubert                    Expires 22 May 2023                 [Page 33]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2022
 
@@ -1872,6 +1872,11 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
               Translators", RFC 6052, DOI 10.17487/RFC6052, October
               2010, <https://www.rfc-editor.org/info/rfc6052>.
 
+   [RFC8929]  Thubert, P., Ed., Perkins, C.E., Levy-Abegnoli, E., and
+              RFC Publisher, "IPv6 Backbone Router", RFC 8929,
+              DOI 10.17487/RFC8929, November 2020,
+              <https://www.rfc-editor.org/info/rfc8929>.
+
    [RFC9008]  Robles, M.I., Richardson, M., and P. Thubert, "Using RPI
               Option Type, Routing Header for Source Routes, and IPv6-
               in-IPv6 Encapsulation in the RPL Data Plane", RFC 9008,
@@ -1886,6 +1891,21 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
               <https://www.ietf.org/archive/id/draft-ietf-bess-evpn-
               optimized-ir-12.txt>.
 
+   [I-D.ietf-rift-rift]
+              Przygienda, T., Sharma, A., Thubert, P., Rijsman, B.,
+              Afanasiev, D., and J. Head, "RIFT: Routing in Fat Trees",
+              Work in Progress, Internet-Draft, draft-ietf-rift-rift-16,
+              12 September 2022, <https://www.ietf.org/archive/id/draft-
+              ietf-rift-rift-16.txt>.
+
+
+
+
+Thubert                    Expires 22 May 2023                 [Page 34]
+
+Internet-Draft     Multicast and Anycast Subscription      November 2022
+
+
    [I-D.kuehlewind-update-tag]
               Kuehlewind, M. and S. Krishnan, "Definition of new tags
               for relations between RFCs", Work in Progress, Internet-
@@ -1898,13 +1918,6 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
               draft-heile-lpwan-wisun-overview-00, 3 July 2017,
               <https://www.ietf.org/archive/id/draft-heile-lpwan-wisun-
               overview-00.txt>.
-
-
-
-Thubert                    Expires 21 May 2023                 [Page 34]
-
-Internet-Draft     Multicast and Anycast Subscription      November 2022
-
 
    [I-D.thubert-bess-secure-evpn-mac-signaling]
               Thubert, P., Przygienda, T., and J. Tantsura, "Secure EVPN
@@ -1939,6 +1952,16 @@ Internet-Draft     Multicast and Anycast Subscription      November 2022
 
 Author's Address
 
+
+
+
+
+
+Thubert                    Expires 22 May 2023                 [Page 35]
+
+Internet-Draft     Multicast and Anycast Subscription      November 2022
+
+
    Pascal Thubert (editor)
    Cisco Systems, Inc
    Building D
@@ -1957,4 +1980,37 @@ Author's Address
 
 
 
-Thubert                    Expires 21 May 2023                 [Page 35]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Thubert                    Expires 22 May 2023                 [Page 36]
