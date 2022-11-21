@@ -42,10 +42,11 @@ docName="draft-ietf-6lo-multicast-registration-12" >
 
    <abstract>
    <t>
-    This document updates RFC 8505 to enable a listener to subscribe an IPv6
-    anycast or multicast address; the draft updates RFC 6550 (RPL) to add a new
-    Non-Storing Multicast Mode and a new support for anycast addresses in
-    Storing and Non-Storing Modes.
+    This document updates the 6LoWPAN extensions to IPv6 Neighbor Discovery
+    (RFC 8505) to enable a listener to subscribe to an IPv6 anycast or multicast
+    address;
+    the document updates RPL (RFC 6550) to add a new Non-Storing Multicast Mode
+    and a new support for anycast addresses in Storing and Non-Storing Modes.
     This document extends RFC 9010 to enable the 6LR to inject the anycast and
     multicast addresses in RPL.
    </t>
@@ -948,7 +949,7 @@ docName="draft-ietf-6lo-multicast-registration-12" >
    A 6LN that has recently
    processed the NA(EARO) ignores the NA(EARO) with a newer TID received
    within the duration of the fast sequence. That duration depends on the
-   environent and has to be configured. By default, it is of 10 seconds.
+   environment and has to be configured. By default, it is of 10 seconds.
    </t>
    </li>
    <li>
