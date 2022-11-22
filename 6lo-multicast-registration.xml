@@ -937,19 +937,32 @@ docName="draft-ietf-6lo-multicast-registration-12" >
    </t>
    <t>
    A device that wishes to refresh its state, e.g., upon reboot if it may have
-   lost some registration state, SHOULD send an asynchronous NA(EARO) with this new
-   status value. That asynchronous NA(EARO) SHOULD be sent to the all-nodes link
+   lost some registration state, SHOULD send an asynchronous NA(EARO) with this
+   new status value.
+   That asynchronous multicast NA(EARO) SHOULD be sent to the all-nodes link
    scope multicast address (FF02::1) and Target MUST be set to the link local
-   address that was exposed previously by this node to accept registrations,
-   and the TID MUST be set to 0.
+   address that was exposed previously by this node to accept registrations
    </t>
    <t>
+   The TID field in the multicast NA(EARO) is the one associated to the
+   Target and follows the same rules as the TID in the NS(EARO) for the same
+   Target, see section 5.2 of <xref target="RFC8505"/>. It is incremented by the
+   sender each time it sends a new sequence of NS and/or NA with the EARO about
+   the Target. By default the TID initial setting is 240.
    In an unreliable environment, the multicast NA(EARO) message may be resent in
-   a fast sequence, in which case the TID must be incremented each time.
-   A 6LN that has recently
-   processed the NA(EARO) ignores the NA(EARO) with a newer TID received
-   within the duration of the fast sequence. That duration depends on the
-   environment and has to be configured. By default, it is of 10 seconds.
+   a fast sequence, in which case the TID must be incremented each time. If the
+   sender is a 6LN that also registers the Target to one or more 6LR(s), then
+   it must reregister before the current value of the TID and the last
+   registered value are no more comparable, see section 7.2 of
+   <xref target="RFC6550"/>. By default multicast NA(EARO) is resent 3 times
+   with a interval of 1 second.
+   A 6LN that has recently processed the multicast NA(EARO) indicating
+   "Registration Refresh Request" ignores the next multicast NA(EARO) with
+   the same status and a newer TID received within the duration of the fast
+   sequence.
+   By default, it is of 10 seconds.
+   The best values for the duration, the number of retries and the TID initial
+   setting depend on the environment and SHOULD be configurable.
    </t>
    </li>
    <li>
