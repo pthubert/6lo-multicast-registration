@@ -550,7 +550,7 @@ docName="draft-ietf-6lo-multicast-registration-12" >
    advertisements are received.
 </t><t>
    The RPL router that merges multiple advertisement for the same anycast or
-   multicast addresses must use and advertise the longest remaining lifetime
+   multicast addresses MUST use and advertise the longest remaining lifetime
    across all the origins of the advertisements for that address.
    When the lifetime expires, the router sends a no-path DAO (i.e. the lifetime
    is 0) using the same value for ROVR value as for the previous advertisements,
@@ -693,7 +693,7 @@ docName="draft-ietf-6lo-multicast-registration-12" >
    When forwarding multicast packets down the DODAG, the RPL router copies
    all the children that advertised the address in their DAO messages. In
    contrast, when forwarding anycast packets down the DODAG, the RPL router
-   must copy one and only one of the children that advertised the address in
+   MUST copy one and only one of the children that advertised the address in
    their DAO messages, and forward to one parent if there is no such child.
 </t>
 
@@ -949,10 +949,10 @@ docName="draft-ietf-6lo-multicast-registration-12" >
    Target, see section 5.2 of <xref target="RFC8505"/>. It is incremented by the
    sender each time it sends a new sequence of NS and/or NA with the EARO about
    the Target. By default the TID initial setting is 240.
-   In an unreliable environment, the multicast NA(EARO) message may be resent in
-   a fast sequence, in which case the TID must be incremented each time. If the
+   In an unreliable environment, the multicast NA(EARO) message MAY be resent in
+   a fast sequence, in which case the TID MUST be incremented each time. If the
    sender is a 6LN that also registers the Target to one or more 6LR(s), then
-   it must reregister before the current value of the TID and the last
+   it MUST reregister before the current value of the TID and the last
    registered value are no more comparable, see section 7.2 of
    <xref target="RFC6550"/>. By default multicast NA(EARO) is resent 3 times
    with a interval of 1 second.
