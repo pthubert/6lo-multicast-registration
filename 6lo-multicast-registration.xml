@@ -17,7 +17,7 @@
 <rfc  xmlns:xi="http://www.w3.org/2001/XInclude" category="std" ipr="trust200902"
 tocInclude="true" indexInclude="true" obsoletes=""  consensus="true"
 submissionType="IETF" xml:lang="en" version="3"  updates="4861, 6550, 6553, 8505, 9010"
-docName="draft-ietf-6lo-multicast-registration-12" >
+docName="draft-ietf-6lo-multicast-registration-13" >
 
 <front>
 
@@ -941,26 +941,40 @@ docName="draft-ietf-6lo-multicast-registration-12" >
    new status value.
    That asynchronous multicast NA(EARO) SHOULD be sent to the all-nodes link
    scope multicast address (FF02::1) and Target MUST be set to the link local
-   address that was exposed previously by this node to accept registrations
+   address that was exposed previously by this node to accept registrations.
    </t>
    <t>
    The TID field in the multicast NA(EARO) is the one associated to the
    Target and follows the same rules as the TID in the NS(EARO) for the same
    Target, see section 5.2 of <xref target="RFC8505"/>. It is incremented by the
-   sender each time it sends a new sequence of NS and/or NA with the EARO about
-   the Target. By default the TID initial setting is 240.
-   In an unreliable environment, the multicast NA(EARO) message MAY be resent in
-   a fast sequence, in which case the TID MUST be incremented each time. If the
-   sender is a 6LN that also registers the Target to one or more 6LR(s), then
-   it MUST reregister before the current value of the TID and the last
+   sender each time it sends a new series of NS and/or NA with the EARO about
+   the Target. By default the TID initial setting is 252.
+   The TID indicates a reboot when it is in the "straight" part of the lollipop,
+   between the initial value and 255. After that the TID remains below 128 as
+   long as the device is alive. An asynchronous multicast NA(EARO) with a TID
+   below 128 MUST NOT be considered as indicating a reboot.
+   </t>
+   <t>
+   In an unreliable environment, the asynchronous multicast NA(EARO) message MAY
+   be resent in a fast sequence for reliability, in which case the TID MUST be
+   incremented each time.
+   If the sender is a 6LN that also registers the Target to one or more 6LR(s),
+   then it MUST reregister before the current value of the TID and the last
    registered value are no more comparable, see section 7.2 of
-   <xref target="RFC6550"/>. By default multicast NA(EARO) is resent 3 times
-   with a interval of 1 second.
+   <xref target="RFC6550"/>.
+   </t>
+   <t>
+   The multicast NA(EARO) SHOULD be resent enough times for the TID to be issued
+   with the value of 255 so the next NA(EARO) after the initial series is
+   outside the lollipop and not confused with a reboot.
    A 6LN that has recently processed the multicast NA(EARO) indicating
    "Registration Refresh Request" ignores the next multicast NA(EARO) with
-   the same status and a newer TID received within the duration of the fast
-   sequence.
-   By default, it is of 10 seconds.
+   the same status and a newer TID received within the duration of the initial
+   series.
+   </t>
+   <t>
+   By default, the duration of the initial series is 10 seconds, the interval
+   between retries is 1 second, and the number of retries is 3.
    The best values for the duration, the number of retries and the TID initial
    setting depend on the environment and SHOULD be configurable.
    </t>
