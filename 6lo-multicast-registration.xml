@@ -17,7 +17,7 @@
 <rfc  xmlns:xi="http://www.w3.org/2001/XInclude" category="std" ipr="trust200902"
 tocInclude="true" indexInclude="true" obsoletes=""  consensus="true"
 submissionType="IETF" xml:lang="en" version="3"  updates="4861, 6550, 6553, 8505, 9010"
-docName="draft-ietf-6lo-multicast-registration-13" >
+docName="draft-ietf-6lo-multicast-registration-14" >
 
 <front>
 
@@ -274,6 +274,59 @@ docName="draft-ietf-6lo-multicast-registration-13" >
    <xref target="RFC8505"/> is agnostic to the routing protocol in which the
    address may be redistributed.
    </t>
+<t>
+
+As opposed to unicast addresses, there is no concept of duplication with multicast and anycast addresses, and there might be multiple registrations from multiple parties for the same address. The router conserves one registration per party per multicast or anycast address, but injects the route into the routing protocol only once for each address, asynchronously to the registration. On the other hand, the validation exchange with the registrar (6LBR) is still needed if the router checks the right for the host to listen to the anycast or  multicast address.
+</t>
+
+<figure anchor='figSub'><name> Registration Flow for an anycast or multicast Address</name>
+ <artwork><![CDATA[
+    6LoWPAN Node           6LR             6LBR
+      (host1)           (router)        (registrar)
+         |                  |               |
+         |   DMB link       |               |
+         |                  |               |
+         |  ND-Classic RS   |               |
+         |----------------->|               |
+         |------------>     |               |
+         |------------------------>         |
+         |  ND-Classic RA   |               |
+         |<-----------------|               |
+         |                  |               |
+         |  NS(EARO)        |               |
+         |----------------->|               |
+         |                  | Extended DAR  |
+         |                  |-------------->|
+         |                  |               |
+         |                  | Extended DAC  |
+         |                  |<--------------|
+         |        NA(EARO)  |
+         |<-----------------|<inject route> ->
+         |                  |
+                   ...
+      (host2)           (router)           6LBR
+         |  NS(EARO)        |               |
+         |----------------->|               |
+         |                  |               |
+         |                  | Extended DAR  |
+         |                  |-------------->|
+         |                  |               |
+         |                  | Extended DAC  |
+         |                  |<--------------|
+         |        NA(EARO)  |               |
+         |<-----------------|               |
+                   ...
+      (host1)           (router)
+         |  NS(EARO)        |               |
+         |----------------->|               |
+         |                  |               |
+         |        NA(EARO)  |               |
+         |<-----------------|               |
+                   ...
+         |                  |<maintain route> ->
+                   ...
+]]></artwork>
+</figure>
    <t>In classical networks, <xref target="RFC8505"/> may be used for an ND
    proxy operation as specified in <xref target="RFC8929"/>, or redistributed in
    a full-fledged routing protocol such as
