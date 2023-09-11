@@ -17,7 +17,7 @@
 <rfc  xmlns:xi="http://www.w3.org/2001/XInclude" category="std" ipr="trust200902"
 tocInclude="true" indexInclude="true" obsoletes=""  consensus="true"
 submissionType="IETF" xml:lang="en" version="3"  updates="4861, 6550, 6553, 8505, 9010"
-docName="draft-ietf-6lo-multicast-registration-14" >
+docName="draft-ietf-6lo-multicast-registration-15" >
 
 <front>
 
@@ -26,10 +26,10 @@ docName="draft-ietf-6lo-multicast-registration-14" >
       <organization abbrev="Cisco Systems">Cisco Systems, Inc</organization>
       <address>
          <postal>
-            <street>Building D</street>
-            <street>45 Allee des Ormes - BP1200 </street>
-            <city>Mougins - Sophia Antipolis</city>
-            <code>06254</code>
+            <street>Emerald Square, Batiment C</street>
+            <street>rue Evariste Galois </street>
+            <city>BIOT - Sophia Antipolis</city>
+            <code>06410</code>
           <country>France</country>
          </postal>
          <phone>+33 497 23 26 34</phone>
@@ -43,10 +43,10 @@ docName="draft-ietf-6lo-multicast-registration-14" >
    <abstract>
    <t>
     This document updates the 6LoWPAN extensions to IPv6 Neighbor Discovery
-    (RFC 8505) to enable a listener to subscribe to an IPv6 anycast or multicast
-    address;
-    the document updates RPL (RFC 6550) to add a new Non-Storing Multicast Mode
-    and a new support for anycast addresses in Storing and Non-Storing Modes.
+    (RFC 4861, RFC 8505) to enable a listener to subscribe to an IPv6 anycast or
+    multicast address;  the document updates RPL (RFC 6550, RFC 6553) to add a
+    new Non-Storing Multicast Mode and a new support for anycast addresses in
+    Storing and Non-Storing Modes.
     This document extends RFC 9010 to enable the 6LR to inject the anycast and
     multicast addresses in RPL.
    </t>
@@ -413,12 +413,12 @@ As opposed to unicast addresses, there is no concept of duplication with multica
    addresses, the 6LR uses an EDAR/EDAC exchange with the 6LBR to notify the
    6LBR of the presence of the listeners.
    </t><t>
-   This specification updates the EARO with a new two-bit field, the P field,
+   This specification updates the EARO with a new two-bit field, the P-Field,
    as detailed in <xref target="R8505E"/>.
    The existing R flag that requests reachability for the registered address
    gets new behavior.
    With this extension the 6LNs can now subscribe to the anycast and multicast
-   addresses they listen to, using a new P field in the EARO to signal that the
+   addresses they listen to, using a new P-Field in the EARO to signal that the
    registration is for a multicast address. Multiple 6LN may subscribe to
    the same multicast address to the same 6LR. Note the use of the term
    "subscribe": using the EARO registration mechanism, a node registers the
@@ -426,7 +426,7 @@ As opposed to unicast addresses, there is no concept of duplication with multica
    that it listens to.
    </t><t>
    With this specification, the 6LNs can also subscribe the anycast addresses
-   they accept, using a new P field in the EARO to signal that the registration
+   they accept, using a new P-Field in the EARO to signal that the registration
    is for an anycast address. As for multicast, multiple 6LN may subscribe the
    same anycast address to the same 6LR.
    </t><t>
@@ -701,13 +701,13 @@ As opposed to unicast addresses, there is no concept of duplication with multica
    is to be delivered to all the active subscribers.
    In contrast, the format of an anycast address is not distinguishable
    from that of unicast. A legacy node may issue a DAO message without setting
-   the P field to 2, the unicast behavior may apply to anycast traffic in a subDAGs.
+   the P-Field to 2, the unicast behavior may apply to anycast traffic in a subDAGs.
    That message will be undistinguishable from a unicast advertisement and the
    anycast behavior in the dataplane can only happen if all the nodes that
    advertise the same anycast address are synchronized with the same TID. That
    way, the multiple paths can remain in the RPL DODAG.
 </t> <t>
-   With the P field set to 2, this specification alleviates the issue of synchronizing
+   With the P-Field set to 2, this specification alleviates the issue of synchronizing
    the TIDs and ROVR fields. As for multicast, the freshness comparison based
    on the TID (in EARO) and the Path Sequence (in TIO) is ignored unless the
    messages have the same origin, as inferred by the same ROVR in RTO and/or
@@ -719,10 +719,10 @@ As opposed to unicast addresses, there is no concept of duplication with multica
    multiple subscriptions uses its own ROVR and Path Sequence and the
    longest lifetime over the different advertisements.
    A target is routed as anycast by a parent (or the Root) that received at
-   least one DAO message for that target with the P field set to 2.
+   least one DAO message for that target with the P-Field set to 2.
 </t> <t>
    As opposed to multicast, the anycast operation described therein applies to
-   both addresses and prefixes, and the P field can be set to 2 for both.
+   both addresses and prefixes, and the P-Field can be set to 2 for both.
    An external destination (address or prefix) that may be injected as a RPL
    target from multiple border routers should be injected as anycast in RPL to
    enable load balancing. A mobile target that is multihomed should in contrast
@@ -753,24 +753,26 @@ As opposed to unicast addresses, there is no concept of duplication with multica
   </section>	<!-- end section "RPL Anycast Operation" -->
 
 
-<section anchor="newpf"><name>New P-Field</name>
-<t> The new P-field is created for use in RPL Target Option, EARO, and EDAR
-    messages. The P-Field is a 2-bits field, capable of storing 4 values,
-    and used to indicate the type of advertisement.
+<section anchor="newpf"><name>New Registered Address Type Indicator P-Field</name>
+<t> The new Registered Address Type Indicator (RATInd) is created for use in RPL
+    Target Option, the EARO, and the header of EDAR messages.
+    The RATInd indicates whether an address is unicast, multicast, or anycast.
+    The new 2-bits P-Field is defined to transport the RATInd in different
+    protocols.
 </t>
 <t>
-    The P field can take the following values:
+    The P-Field can take the following values:
 </t>
-	 <table anchor="pVALS" ><name>P-field Values</name>
+	 <table anchor="pVALS" ><name>P-Field Values</name>
      <thead>
-      <tr><td>Value</td><td>Meaning</td></tr>
+      <tr><td>P-Field Value</td><td>Registered Address Type</td></tr>
      </thead><tbody>
       <tr><td>0</td><td>Registration for a Unicast Address</td></tr>
       <tr><td>1</td><td>Registration for a Multicast Address</td></tr>
       <tr><td>2</td><td>Registration for an Anycast Address</td></tr>
       <tr><td>3</td><td>Reserved, MUST be ignored by the receiver</td></tr>
      </tbody>
-    </table>  <!-- end table "P-field values" -->
+    </table>  <!-- end table "P-Field values" -->
 
 </section><!-- New P-Field -->
 
@@ -783,17 +785,17 @@ As opposed to unicast addresses, there is no concept of duplication with multica
    <xref target="RFC6550"/> recognizes a multicast address by its format
    (as specified in section 2.7 of <xref target="RFC4291"/>) and applies the
    specified multicast operation if the address is recognized as multicast.
-   This specification updates <xref target="RFC6550"/> to add the 2-bits P field
+   This specification updates <xref target="RFC6550"/> to add the 2-bits P-Field
    (see <xref target="newpf"/>) to the RTO to indicate that the target address
    is to be processed as unicast, multicast or anycast.
 </t> <ul>
-   <li>An RTO that has the P field set to 0 is called a unicast RTO.</li>
-   <li>An RTO that has the P field set to 1 is called a multicast RTO.</li>
-   <li>An RTO that has the P field set to 2 is called an anycast RTO.</li>
+   <li>An RTO that has the P-Field set to 0 is called a unicast RTO.</li>
+   <li>An RTO that has the P-Field set to 1 is called a multicast RTO.</li>
+   <li>An RTO that has the P-Field set to 2 is called an anycast RTO.</li>
 
 
 </ul> <t>
-   The suggested position for the P field is 2 counting from 0 to
+   The suggested position for the P-Field is 2 counting from 0 to
    7 in network order as shown in <xref target="rto-fmt"/>, based on figure 4
    of <xref target="RFC9010"/> which defines the flags in position 0 and 1:
 </t>
@@ -827,34 +829,34 @@ As opposed to unicast addresses, there is no concept of duplication with multica
 
 
 
-<section anchor="R8505E"><name>Placing the New P field in the EARO</name>
+<section anchor="R8505E"><name>Placing the New P-Field in the EARO</name>
 
 <t>
    Section 4.1 of <xref target="RFC8505"/> defines the EARO as an extension to
    the ARO option defined in <xref target="RFC6775"/>.
-   This specification adds a new P field placed in the EARO flags that is set as
+   This specification adds a new P-Field placed in the EARO flags that is set as
    follows:
 
 </t>
 <ul>
 <li>
-   The P field is set to 1 to signal that the
-   Registered Address is a multicast address. When the P field is 1 and the R flag
+   The P-Field is set to 1 to signal that the
+   Registered Address is a multicast address. When the P-Field is 1 and the R flag
    is set to 1 as well, the 6LR that
    conforms to this specification joins the multicast stream,  e.g., by
    injecting the address in the RPL multicast support that is extended in this
    specification for Non-Storing Mode.
 </li>
 <li>
-   The P field is set to 2 to signal that the Registered Address is
-   an anycast address. When the P field is 2 and the R flag is 1, the 6LR that
+   The P-Field is set to 2 to signal that the Registered Address is
+   an anycast address. When the P-Field is 2 and the R flag is 1, the 6LR that
    conforms to this specification injects the anycast address in the routing
    protocol(s) that it participates to, e.g., in the RPL anycast support that
    is introduced in this specification for both Storing and Non-Storing Modes.
 </li>
 </ul>
 <t>
-   <xref target="EARO"/> illustrates the P field in its suggested
+   <xref target="EARO"/> illustrates the P-Field in its suggested
    positions (2, counting 0 to 7 in network order in the
    8-bit array), to be confirmed by IANA.
 </t>
@@ -877,13 +879,13 @@ As opposed to unicast addresses, there is no concept of duplication with multica
     <t> New and updated Option Fields:    </t>
 	<dl>
 	<dt>Rsv:</dt><dd> 2-bit field; reserved, MUST be set to 0 and ignored by the receiver</dd>
-	<dt>P:</dt><dd>2-bit field; see <xref target="newpf"/></dd>
+	<dt>P:</dt><dd>2-bit P-Field; see <xref target="newpf"/></dd>
 
 	</dl>
 
-</section> <!-- end section "Placing the New P field in the EARO" -->
+</section> <!-- end section "Placing the New P-Field in the EARO" -->
 
-<section anchor="R8505D"><name>Placing the New P field in the EDAR Message</name>
+<section anchor="R8505D"><name>Placing the New P-Field in the EDAR Message</name>
 
 <t>
    Section 4 of <xref target="RFC6775"/> provides the same format for DAR and
@@ -894,12 +896,12 @@ As opposed to unicast addresses, there is no concept of duplication with multica
 </t>
 <t>
    This specification repurposes the status field in the EDAR as a Flags field.
-   It adds a new P field to the EDAR flags field to match the P field in the
+   It adds a new P-Field to the EDAR flags field to match the P-Field in the
    EARO and signal the new types of registration. The EDAC message is not
    modified.
 </t>
 <t>
-   <xref target="EDAR"/> illustrates the P field in its suggested position
+   <xref target="EDAR"/> illustrates the P-Field in its suggested position
    (0, counting 0 to 7 in network order in the 8-bit array), to be confirmed by
    IANA.
 </t>
@@ -933,7 +935,7 @@ As opposed to unicast addresses, there is no concept of duplication with multica
 	<dt>P:</dt><dd>2-bit field; see <xref target="newpf"/></dd>
     </dl>
 
-</section> <!-- end section "Placing the New P field in the EDAR Message" -->
+</section> <!-- end section "Placing the New P-Field in the EDAR Message" -->
 
 
 
@@ -1039,7 +1041,7 @@ As opposed to unicast addresses, there is no concept of duplication with multica
    receiver. For instance, a node that rebooted needs to reset its uptime to 0.
    A Router that changed information like a prefix information option has to advertise an
    incremented state sequence. To that effect, the CUO carries a Node State
-   Sequence Information (NSSI) and a Node Uptime.
+   Sequence Information (NSSI) and a Consistent Uptime.
    See <xref target="CUO"/> for the option details.
    </t>
    <t>
@@ -1050,7 +1052,7 @@ As opposed to unicast addresses, there is no concept of duplication with multica
    In the process, the peer may attempt to form new address and register them, deprecate
    old addresses and deregister them using a Lifetime of 0, and reform any potentially lost state,
    e.g., by re-registering an existing address that it will keep using. A loss of state is
-   inferred if the Node Uptime of the peer is less than the time since the state was installed,
+   inferred if the Consistent Uptime of the peer is less than the time since the state was installed,
    or the NSSI is incremented for a consistent uptime.
    </t>
    </li>
@@ -1066,7 +1068,7 @@ As opposed to unicast addresses, there is no concept of duplication with multica
    The 6LN MUST also subscribe all the IPv6 multicast addresses that it listens
    to but the all-nodes link-scope multicast address FF02::1
    <xref target="RFC4291"/> which is implicitly registered, and it MUST set the
-   P field to 1 in the EARO for those addresses.
+   P-Field to 1 in the EARO for those addresses.
    </li>
    <li>
    The 6LN MAY set the R flag in the EARO to obtain the delivery of the
@@ -1076,7 +1078,7 @@ As opposed to unicast addresses, there is no concept of duplication with multica
    </li>
    <li>
    The 6LN MUST also subscribe all the IPv6 anycast addresses that it supports
-   and it MUST set the P field in the EARO to 2 for those addresses.
+   and it MUST set the P-Field in the EARO to 2 for those addresses.
    </li>
    <li>
    The 6LR and the 6LBR are extended to accept more than one subscription for
@@ -1127,13 +1129,13 @@ As opposed to unicast addresses, there is no concept of duplication with multica
    </t>
    <ul>
    <li>
-   Upon a subscription with the R flag and the P field both set to 1 in the EARO,
+   Upon a subscription with the R flag and the P-Field both set to 1 in the EARO,
    if the scope of the multicast address is above link-scope <xref target="RFC7346"/>,
    then the 6LR injects the address in the RPL multicast support and sets the P
    field in the RTO to 1 as well.
    </li><li>
-   Upon a subscription with the R set to 1 and the P field set to 2 in the EARO,
-   the 6LR injects the address in the new RPL anycast support and sets the P field
+   Upon a subscription with the R set to 1 and the P-Field set to 2 in the EARO,
+   the 6LR injects the address in the new RPL anycast support and sets the P-Field
    to 2 in the RTO.
    </li><li>
    Upon receiving a packet directed to a multicast address for which it has at
@@ -1235,10 +1237,10 @@ As opposed to unicast addresses, there is no concept of duplication with multica
     <dd>10-bits unsigned integer: The mantissa of the uptime value </dd>
 </dl>
 
-<t>The Node Uptime indicates how long the sender has been continuously up and
+<t>The Consistent Uptime indicates how long the sender has been continuously up and
    running without loss of state. It is expressed by the Uptime Mantissa in units
    of 2 at the power of the Uptime Exponent milliseconds. The receiver derives
-   the boot time of the sender as the current Epoch the sender's Node Uptime.
+   the boot time of the sender as the current Epoch the sender's Consistent Uptime.
    If the sender rebooted since last time state was installed, any state that was
    installed in the sender before it rebooted needs to be reassessed and
    reinstalled if it is still needed. Any state that was installed in the receiver
@@ -1250,7 +1252,7 @@ As opposed to unicast addresses, there is no concept of duplication with multica
    sequence, but may not be still 0 when the first message is sent, so the
    receiver must not expect a value of 0 as the signal of a reboot.
 </t>
-	<table anchor="timex" ><name>Node Uptime Rough Values</name>
+	<table anchor="timex" ><name>Consistent Uptime Rough Values</name>
    <thead>
       <tr><td>Mantissa</td><td>Exponent</td><td>Resolution</td><td>Uptime</td></tr>
    </thead><tbody>
@@ -1259,7 +1261,7 @@ As opposed to unicast addresses, there is no concept of duplication with multica
       <tr><td>2</td><td>15</td><td>30s</td><td>1mn</td></tr>
       <tr><td>2</td><td>21</td><td>33mn</td><td>1 hour</td></tr>
    </tbody>
-	</table>	<!-- end table "Node Uptime Example Values" +-->
+	</table>	<!-- end table "Consistent Uptime Example Values" +-->
 
 <t>
    The NSSI SHOULD be stored in persistent memory by the
@@ -1276,7 +1278,7 @@ As opposed to unicast addresses, there is no concept of duplication with multica
 
 </t>
 
-</section><!-- Node Uptime Option -->
+</section><!-- Consistent Uptime Option -->
 
 <section anchor="deploy"><name>Deployment considerations</name>
 <t>
@@ -1394,7 +1396,7 @@ As opposed to unicast addresses, there is no concept of duplication with multica
 <section anchor="back"><name>Backward Compatibility</name>
 <t>
    A legacy 6LN will not subscribe multicast addresses and the service will be
-   the same when the network is upgraded. A legacy 6LR will not set the P field
+   the same when the network is upgraded. A legacy 6LR will not set the P-Field
    in the 6CIO and an upgraded 6LN will not subscribe multicast addresses.
 </t>
 <t>
@@ -1409,18 +1411,18 @@ As opposed to unicast addresses, there is no concept of duplication with multica
 </t>
 
 <t>
-   The combination of a multicast address and the P field set to 0 in an RTO in
+   The combination of a multicast address and the P-Field set to 0 in an RTO in
    a MOP 3 RPL Instance is understood by the receiver that supports this
    specification (the parent) as an indication that the sender (child) does
    not support this specification, but the RTO is accepted and processed as if
-   the P field was set to 1 for backward compatibility.
+   the P-Field was set to 1 for backward compatibility.
 </t>
 
 <t>
-   When the DODAG is operated in MOP 3, a legacy node will not set the P field
+   When the DODAG is operated in MOP 3, a legacy node will not set the P-Field
    and still expect multicast service as specified in section 12 of <xref
    target="RFC6550"/>.
-   In MOP 3 an RTO that is received with a target that is multicast and the P field set to 0 MUST be considered as multicast and MUST be processed as if the P field is set to 1.
+   In MOP 3 an RTO that is received with a target that is multicast and the P-Field set to 0 MUST be considered as multicast and MUST be processed as if the P-Field is set to 1.
 </t>
 </section>	<!-- end section "Backward Compatibility" -->
 
@@ -1443,27 +1445,28 @@ As opposed to unicast addresses, there is no concept of duplication with multica
     registry groupings, as follows:
 </t>
 
-    <section anchor="PF"><name>New P-Field Registry</name>
+    <section anchor="PF"><name>New P-Field values Registry</name>
 
 	<t>
-    IANA is requested to create a new "P-field values" registry under the
-    heading "Internet Control Message Protocol version 6 (ICMPv6) Parameters".
+    IANA is requested to create a new "P-Field values" registry under the
+    heading "Internet Control Message Protocol version 6 (ICMPv6) Parameters" to store the
+    expression of the Registered Address Type Indicator as a P-Field.
 	</t>
 
  <t> Registration procedure is "Standards Action" <xref target='RFC8126'/>. The initial allocation is as indicated in <xref target="AM2"/>:
  </t>
 
 
-	 <table anchor="AM2" ><name>P-field values</name>
+	 <table anchor="AM2" ><name>P-Field values</name>
      <thead>
-      <tr><td>Value</td><td>Meaning</td><td>Reference</td></tr>
+      <tr><td>Value</td><td>Registered Address Type Indicator</td><td>Reference</td></tr>
      </thead><tbody>
       <tr><td>0</td><td>Registration for a Unicast Address</td> <td>This RFC</td></tr>
       <tr><td>1</td><td>Registration for a Multicast Address</td> <td>This RFC</td></tr>
       <tr><td>2</td><td>Registration for an Anycast Address</td> <td>This RFC</td></tr>
       <tr><td>3</td><td>Unassigned</td><td>This RFC</td></tr>
      </tbody>
-    </table>  <!-- end table "P-field values" -->
+    </table>  <!-- end table "P-Field values" -->
 
     </section><!-- New P-Field Registry -->
 
@@ -1482,7 +1485,7 @@ As opposed to unicast addresses, there is no concept of duplication with multica
    <thead>
       <tr><td>Bit Number</td><td>Meaning</td><td>Reference</td></tr>
    </thead><tbody>
-      <tr><td>0..1 (suggested)</td><td> P-field (2 bits), see <xref target="PF"/>
+      <tr><td>0..1 (suggested)</td><td> P-Field (2 bits), see <xref target="PF"/>
       </td><td>This RFC</td></tr>
       <tr><td>2..7</td><td>Unassigned </td><td></td></tr>
    </tbody>
@@ -1509,8 +1512,7 @@ As opposed to unicast addresses, there is no concept of duplication with multica
    <thead>
       <tr><td>ARO flag</td><td>Meaning</td><td>Reference</td></tr>
    </thead><tbody>
-      <tr><td>2..3 (suggested)</td><td> P-field (2 bits), see <xref target="PF"/></td><td>This RFC</td></tr>
-      <tr><td>4 and 5</td><td>"I" Field</td><td>RFC 8505</td></tr>
+      <tr><td>2..3 (suggested)</td><td> P-Field (2 bits), see <xref target="PF"/></td><td>This RFC</td></tr>
    </tbody>
 	</table>	<!-- end table "New  ARO flag" +-->
     </section>	<!-- end section "New ARO flag -->
@@ -1526,7 +1528,7 @@ As opposed to unicast addresses, there is no concept of duplication with multica
    <thead>
       <tr><td>Bit Number</td><td>Meaning</td><td>Reference</td></tr>
    </thead><tbody>
-      <tr><td>2..3 (suggested)</td><td> P-field (2 bits), see <xref target="PF"/></td><td>This RFC</td></tr>
+      <tr><td>2..3 (suggested)</td><td> P-Field (2 bits), see <xref target="PF"/></td><td>This RFC</td></tr>
    </tbody>
 	</table>	<!-- end table "New  RTO flags" +-->
     </section>	<!-- end section "New RTO flags -->
@@ -1604,7 +1606,7 @@ As opposed to unicast addresses, there is no concept of duplication with multica
    <thead>
       <tr><td>Value </td><td>Description</td><td>Reference</td></tr>
    </thead><tbody>
-      <tr><td>42 (suggested)</td><td>Node Uptime Option</td><td>This RFC</td></tr>
+      <tr><td>42 (suggested)</td><td>Consistent Uptime Option</td><td>This RFC</td></tr>
 
    </tbody>
 	</table>	<!-- end table "IPv6 Neighbor Discovery Option" -->
