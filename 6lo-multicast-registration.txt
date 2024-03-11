@@ -3,16 +3,16 @@
 
 
 6lo                                                      P. Thubert, Ed.
-Internet-Draft                                          10 November 2023
+Internet-Draft                                          20 November 2023
 Updates: 4861, 6550, 6553, 8505, 9010 (if                               
          approved)                                                      
 Intended status: Standards Track                                        
-Expires: 13 May 2024
+Expires: 23 May 2024
 
 
      IPv6 Neighbor Discovery Multicast and Anycast Address Listener
                               Subscription
-                draft-ietf-6lo-multicast-registration-15
+                draft-ietf-6lo-multicast-registration-16
 
 Abstract
 
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 May 2024.
+   This Internet-Draft will expire on 23 May 2024.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Thubert                    Expires 13 May 2024                  [Page 1]
+Thubert                    Expires 23 May 2024                  [Page 1]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thubert                    Expires 13 May 2024                  [Page 2]
+Thubert                    Expires 23 May 2024                  [Page 2]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -165,7 +165,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                  [Page 3]
+Thubert                    Expires 23 May 2024                  [Page 3]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -221,7 +221,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                  [Page 4]
+Thubert                    Expires 23 May 2024                  [Page 4]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -277,7 +277,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                  [Page 5]
+Thubert                    Expires 23 May 2024                  [Page 5]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -333,7 +333,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                  [Page 6]
+Thubert                    Expires 23 May 2024                  [Page 6]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -389,7 +389,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                  [Page 7]
+Thubert                    Expires 23 May 2024                  [Page 7]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -445,7 +445,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                  [Page 8]
+Thubert                    Expires 23 May 2024                  [Page 8]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -501,7 +501,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                  [Page 9]
+Thubert                    Expires 23 May 2024                  [Page 9]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -557,7 +557,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 10]
+Thubert                    Expires 23 May 2024                 [Page 10]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -613,7 +613,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 11]
+Thubert                    Expires 23 May 2024                 [Page 11]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -669,7 +669,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 12]
+Thubert                    Expires 23 May 2024                 [Page 12]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -725,7 +725,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 13]
+Thubert                    Expires 23 May 2024                 [Page 13]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -781,7 +781,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 14]
+Thubert                    Expires 23 May 2024                 [Page 14]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -837,7 +837,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 15]
+Thubert                    Expires 23 May 2024                 [Page 15]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -893,7 +893,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 16]
+Thubert                    Expires 23 May 2024                 [Page 16]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -949,7 +949,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 17]
+Thubert                    Expires 23 May 2024                 [Page 17]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -1005,7 +1005,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 18]
+Thubert                    Expires 23 May 2024                 [Page 18]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -1061,7 +1061,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 19]
+Thubert                    Expires 23 May 2024                 [Page 19]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -1117,7 +1117,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 20]
+Thubert                    Expires 23 May 2024                 [Page 20]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -1173,7 +1173,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 21]
+Thubert                    Expires 23 May 2024                 [Page 21]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -1229,7 +1229,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 22]
+Thubert                    Expires 23 May 2024                 [Page 22]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -1285,7 +1285,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 23]
+Thubert                    Expires 23 May 2024                 [Page 23]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -1341,7 +1341,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 24]
+Thubert                    Expires 23 May 2024                 [Page 24]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -1397,7 +1397,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 25]
+Thubert                    Expires 23 May 2024                 [Page 25]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -1453,7 +1453,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 26]
+Thubert                    Expires 23 May 2024                 [Page 26]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -1509,7 +1509,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 27]
+Thubert                    Expires 23 May 2024                 [Page 27]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -1565,7 +1565,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 28]
+Thubert                    Expires 23 May 2024                 [Page 28]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -1621,7 +1621,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 29]
+Thubert                    Expires 23 May 2024                 [Page 29]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -1677,7 +1677,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 30]
+Thubert                    Expires 23 May 2024                 [Page 30]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -1733,7 +1733,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 31]
+Thubert                    Expires 23 May 2024                 [Page 31]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -1789,7 +1789,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 32]
+Thubert                    Expires 23 May 2024                 [Page 32]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -1845,7 +1845,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 33]
+Thubert                    Expires 23 May 2024                 [Page 33]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -1901,7 +1901,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 34]
+Thubert                    Expires 23 May 2024                 [Page 34]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -1957,7 +1957,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 35]
+Thubert                    Expires 23 May 2024                 [Page 35]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -2013,7 +2013,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 36]
+Thubert                    Expires 23 May 2024                 [Page 36]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -2069,7 +2069,7 @@ Internet-Draft     Multicast and Anycast Subscription      November 2023
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 37]
+Thubert                    Expires 23 May 2024                 [Page 37]
 
 Internet-Draft     Multicast and Anycast Subscription      November 2023
 
@@ -2125,4 +2125,4 @@ Author's Address
 
 
 
-Thubert                    Expires 13 May 2024                 [Page 38]
+Thubert                    Expires 23 May 2024                 [Page 38]
