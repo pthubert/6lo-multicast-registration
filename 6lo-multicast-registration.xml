@@ -86,7 +86,7 @@ docName="draft-ietf-6lo-multicast-registration-17" >
    applications that require point-to-multipoint (P2MP) or point-to-
    point (P2P) traffic.  RPL supports two modes of Downward traffic:
    Storing (fully stateful) or Non-Storing (fully source routed); see
-   Section 9 of of <xref target="RFC6550"/> .  
+   Section 9 of <xref target="RFC6550"/> .  
    
 </t><t>
    Any given RPL Instance is either storing or non-storing.

@@ -145,7 +145,7 @@ Internet-Draft     Multicast and Anycast Subscription         March 2024
    applications that require point-to-multipoint (P2MP) or point-to-
    point (P2P) traffic.  RPL supports two modes of Downward traffic:
    Storing (fully stateful) or Non-Storing (fully source routed); see
-   Section 9 of of [RFC6550] .
+   Section 9 of [RFC6550] .
 
    Any given RPL Instance is either storing or non-storing.  In both
    cases, P2P packets travel Up toward a DODAG root then Down to the
