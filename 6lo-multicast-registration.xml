@@ -17,7 +17,7 @@
 <rfc  xmlns:xi="http://www.w3.org/2001/XInclude" category="std" ipr="trust200902"
 tocInclude="true" indexInclude="true" obsoletes=""  consensus="true"
 submissionType="IETF" xml:lang="en" version="3"  updates="4861, 6550, 6553, 8505, 9010"
-docName="draft-ietf-6lo-multicast-registration-17 >
+docName="draft-ietf-6lo-multicast-registration-17" >
 
 <front>
 
@@ -81,8 +81,25 @@ docName="draft-ietf-6lo-multicast-registration-17 >
    inconsistency discovery, which avoids wasting energy in the proactive repair
    of unused paths.
 </t><t>
+   RPL uses Destination Advertisement Object (DAO) messages to establish
+   Downward routes.  DAO messages are an optional feature for
+   applications that require point-to-multipoint (P2MP) or point-to-
+   point (P2P) traffic.  RPL supports two modes of Downward traffic:
+   Storing (fully stateful) or Non-Storing (fully source routed); see
+   Section 9 of of <xref target="RFC6550"/> .  
+   
+</t><t>
+   Any given RPL Instance is either storing or non-storing.
+   In both cases, P2P packets travel Up toward a DODAG root then Down to
+   the final destination (unless the destination is on the Upward
+   route).  In the Non-Storing case, the packet will travel all the way
+   to a DODAG root before traveling Down.  In the Storing case, the
+   packet may be directed Down towards the destination by a common
+   ancestor of the source and the destination prior to reaching a DODAG
+   root.
    Section 12 of <xref target="RFC6550"/> details the "Storing Mode of
-   Operation with multicast support" with source-independent multicast routing in RPL.
+   Operation with multicast support" with source-independent multicast 
+   routing in RPL.
 </t><t>
    The classical "IPv6 Neighbor Discovery (IPv6 ND) Protocol"
    <xref target="RFC4861"/> <xref target="RFC4862"/> was defined for serial
@@ -135,7 +152,13 @@ docName="draft-ietf-6lo-multicast-registration-17 >
 </t><t>
    This specification Extends <xref target="RFC8505"/> and <xref target="RFC9010"/>
    to add the capability for the 6LN to subscribe anycast and multicast addresses
-   and for the 6LR to inject them in RPL when appropriate.
+   and for the 6LR to inject them in RPL when appropriate. Note that due to 
+   the unreliable propagation of packets in the LLN, it cannot be guaranteed that 
+   any given packet is delivered once and only once. If a breakage happens along
+   the preferred parent tree that is normally used for multicast forwarding, 
+   the packet going up may be rerouted to an alternate parent, leading to potential 
+   failures and duplications, whereas a packet going down will not be delivered
+   in the subtree. It is up to the ULP to cope with both situations.
 </t>
 
 
@@ -201,7 +224,9 @@ docName="draft-ietf-6lo-multicast-registration-17 >
        <dt>ARO</dt><dd> Address Registration Option</dd>
        <dt>DAC</dt><dd> Duplicate Address Confirmation </dd>
        <dt>DAD</dt><dd> Duplicate Address Detection </dd>
+       <dt>DAO</dt><dd> Destination Advertisement Object </dd>
        <dt>DAR</dt><dd> Duplicate Address Request</dd>
+       <dt>DIO</dt><dd> DODAG Information Object </dd>
        <dt>EARO</dt><dd> Extended Address Registration Option</dd>
        <dt>EDAC</dt><dd> Extended Duplicate Address Confirmation  </dd>
        <dt>EDAR</dt><dd> Extended Duplicate Address Request</dd>
@@ -1626,7 +1651,9 @@ As opposed to unicast addresses,  there might be multiple registrations from mul
    WG and the Wi-Sun FAN WG. Thanks to all in both WGs who contributed reviews
    and productive suggestions, in particular Carsten Bormann, Paul Duffy,
    Klaus Hueske, Adnan Rashid, Rahul Jadhav, Gene Falendysz, Don Sturek,
-   Dario Tedeschi, Saurabh Jain, and Chris Hett.
+   Dario Tedeschi, Saurabh Jain, and Chris Hett. Also many thanks to 
+   Kyle Rose, and Dan Romascanu for their suggestions and comments during 
+   the IETF last call and IESG review cycle.
 </t>
 <t>
   The Editor wishes to thank ...
