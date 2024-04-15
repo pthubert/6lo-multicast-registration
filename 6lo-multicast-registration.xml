@@ -86,7 +86,9 @@ docName="draft-ietf-6lo-multicast-registration-17" >
    applications that require point-to-multipoint (P2MP) or point-to-
    point (P2P) traffic.  RPL supports two modes of Downward traffic:
    Storing (fully stateful) or Non-Storing (fully source routed); see
-   Section 9 of <xref target="RFC6550"/> .  
+   Section 9 of <xref target="RFC6550"/>. The mode is signaled in the
+   Mode of Operation (MoP) field in the DIO messages and applies to the
+   whole RPL Instance.    
    
 </t><t>
    Any given RPL Instance is either storing or non-storing.
@@ -485,6 +487,11 @@ As opposed to unicast addresses,  there might be multiple registrations from mul
    announced the anycast address as Target, but forwards a given packet to only
    one of them.
    </t>
+   
+<t>
+   Operationally speaking, deploying a new MOP means that one cannot update a live network. The network administrator must create a new instance
+   with MoP 5 and migrate nodes to that instance by allowing them to join it. 
+   </t> 
  <t>For backward compatibility, this specification allows to build a single
     DODAG signaled as MOP 1, that conveys anycast, unicast and multicast packets
     using the same source routing mechanism, more in <xref target="deploy"/>.
@@ -1310,7 +1317,7 @@ As opposed to unicast addresses,  there might be multiple registrations from mul
 
 </section><!-- Consistent Uptime Option -->
 
-<section anchor="deploy"><name>Deployment considerations</name>
+<section anchor="deploy"><name>Operational considerations</name>
 <t>
    With this specification, a RPL DODAG forms a realm, and multiple RPL DODAGs
    may federated in a single RPL Instance administratively. This means that
@@ -1337,6 +1344,14 @@ As opposed to unicast addresses,  there might be multiple registrations from mul
    the IPv6 multicast addresses can be automatically derived from the prefix and
    the 32-bit value for either a Realm-Local or an Admin-Local multicast
    address as needed in the configuration.
+   
+</t>
+<t>
+   This specification introduces the new RPL MoP 5.
+   Operationally speaking, deploying a new RPL MoP means that one cannot
+   update a live network. The network administrator must create a new instance
+   with MoP 5 and migrate nodes to that instance by allowing them to join it. 
+
 </t>
 <t>
    In a "green field"  deployment where all nodes support this
@@ -1395,14 +1410,25 @@ As opposed to unicast addresses,  there might be multiple registrations from mul
  </li>
 </ul>
 
-</section>	<!-- end section "Deployment considerations" -->
+</section>	<!-- end section "Operational considerations" -->
 
 <section  anchor="sec"><name>Security Considerations</name>
 <t>
-    This specification Extends <xref target="RFC8505"/>, and
-    the security section of that document also applies to this document.
+    This specification Extends <xref target="RFC8505"/> and <xref target="RFC9010"/>, and leverages <xref target="RFC9008"/>.
+	The security section in these documents also apply to this document.
     In particular, the link layer SHOULD be sufficiently
     protected to prevent rogue access.
+</t><t>
+    <xref target="RFC6550"> RPL </xref> already supports routing on multicast addresses, 
+	whereby the endpoint that subscribes to the group and to do so injects the multicast address participates to RPL as a RPL aware node (RAN).
+	Using an extension of RFC 8505 as opposed to RPL to subscribe the address allows a RPL unaware node (RUL) to subscribe as well.
+	As noted in <xref target="RFC9010"/>, this provides a better security posture for the RPL network, since the nodes that do not really need to speak RPL, or are not trusted enough to inject RPL messages, can be prescribed from doing so, which bars a number of attacks Vectors from within RPL. Acting as RUL, those nodes may still leverage the RPL network through the capabilities that are opened via ND operations. With this draft, a node that needs multicast delivery can now obtain the service in a RPL domain while not allowed to inject RPL messages.
+	</t>
+<t>
+   
+</t>
+<t> Compared to <xref target="RFC6550"/>, this draft enables to track the origin of the multicast subscribtion inside the RPL network.
+   This is a first step to enable Route Ownership Validation (ROV) in RPL using the ROVR field in the EARO as proof of owernship.
 </t>
 <t>
    <xref target="sec8928"/> leverages <xref target="RFC8928"/> to prevent an
@@ -1652,7 +1678,7 @@ As opposed to unicast addresses,  there might be multiple registrations from mul
    and productive suggestions, in particular Carsten Bormann, Paul Duffy,
    Klaus Hueske, Adnan Rashid, Rahul Jadhav, Gene Falendysz, Don Sturek,
    Dario Tedeschi, Saurabh Jain, and Chris Hett. Also many thanks to 
-   Kyle Rose, and Dan Romascanu for their suggestions and comments during 
+   Kyle Rose, Scott Kelly, and Dan Romascanu for their suggestions and comments during 
    the IETF last call and IESG review cycle.
 </t>
 <t>
