@@ -17,7 +17,7 @@
 <rfc  xmlns:xi="http://www.w3.org/2001/XInclude" category="std" ipr="trust200902"
 tocInclude="true" indexInclude="true" obsoletes=""  consensus="true"
 submissionType="IETF" xml:lang="en" version="3"  updates="4861, 6550, 6553, 8505, 9010"
-docName="draft-ietf-6lo-multicast-registration-17" >
+docName="draft-ietf-6lo-multicast-registration-18" >
 
 <front>
 
@@ -120,7 +120,7 @@ docName="draft-ietf-6lo-multicast-registration-17" >
    energy-constrained nodes.
    <xref target="RFC6775"/> changes the classical IPv6 ND model to proactively
    establish the Neighbor Cache Entry (NCE) associated to the unicast address of
-   a 6LoWPAN Node (6LN) in the a 6LoWPAN Router(s) (6LR) that serves it.
+   a 6LoWPAN Node (6LN) in the 6LoWPAN Router(s) (6LR) that serves it.
    To that effect, <xref target="RFC6775"/> defines a new Address Registration
    Option (ARO) that is  placed in unicast Neighbor Solicitation (NS) and
    Neighbor Advertisement (NA) messages between the 6LN and the 6LR.
@@ -181,9 +181,17 @@ docName="draft-ietf-6lo-multicast-registration-17" >
   </t>
 
 <t>
-  In addition, the terms "Extends" and "Amends" are used as per
-  <xref target="I-D.kuehlewind-update-tag" /> section 3.
-</t>
+  In addition, the terms "Extends" and "Amends" are used as a more specific term for "Updates" per
+  <xref target="I-D.kuehlewind-update-tag" /> section 3 as follows:
+  </t>
+   <dl newline="false" indent="7" spacing="compact" >
+       <dt>Amends/Amended by:</dt>
+			<dd>This tag pair is used with an amending RFC that changes the amended RFC. This could include bug fixes, behavior changes etc. This is intended to specify mandatory changes to the protocol. The goal of this tag pair is to signal to anyone looking to implement the amended RFC that they MUST also implement the amending RFC. </dd>
+	   <dt>Extends/Extended by:</dt>
+			<dd> This tag pair is used with an extending RFC that defines an optional addition to the extended RFC. This can be used by documents that use existing extension points or clarifications that do not change existing protocol behavior. This signals to implementers and protocol designers that there are changes to the extended RFC that they need to consider but not necessarily implement.</dd>
+       </dl>
+
+  
   </section>	<!-- end section "Requirements Language" -->
 
   <section anchor="lo"><name>References</name>
@@ -262,10 +270,10 @@ docName="draft-ietf-6lo-multicast-registration-17" >
        <dt>Merge/merging</dt><dd> The action of receiving multiple anycast or
        multicast advertisements, either internally from self, in the form of
        a NS(EARO), or as a DAO(TIO, RTO), and generating a single DAO(TIO, RTO).
-       The 6RPL router maintains a state per origin for each advertised address, and merges the advertisements for all subsriptions for the same
+       The 6RPL router maintains a state per origin for each advertised address, and merges the advertisements for all subscriptions for the same
        address in a single advertisement.
-       A RPL router that merges becomes the origin of the merged advertisement
-       and uses its own values for the Path Sequence and ROVR fields.
+       A RPL router that merges multicast advertisements from different origins becomes the origin of the merged advertisement
+       and uses its own values for the Path Sequence and Registration Ownership Verifier (ROVR) fields.
        </dd>
        <dt>Subscribe/subscription</dt><dd> The special form of
        registration that leverages NS(EARO) to register (subscribe)
@@ -786,7 +794,7 @@ As opposed to unicast addresses,  there might be multiple registrations from mul
 <t> The new Registered Address Type Indicator (RATInd) is created for use in RPL
     Target Option, the EARO, and the header of EDAR messages.
     The RATInd indicates whether an address is unicast, multicast, or anycast.
-    The new 2-bits P-Field is defined to transport the RATInd in different
+    The new 2-bit P-Field is defined to transport the RATInd in different
     protocols.
 </t>
 <t>
@@ -814,7 +822,7 @@ As opposed to unicast addresses,  there might be multiple registrations from mul
    <xref target="RFC6550"/> recognizes a multicast address by its format
    (as specified in section 2.7 of <xref target="RFC4291"/>) and applies the
    specified multicast operation if the address is recognized as multicast.
-   This specification updates <xref target="RFC6550"/> to add the 2-bits P-Field
+   This specification updates <xref target="RFC6550"/> to add the 2-bit P-Field
    (see <xref target="newpf"/>) to the RTO to indicate that the target address
    is to be processed as unicast, multicast or anycast.
 </t> <ul>
@@ -1098,7 +1106,7 @@ As opposed to unicast addresses,  there might be multiple registrations from mul
    </li>
    <li>
    The 6LN MUST also subscribe all the IPv6 multicast addresses that it listens
-   to but the all-nodes link-scope multicast address FF02::1
+   to but the all-nodes link-scope multicast address ff02::1
    <xref target="RFC4291"/> which is implicitly registered, and it MUST set the
    P-Field to 1 in the EARO for those addresses.
    </li>
@@ -1122,7 +1130,7 @@ As opposed to unicast addresses,  there might be multiple registrations from mul
    <li>
    The 6LR MUST also consider that all the nodes that registered an address to
    it (as known by the SLLAO) also registered to the all nodes link-scope
-   multicast address FF02::1 <xref target="RFC4291"/>.
+   multicast address ff02::1 <xref target="RFC4291"/>.
    </li>
    <li>
     The 6LR MUST maintain a subscription state per tuple (IPv6 address, ROVR)
@@ -1258,15 +1266,15 @@ As opposed to unicast addresses,  there might be multiple registrations from mul
 <dt>flags</dt>
     <dd> 6-bit, reserved. MUST be set to 0 by the sender and ignored by the receiver.</dd>
 <dt> NSSI </dt>
-    <dd>12-bits unsigned integer: The Node State Sequence Information, MUST be
+    <dd>12-bit unsigned integer: The Node State Sequence Information, MUST be
     stored by the receiver if it has a dependency on information advertised or
     stored at the sender.</dd>
 <dt> Peer NSSI </dt>
-    <dd>12-bits unsigned integer: Echoes the last known NSSI from the peer.</dd>
+    <dd>12-bit unsigned integer: Echoes the last known NSSI from the peer.</dd>
 <dt> Uptime Exponent </dt>
-    <dd>6-bits unsigned integer: The 2-exponent of the uptime unit </dd>
+    <dd>6-bit unsigned integer: The 2-exponent of the uptime unit </dd>
 <dt> Uptime Mantissa </dt>
-    <dd>10-bits unsigned integer: The mantissa of the uptime value </dd>
+    <dd>10-bit unsigned integer: The mantissa of the uptime value </dd>
 </dl>
 
 <t>The Consistent Uptime indicates how long the sender has been continuously up and
@@ -1427,16 +1435,16 @@ As opposed to unicast addresses,  there might be multiple registrations from mul
 <t>
    
 </t>
-<t> Compared to <xref target="RFC6550"/>, this draft enables to track the origin of the multicast subscribtion inside the RPL network.
-   This is a first step to enable Route Ownership Validation (ROV) in RPL using the ROVR field in the EARO as proof of owernship.
+<t> Compared to <xref target="RFC6550"/>, this draft enables to track the origin of the multicast subscription inside the RPL network.
+   This is a first step to enable Route Ownership Validation (ROV) in RPL using the ROVR field in the EARO as proof of ownership.
 </t>
 <t>
-   <xref target="sec8928"/> leverages <xref target="RFC8928"/> to prevent an
+   <xref target="sec8928"/> leverages <xref target="RFC8928"/> to prevent a
    rogue node to register a unicast address that it does not own.
    The mechanism could be extended to anycast and multicast addresses if the
    values of the ROVR they use is known in advance, but how this is done is
    not in scope for this specification.
-   One way would be to authorize in a advance the ROVR of the valid users.
+   One way would be to authorize in advance the ROVR of the valid users.
    A less preferred way could be to synchronize the ROVR and TID values across
    the valid subscribers as a preshared key material.
 </t>

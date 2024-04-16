@@ -3,16 +3,16 @@
 
 
 6lo                                                      P. Thubert, Ed.
-Internet-Draft                                             15 April 2024
+Internet-Draft                                             16 April 2024
 Updates: 4861, 6550, 6553, 8505, 9010 (if                               
          approved)                                                      
 Intended status: Standards Track                                        
-Expires: 17 October 2024
+Expires: 18 October 2024
 
 
      IPv6 Neighbor Discovery Multicast and Anycast Address Listener
                               Subscription
-                draft-ietf-6lo-multicast-registration-17
+                draft-ietf-6lo-multicast-registration-18
 
 Abstract
 
@@ -39,7 +39,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 October 2024.
+   This Internet-Draft will expire on 18 October 2024.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Thubert                  Expires 17 October 2024                [Page 1]
+Thubert                  Expires 18 October 2024                [Page 1]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -69,7 +69,7 @@ Table of Contents
    2.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   5
      2.1.  Requirements Language . . . . . . . . . . . . . . . . . .   5
      2.2.  References  . . . . . . . . . . . . . . . . . . . . . . .   5
-     2.3.  Glossary  . . . . . . . . . . . . . . . . . . . . . . . .   5
+     2.3.  Glossary  . . . . . . . . . . . . . . . . . . . . . . . .   6
      2.4.  New terms . . . . . . . . . . . . . . . . . . . . . . . .   6
    3.  Overview  . . . . . . . . . . . . . . . . . . . . . . . . . .   7
    4.  Updating RFC 4861 . . . . . . . . . . . . . . . . . . . . . .  12
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Thubert                  Expires 17 October 2024                [Page 2]
+Thubert                  Expires 18 October 2024                [Page 2]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -165,7 +165,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024                [Page 3]
+Thubert                  Expires 18 October 2024                [Page 3]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -184,7 +184,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
    use of multicast messages and enable IPv6 ND for operations over
    energy-constrained nodes.  [RFC6775] changes the classical IPv6 ND
    model to proactively establish the Neighbor Cache Entry (NCE)
-   associated to the unicast address of a 6LoWPAN Node (6LN) in the a
+   associated to the unicast address of a 6LoWPAN Node (6LN) in the
    6LoWPAN Router(s) (6LR) that serves it.  To that effect, [RFC6775]
    defines a new Address Registration Option (ARO) that is placed in
    unicast Neighbor Solicitation (NS) and Neighbor Advertisement (NA)
@@ -221,7 +221,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024                [Page 4]
+Thubert                  Expires 18 October 2024                [Page 4]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -247,8 +247,23 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
    14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
-   In addition, the terms "Extends" and "Amends" are used as per
-   [I-D.kuehlewind-update-tag] section 3.
+   In addition, the terms "Extends" and "Amends" are used as a more
+   specific term for "Updates" per [I-D.kuehlewind-update-tag] section 3
+   as follows:
+
+   Amends/Amended by:  This tag pair is used with an amending RFC that
+          changes the amended RFC.  This could include bug fixes,
+          behavior changes etc.  This is intended to specify mandatory
+          changes to the protocol.  The goal of this tag pair is to
+          signal to anyone looking to implement the amended RFC that
+          they MUST also implement the amending RFC.
+   Extends/Extended by:  This tag pair is used with an extending RFC
+          that defines an optional addition to the extended RFC.  This
+          can be used by documents that use existing extension points or
+          clarifications that do not change existing protocol behavior.
+          This signals to implementers and protocol designers that there
+          are changes to the extended RFC that they need to consider but
+          not necessarily implement.
 
 2.2.  References
 
@@ -259,6 +274,13 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
    *  Neighbor Discovery Optimization for Low-Power and Lossy Networks
       [RFC6775], as well as
+
+
+
+Thubert                  Expires 18 October 2024                [Page 5]
+
+Internet-Draft     Multicast and Anycast Subscription         April 2024
+
 
    *  "Registration Extensions for 6LoWPAN Neighbor Discovery" [RFC8505]
       and
@@ -274,14 +296,6 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
    6LBR   6LoWPAN Border Router
    6LN    6LoWPAN Node
    6LR    6LoWPAN Router
-
-
-
-Thubert                  Expires 17 October 2024                [Page 5]
-
-Internet-Draft     Multicast and Anycast Subscription         April 2024
-
-
    6CIO   Capability Indication Option
    AMC    Address Mapping Confirmation
    AMR    Address Mapping Request
@@ -315,28 +329,27 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
    Origin  The node that issued an anycast or multicast advertisement,
           either in the form of a NS(EARO) or as a DAO(TIO, RTO)
    Merge/merging  The action of receiving multiple anycast or multicast
+
+
+
+
+Thubert                  Expires 18 October 2024                [Page 6]
+
+Internet-Draft     Multicast and Anycast Subscription         April 2024
+
+
           advertisements, either internally from self, in the form of a
           NS(EARO), or as a DAO(TIO, RTO), and generating a single
           DAO(TIO, RTO).  The 6RPL router maintains a state per origin
           for each advertised address, and merges the advertisements for
-          all subsriptions for the same address in a single
-          advertisement.  A RPL router that merges becomes the origin of
+          all subscriptions for the same address in a single
+          advertisement.  A RPL router that merges multicast
+          advertisements from different origins becomes the origin of
           the merged advertisement and uses its own values for the Path
-          Sequence and ROVR fields.
+          Sequence and Registration Ownership Verifier (ROVR) fields.
    Subscribe/subscription  The special form of registration that
           leverages NS(EARO) to register (subscribe) a multicast or an
           anycast address.
-
-
-
-
-
-
-
-Thubert                  Expires 17 October 2024                [Page 6]
-
-Internet-Draft     Multicast and Anycast Subscription         April 2024
-
 
 3.  Overview
 
@@ -376,20 +389,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-Thubert                  Expires 17 October 2024                [Page 7]
+Thubert                  Expires 18 October 2024                [Page 7]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -445,7 +445,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024                [Page 8]
+Thubert                  Expires 18 October 2024                [Page 8]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -501,7 +501,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024                [Page 9]
+Thubert                  Expires 18 October 2024                [Page 9]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -557,7 +557,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 10]
+Thubert                  Expires 18 October 2024               [Page 10]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -613,7 +613,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 11]
+Thubert                  Expires 18 October 2024               [Page 11]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -669,7 +669,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 12]
+Thubert                  Expires 18 October 2024               [Page 12]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -725,7 +725,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 13]
+Thubert                  Expires 18 October 2024               [Page 13]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -781,7 +781,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 14]
+Thubert                  Expires 18 October 2024               [Page 14]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -837,7 +837,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 15]
+Thubert                  Expires 18 October 2024               [Page 15]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -893,7 +893,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 16]
+Thubert                  Expires 18 October 2024               [Page 16]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -941,15 +941,15 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
    The new Registered Address Type Indicator (RATInd) is created for use
    in RPL Target Option, the EARO, and the header of EDAR messages.  The
    RATInd indicates whether an address is unicast, multicast, or
-   anycast.  The new 2-bits P-Field is defined to transport the RATInd
-   in different protocols.
+   anycast.  The new 2-bit P-Field is defined to transport the RATInd in
+   different protocols.
 
    The P-Field can take the following values:
 
 
 
 
-Thubert                  Expires 17 October 2024               [Page 17]
+Thubert                  Expires 18 October 2024               [Page 17]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -973,7 +973,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
    [RFC6550] recognizes a multicast address by its format (as specified
    in section 2.7 of [RFC4291]) and applies the specified multicast
    operation if the address is recognized as multicast.  This
-   specification updates [RFC6550] to add the 2-bits P-Field (see
+   specification updates [RFC6550] to add the 2-bit P-Field (see
    Section 6.4) to the RTO to indicate that the target address is to be
    processed as unicast, multicast or anycast.
 
@@ -1005,7 +1005,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 18]
+Thubert                  Expires 18 October 2024               [Page 18]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -1061,7 +1061,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 19]
+Thubert                  Expires 18 October 2024               [Page 19]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -1117,7 +1117,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 20]
+Thubert                  Expires 18 October 2024               [Page 20]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -1173,7 +1173,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 21]
+Thubert                  Expires 18 October 2024               [Page 21]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -1229,7 +1229,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 22]
+Thubert                  Expires 18 October 2024               [Page 22]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -1263,7 +1263,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
    *  The 6LN MUST also subscribe all the IPv6 multicast addresses that
       it listens to but the all-nodes link-scope multicast address
-      FF02::1 [RFC4291] which is implicitly registered, and it MUST set
+      ff02::1 [RFC4291] which is implicitly registered, and it MUST set
       the P-Field to 1 in the EARO for those addresses.
 
    *  The 6LN MAY set the R flag in the EARO to obtain the delivery of
@@ -1285,14 +1285,14 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 23]
+Thubert                  Expires 18 October 2024               [Page 23]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
    *  The 6LR MUST also consider that all the nodes that registered an
       address to it (as known by the SLLAO) also registered to the all
-      nodes link-scope multicast address FF02::1 [RFC4291].
+      nodes link-scope multicast address ff02::1 [RFC4291].
 
    *  The 6LR MUST maintain a subscription state per tuple (IPv6
       address, ROVR) for both anycast and multicast types of address.
@@ -1341,7 +1341,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 24]
+Thubert                  Expires 18 October 2024               [Page 24]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -1397,7 +1397,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 25]
+Thubert                  Expires 18 October 2024               [Page 25]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -1419,17 +1419,17 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
    flags  6-bit, reserved.  MUST be set to 0 by the sender and ignored
       by the receiver.
 
-   NSSI  12-bits unsigned integer: The Node State Sequence Information,
+   NSSI  12-bit unsigned integer: The Node State Sequence Information,
       MUST be stored by the receiver if it has a dependency on
       information advertised or stored at the sender.
 
-   Peer NSSI  12-bits unsigned integer: Echoes the last known NSSI from
+   Peer NSSI  12-bit unsigned integer: Echoes the last known NSSI from
       the peer.
 
-   Uptime Exponent  6-bits unsigned integer: The 2-exponent of the
-      uptime unit
+   Uptime Exponent  6-bit unsigned integer: The 2-exponent of the uptime
+      unit
 
-   Uptime Mantissa  10-bits unsigned integer: The mantissa of the uptime
+   Uptime Mantissa  10-bit unsigned integer: The mantissa of the uptime
       value
 
    The Consistent Uptime indicates how long the sender has been
@@ -1453,7 +1453,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 26]
+Thubert                  Expires 18 October 2024               [Page 26]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -1509,7 +1509,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 27]
+Thubert                  Expires 18 October 2024               [Page 27]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -1565,7 +1565,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 28]
+Thubert                  Expires 18 October 2024               [Page 28]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -1621,7 +1621,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 29]
+Thubert                  Expires 18 October 2024               [Page 29]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -1634,16 +1634,16 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
    Compared to [RFC6550], this draft enables to track the origin of the
-   multicast subscribtion inside the RPL network.  This is a first step
+   multicast subscription inside the RPL network.  This is a first step
    to enable Route Ownership Validation (ROV) in RPL using the ROVR
-   field in the EARO as proof of owernship.
+   field in the EARO as proof of ownership.
 
-   Section 9 leverages [RFC8928] to prevent an rogue node to register a
+   Section 9 leverages [RFC8928] to prevent a rogue node to register a
    unicast address that it does not own.  The mechanism could be
    extended to anycast and multicast addresses if the values of the ROVR
    they use is known in advance, but how this is done is not in scope
-   for this specification.  One way would be to authorize in a advance
-   the ROVR of the valid users.  A less preferred way could be to
+   for this specification.  One way would be to authorize in advance the
+   ROVR of the valid users.  A less preferred way could be to
    synchronize the ROVR and TID values across the valid subscribers as a
    preshared key material.
 
@@ -1677,7 +1677,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 30]
+Thubert                  Expires 18 October 2024               [Page 30]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -1733,7 +1733,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 31]
+Thubert                  Expires 18 October 2024               [Page 31]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -1789,7 +1789,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 32]
+Thubert                  Expires 18 October 2024               [Page 32]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -1845,7 +1845,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 33]
+Thubert                  Expires 18 October 2024               [Page 33]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -1901,7 +1901,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 34]
+Thubert                  Expires 18 October 2024               [Page 34]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -1957,7 +1957,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 35]
+Thubert                  Expires 18 October 2024               [Page 35]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -2013,7 +2013,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 36]
+Thubert                  Expires 18 October 2024               [Page 36]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -2069,7 +2069,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 37]
+Thubert                  Expires 18 October 2024               [Page 37]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -2125,7 +2125,7 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 38]
+Thubert                  Expires 18 October 2024               [Page 38]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -2181,7 +2181,7 @@ Author's Address
 
 
 
-Thubert                  Expires 17 October 2024               [Page 39]
+Thubert                  Expires 18 October 2024               [Page 39]
 
 Internet-Draft     Multicast and Anycast Subscription         April 2024
 
@@ -2237,4 +2237,4 @@ Internet-Draft     Multicast and Anycast Subscription         April 2024
 
 
 
-Thubert                  Expires 17 October 2024               [Page 40]
+Thubert                  Expires 18 October 2024               [Page 40]
