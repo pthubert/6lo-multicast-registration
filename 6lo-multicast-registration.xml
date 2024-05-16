@@ -17,7 +17,7 @@
 <rfc  xmlns:xi="http://www.w3.org/2001/XInclude" category="std" ipr="trust200902"
 tocInclude="true" indexInclude="true" obsoletes=""  consensus="true"
 submissionType="IETF" xml:lang="en" version="3"  updates="4861, 6550, 6553, 8505, 9010"
-docName="draft-ietf-6lo-multicast-registration-19" >
+docName="draft-ietf-6lo-multicast-registration-20" >
 
 <front>
 
@@ -1788,9 +1788,7 @@ As opposed to unicast addresses,  there might be multiple registrations from mul
    Klaus Hueske, Adnan Rashid, Rahul Jadhav, Gene Falendysz, Don Sturek,
    Dario Tedeschi, Saurabh Jain, and Chris Hett, with special thanks
    to Esko Dijk for his useful WGLC reviews and proposed changes.
-   Also many thanks to Eric Vyncke, Sandy Ginoza, Zaheduzzaman Sarker,
-   Paul Wouters, Roman Danyliw, John Scudder, Dirk Von Hugo, Murray Kucherawy,
-   Kyle Rose, Scott Kelly, and Dan Romascanu for their suggestions and comments during 
+   Also many thanks to Eric Vyncke, Sandy Ginoza, Zaheduzzaman Sarker, Paul Wouters, Roman Danyliw, John Scudder, Dirk Von Hugo, Murray Kucherawy,  Kyle Rose, Scott Kelly, and Dan Romascanu for their suggestions and comments during 
    the IETF last call and IESG review cycle.
 </t>
 </section> <!-- title="Acknowledgments" -->
